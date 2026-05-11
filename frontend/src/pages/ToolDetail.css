@@ -1,0 +1,192 @@
+.tool-detail-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.back-link {
+  margin-bottom: 20px;
+}
+
+.back-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.back-link a:hover {
+  text-decoration: underline;
+}
+
+.tool-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.tool-detail-header h1 {
+  margin: 0;
+  color: #333;
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.badge.active {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge.inactive {
+  background-color: #dc3545;
+  color: white;
+}
+
+.badge.archived {
+  background-color: #6c757d;
+  color: white;
+}
+
+.tool-detail-content {
+  display: grid;
+  gap: 20px;
+}
+
+.tool-info h2,
+.subscriptions h2,
+.movements h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.label {
+  font-weight: 500;
+  color: #666;
+}
+
+.value {
+  color: #333;
+}
+
+.value.link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.value.link:hover {
+  text-decoration: underline;
+}
+
+.tool-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.edit-form {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  margin: 0;
+}
+
+.subscription-form {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+}
+
+.subscriptions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.subscription-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+}
+
+.subscription-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.subscription-price {
+  font-weight: bold;
+  color: #333;
+}
+
+.subscription-renewal {
+  color: #666;
+  font-size: 14px;
+}
+
+.movements-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.movement-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+}
+
+.movement-type {
+  font-weight: bold;
+  color: #007bff;
+}
+
+.movement-description {
+  color: #333;
+  flex: 1;
+  margin: 0 15px;
+}
+
+.movement-date {
+  color: #666;
+  font-size: 12px;
+}
+
+.empty-state {
+  color: #666;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+}

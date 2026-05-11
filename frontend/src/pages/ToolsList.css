@@ -1,0 +1,119 @@
+.tools-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.tools-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.tools-header h1 {
+  margin: 0;
+  color: #333;
+}
+
+.tool-form {
+  margin-bottom: 30px;
+}
+
+.tool-form h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.tool-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tool-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.tool-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.badge.active {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge.inactive {
+  background-color: #dc3545;
+  color: white;
+}
+
+.badge.archived {
+  background-color: #6c757d;
+  color: white;
+}
+
+.tool-type {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.tool-price {
+  color: #007bff;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.tool-category {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.tool-link {
+  display: block;
+  color: #007bff;
+  text-decoration: none;
+  margin-bottom: 15px;
+}
+
+.tool-link:hover {
+  text-decoration: underline;
+}
+
+.tool-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.tool-actions .btn {
+  flex: 1;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+  background-color: white;
+  border-radius: 8px;
+}

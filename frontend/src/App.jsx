@@ -1,0 +1,78 @@
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import Navbar from './components/Navbar';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Home from './pages/Home';
+import Dashboard from './pages/Dashboard';
+import ToolsList from './pages/ToolsList';
+import ToolDetail from './pages/ToolDetail';
+import AdminDashboard from './pages/AdminDashboard';
+import Profile from './pages/Profile';
+import './App.css';
+
+const ProtectedRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+  
+  if (loading) {
+    return <div className="loading">Loading...</div>;
+  }
+  
+  return user ? children : <Navigate to="/login" />;
+};
+
+const AdminRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+  
+  if (loading) {
+    return <div className="loading">Loading...</div>;
+  }
+  
+  return user?.role === 'ADMIN' ? children : <Navigate to="/dashboard" />;
+};
+
+function App() {
+  return (
+    <AuthProvider>
+      <Router>
+        <div className="App">
+          <Navbar />
+          <main className="main-content">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/dashboard" element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/tools" element={
+                <ProtectedRoute>
+                  <ToolsList />
+                </ProtectedRoute>
+              } />
+              <Route path="/tools/:id" element={
+                <ProtectedRoute>
+                  <ToolDetail />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin" element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              } />
+              <Route path="/profile" element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } />
+            </Routes>
+          </main>
+        </div>
+      </Router>
+    </AuthProvider>
+  );
+}
+
+export default App;
