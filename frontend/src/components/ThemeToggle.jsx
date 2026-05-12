@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import './ThemeToggle.css';
 
 const ThemeToggle = ({ className = '' }) => {
-  const { t } = useTranslation();
   const [theme, setTheme] = useState('dark');
 
   useEffect(() => {
@@ -23,7 +21,7 @@ const ThemeToggle = ({ className = '' }) => {
     <button 
       className={`theme-toggle ${className}`}
       onClick={toggleTheme}
-      title={t('profile.toggleTheme')}
+      title={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
     >
       {theme === 'light' ? (
         <span className="theme-icon">🌙</span>

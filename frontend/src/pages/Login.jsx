@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useTranslation } from 'react-i18next';
 import './Login.css';
 
 const Login = () => {
@@ -11,7 +10,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
-  const { t } = useTranslation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,11 +29,11 @@ const Login = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h1>{t('auth.loginTitle')}</h1>
+        <h1>Login</h1>
         {error && <div className="error">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>{t('auth.email')}:</label>
+            <label>Email:</label>
             <input
               type="email"
               value={email}
@@ -44,7 +42,7 @@ const Login = () => {
             />
           </div>
           <div className="form-group">
-            <label>{t('auth.password')}:</label>
+            <label>Password:</label>
             <input
               type="password"
               value={password}
@@ -53,11 +51,11 @@ const Login = () => {
             />
           </div>
           <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? t('common.loading') : t('auth.login')}
+            {loading ? 'Loading...' : 'Login'}
           </button>
         </form>
         <p className="auth-link">
-          {t('auth.dontHaveAccount')} <Link to="/register">{t('auth.registerLink')}</Link>
+          Don't have an account? <Link to="/register">Register</Link>
         </p>
       </div>
     </div>

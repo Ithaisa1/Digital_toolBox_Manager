@@ -1,5 +1,10 @@
 export const errorHandler = (err, req, res, next) => {
-  console.error(err.stack);
+  console.error('Error details:', {
+    message: err.message,
+    stack: err.stack,
+    code: err.code,
+    name: err.name
+  });
 
   if (err.name === 'ValidationError') {
     return res.status(400).json({ error: err.message });
@@ -15,6 +20,15 @@ export const errorHandler = (err, req, res, next) => {
 
   if (err.code === 'P2025') {
     return res.status(404).json({ error: 'Resource not found' });
+  }
+
+  // Enviar error detallado en desarrollo
+  if (process.env.NODE_ENV === 'development') {
+    return res.status(500).json({ 
+      error: 'Internal server error',
+      details: err.message,
+      stack: err.stack
+    });
   }
 
   res.status(500).json({ error: 'Internal server error' });
