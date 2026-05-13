@@ -37,12 +37,12 @@ export class EmailView extends BaseView {
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Welcome to Gestor de Herramientas</title>
+          <title>Welcome to ToolBox Manager</title>
         </head>
         <body>
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <div style="background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;">
-              <h1>🎉 Welcome to Gestor de Herramientas!</h1>
+              <h1>🎉 Welcome to ToolBox Manager!</h1>
               <p>Hi {{name}}, thank you for joining us!</p>
             </div>
             <div style="background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px;">

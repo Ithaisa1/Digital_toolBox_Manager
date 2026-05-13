@@ -1,29 +1,169 @@
-# 🧰 Gestor de Herramientas
+# 🧰 ToolBox Manager
 
-Una plataforma full-stack para gestionar herramientas digitales, suscripciones y licencias. Perfecta para profesionales que quieren controlar su software, SaaS, plugins y recursos digitales en un lugar centralizado.
+Una plataforma full-stack enterprise-level para gestionar herramientas digitales, suscripciones y licencias. Perfecta para profesionales y equipos que quieren controlar su software, SaaS, plugins y recursos digitales en un lugar centralizado con un diseño moderno y funcionalidades avanzadas.
 
 ## 📋 Descripción General
 
-Gestor de Herramientas es una plataforma tipo inventario inteligente donde los usuarios pueden registrar, gestionar y analizar sus herramientas digitales de trabajo (software, SaaS, licencias, plugins, suscripciones y recursos digitales).
+ToolBox Manager es una plataforma tipo inventario inteligente donde los usuarios pueden registrar, gestionar y analizar sus herramientas digitales de trabajo (software, SaaS, licencias, plugins, suscripciones y recursos digitales). Incluye sistemas avanzados de alertas, notificaciones por email, exportación de datos, y una interfaz moderna con efectos visuales impactantes.
 
-## 📋 Características
+## 🎨 Características Principales
 
-### Funcionalidades Principales
-- **Gestión de Herramientas**: Registrar, editar, eliminar y organizar herramientas digitales
-- **Seguimiento de Suscripciones**: Monitorear suscripciones con fechas de renovación y precios
-- **Historial de Actividad**: Rastrear todos los cambios y movimientos por herramienta
-- **Dashboard con Analíticas**: Ver estadísticas de uso de herramientas, costos y renovaciones próximas
-- **Organización por Categorías**: Agrupar herramientas por categoría (Desarrollo, Diseño, Productividad, etc.)
-- **Autenticación de Usuarios**: Autenticación segura basada en JWT con control de acceso por roles (USER/ADMIN)
+### 🚀 Gestión de Herramientas
+- **CRUD Completo**: Registrar, editar, eliminar y organizar herramientas digitales
+- **Categorización**: Agrupar herramientas por categoría (Desarrollo, Diseño, Productividad, etc.)
+- **Seguimiento de Estado**: Control de estado activo/inactivo de herramientas
+- **URLs y Precios**: Gestión de enlaces y costos por herramienta
+- **Historial de Movimientos**: Auditoría completa de todos los cambios
 
-### Características Técnicas
-- API RESTful con Express.js
-- Base de datos PostgreSQL con Prisma ORM
-- React 18 con Vite para el frontend
-- Context API para gestión de estado
-- Diseño responsive con CSS Modules
-- Control de acceso basado en roles
-- Rastreo de movimientos para auditoría
+### 📊 Dashboard con Analíticas
+- **Estadísticas en Tiempo Real**: Métricas de uso, costos y renovaciones
+- **Tarjetas de Costos**: Promedio de suscripciones y gastos mensuales
+- **Gráficos Visuales**: Representación gráfica de datos
+- **Panel de Administración**: Métricas totales del sistema (solo admin)
+- **Alertas de Renovación**: Notificaciones de suscripciones próximas
+
+### 🔔 Sistema de Alertas Avanzado
+- **Tipos de Alertas**: Renovaciones, cambios de precio, discontinuación de servicios
+- **Prioridades**: Baja, media, alta y crítica
+- **Notificaciones Push**: Sistema en tiempo real
+- **Gestión de Alertas**: Crear, leer, marcar como leídas, eliminar
+- **Alertas Automáticas**: Generación automática basada en fechas de renovación
+
+### 📧 Sistema de Emails Automáticos
+- **Emails de Bienvenida**: Automáticos al registrar nuevos usuarios
+- **Recordatorios de Renovación**: 3 días y 1 día antes de la renovación
+- **Reset de Contraseña**: Plantillas seguras para recuperación
+- **Plantillas HTML**: Diseños profesionales y responsivos
+- **Configuración SMTP**: Soporte para múltiples proveedores de email
+
+### 📤 Exportación de Datos
+- **Exportación CSV**: Descarga de herramientas, suscripciones y movimientos
+- **Exportación JSON**: Formato estructurado para integraciones
+- **Reportes de Analíticas**: Por período (semanal, mensual, anual)
+- **Filtros Personalizados**: Por tipo, estado, fecha
+- **Reportes PDF**: Generación de reportes profesionales
+
+### ⏰ Scheduler y Tareas Automáticas
+- **Verificación Diaria**: Chequeo de renovaciones a las 9 AM
+- **Emails Automáticos**: Envío cada 6 horas
+- **Limpieza de Datos**: Tareas semanales de mantenimiento
+- **Tareas Programadas**: Sistema cron flexible
+- **Monitoreo de Jobs**: Estado y ejecución de tareas
+
+### 🎨 Diseño Moderno y UX
+- **Glassmorphism**: Efectos de cristal y blur
+- **Gradientes Vibrantes**: Paleta de colores moderna y atractiva
+- **Animaciones Fluidas**: Transiciones suaves con cubic-bezier
+- **Microinteracciones**: Hover effects y feedback visual
+- **Tema Claro/Oscuro**: Con persistencia en localStorage
+- **Responsive Total**: Mobile-first approach para todos los dispositivos
+
+### 🌍 Internacionalización
+- **Multi-idioma**: Soporte para español e inglés
+- **Selector de Idioma**: Cambio dinámico en la interfaz
+- **Traducciones Completas**: Todos los textos traducidos
+- **Moneda en Euros**: Configuración regional europea
+
+### 🔐 Seguridad y Autenticación
+- **JWT Tokens**: Autenticación segura y stateless
+- **Roles de Usuario**: USER y ADMIN con permisos diferenciados
+- **Middleware de Autenticación**: Protección de rutas
+- **Validación de Datos**: Middleware de validación completo
+- **Control de Acceso**: RBAC (Role-Based Access Control)
+
+## 🏗️ Arquitectura Técnica
+
+### Backend (Node.js + Express) - Patrón MVC
+
+**📁 Estructura MVC:**
+```
+backend/src/
+├── models/          # Modelos de datos y lógica de negocio
+│   ├── Alert.js     # Modelo de alertas con tipos y prioridades
+│   └── index.js     # Exportador de modelos
+├── views/           # Plantillas y lógica de vistas
+│   └── index.js     # BaseView, EmailView, PDFView
+├── controllers/     # Manejadores de peticiones HTTP
+│   ├── authController.js
+│   ├── toolsController.js
+│   ├── categoriesController.js
+│   ├── subscriptionsController.js
+│   ├── dashboardController.js
+│   ├── movementsController.js
+│   ├── alertController.js
+│   └── exportController.js
+├── services/        # Servicios de negocio complejos
+│   └── AlertService.js
+├── middleware/      # Middleware de Express
+│   ├── auth.js
+│   ├── errorHandler.js
+│   └── validation.js
+├── utils/           # Utilidades y helpers
+│   ├── emailService.js
+│   └── scheduler.js
+├── routes/          # Definición de rutas
+│   ├── auth.js
+│   ├── tools.js
+│   ├── categories.js
+│   ├── subscriptions.js
+│   ├── dashboard.js
+│   ├── movements.js
+│   ├── alerts.js
+│   └── export.js
+└── config/          # Configuración
+    ├── database.js
+    └── mvc.js
+```
+
+**🔧 Tecnologías Backend:**
+- **Framework**: Express.js con middleware personalizado
+- **Base de Datos**: PostgreSQL con Prisma ORM
+- **Autenticación**: JWT (JSON Web Tokens) con bcrypt
+- **Validación**: Middleware de validación personalizado
+- **Emails**: Nodemailer con plantillas HTML
+- **Scheduler**: node-cron para tareas programadas
+- **Exportación**: json2csv para generación de CSV
+- **Manejo de Errores**: Middleware centralizado
+
+### Frontend (React + Vite)
+
+**📁 Estructura Frontend:**
+```
+frontend/src/
+├── components/      # Componentes reutilizables
+│   ├── Navbar.jsx
+│   ├── ThemeToggle.jsx
+│   └── LanguageSelector.jsx
+├── context/         # Context API para estado global
+│   └── AuthContext.jsx
+├── pages/           # Páginas de la aplicación
+│   ├── Login.jsx
+│   ├── Register.jsx
+│   ├── Home.jsx
+│   ├── Dashboard.jsx
+│   ├── Profile.jsx
+│   └── ToolsList.jsx
+├── i18n/            # Internacionalización
+│   ├── i18n.js
+│   └── translations/
+│       ├── es.json
+│       └── en.json
+├── services/        # Cliente HTTP
+│   └── api.js
+├── App.jsx          # Componente principal
+├── App.css          # Estilos globales con variables CSS
+└── main.jsx         # Punto de entrada
+```
+
+**🎨 Tecnologías Frontend:**
+- **Framework**: React 18 con Hooks
+- **Build Tool**: Vite para desarrollo rápido
+- **Enrutamiento**: React Router v6
+- **Gestión de Estado**: Context API
+- **Cliente HTTP**: Axios
+- **Internacionalización**: i18next
+- **Estilos**: CSS con variables y glassmorphism
+- **Diseño**: Mobile-first responsive
 
 ## 🏗️ Arquitectura
 

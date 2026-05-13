@@ -1,15 +1,22 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 import api from '../services/api';
 import { useTranslation } from 'react-i18next';
-import ThemeToggle from '../components/ThemeToggle';
+import { formatEuro } from '../utils/formatCurrency';
 import './Dashboard.css';
 
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isSpanish = i18n.language?.startsWith('es');
+
+  const dashboardSubtitle = isSpanish
+    ? 'Centraliza y gestiona tus herramientas en un solo lugar'
+    : 'Centralize and manage your tools in one place';
+  const viewAllSubscriptionsLabel = isSpanish ? 'Ver todas' : 'View all';
+  const viewToolsLabel = isSpanish ? 'Ver herramientas' : 'View tools';
 
   useEffect(() => {
     fetchStats();
@@ -34,38 +41,39 @@ const Dashboard = () => {
     <div className="dashboard-container">
       <div className="dashboard-header">
         <div className="header-content">
-          <div>
+          <div className="dashboard-heading">
             <h1>{t('dashboard.title')}</h1>
-            <p>{t('dashboard.subtitle')}</p>
+            <p className="dashboard-subtitle">{dashboardSubtitle}</p>
           </div>
-          <ThemeToggle className="header-theme-toggle" />
         </div>
       </div>
+
       <div className="stats-grid">
-        <div className="stat-card">
+        <Link to="/tools" className="stat-card dashboard-stat-card stat-card-link" aria-label={t('dashboard.totalTools')}>
           <h3>{t('dashboard.totalTools')}</h3>
           <p className="stat-number">{stats.tools.total}</p>
           <p className="stat-detail">
-            {t('dashboard.active')}: {stats.tools.byStatus.ACTIVE || 0} | 
-            {t('dashboard.inactive')}: {stats.tools.byStatus.INACTIVE || 0}
+            {t('dashboard.active')}: {stats.tools.byStatus?.ACTIVE || 0} | {t('dashboard.inactive')}: {stats.tools.byStatus?.INACTIVE || 0} | {isSpanish ? 'Archivadas' : 'Archived'}: {stats.tools.byStatus?.ARCHIVED || 0}
           </p>
-        </div>
-        
-        <div className="stat-card">
+          <span className="stat-card-link-text">{viewToolsLabel}</span>
+        </Link>
+
+        <Link to="/subscriptions" className="stat-card dashboard-stat-card stat-card-link" aria-label={t('dashboard.subscriptions')}>
           <h3>{t('dashboard.subscriptions')}</h3>
           <p className="stat-number">{stats.subscriptions.total}</p>
           <p className="stat-detail">
-            {t('dashboard.monthlyCost')}: ${stats.subscriptions.monthlyCost.toFixed(2)}
+            {t('dashboard.monthlyCost')}: {formatEuro(stats.subscriptions.monthlyCost)}
           </p>
-        </div>
-        
-        <div className="stat-card">
+          <span className="stat-card-link-text">{viewAllSubscriptionsLabel}</span>
+        </Link>
+
+        <div className="stat-card dashboard-stat-card">
           <h3>{t('dashboard.upcomingRenewals')}</h3>
           <p className="stat-number">{stats.subscriptions.upcomingRenewals}</p>
           <p className="stat-detail">{t('dashboard.next30Days')}</p>
         </div>
-        
-        <div className="stat-card">
+
+        <div className="stat-card dashboard-stat-card">
           <h3>{t('dashboard.categories')}</h3>
           <p className="stat-number">{stats.categories}</p>
           <p className="stat-detail">{t('dashboard.toolCategories')}</p>
@@ -79,8 +87,8 @@ const Dashboard = () => {
             {stats.expensiveTools.map((tool) => (
               <div key={tool.id} className="tool-item">
                 <h4>{tool.name}</h4>
-                <p className="tool-price">${tool.price.toFixed(2)}/mo</p>
-                <p className="tool-category">{tool.category?.name || t('common.uncategorized')}</p>
+                <p className="tool-price">{formatEuro(tool.price)}/mo</p>
+                <p className="tool-category">{tool.category?.name || (isSpanish ? 'Sin categoria' : 'Uncategorized')}</p>
               </div>
             ))}
           </div>

@@ -8,7 +8,9 @@ export const getDashboardStats = async (req, res, next) => {
     const toolsByStatus = await prisma.tool.groupBy({
       by: ['status'],
       where: { userId },
-      _count: true,
+      _count: {
+        _all: true,
+      },
     });
 
     // Get total subscriptions and monthly cost
@@ -26,7 +28,9 @@ export const getDashboardStats = async (req, res, next) => {
     const toolsByCategory = await prisma.tool.groupBy({
       by: ['categoryId'],
       where: { userId },
-      _count: true,
+      _count: {
+        _all: true,
+      },
     });
 
     // Get upcoming renewals in next 30 days
@@ -50,9 +54,9 @@ export const getDashboardStats = async (req, res, next) => {
 
     res.json({
       tools: {
-        total: toolsByStatus.reduce((sum, item) => sum + item._count, 0),
+        total: toolsByStatus.reduce((sum, item) => sum + item._count._all, 0),
         byStatus: toolsByStatus.reduce((acc, item) => {
-          acc[item.status] = item._count;
+          acc[item.status] = item._count._all;
           return acc;
         }, {}),
       },

@@ -7,10 +7,11 @@
 .hero {
   text-align: center;
   padding: 60px 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.96) 0%, rgba(15, 23, 42, 0.96) 100%);
+  color: var(--text-inverse);
+  border-radius: var(--border-radius);
   margin-bottom: 40px;
+  box-shadow: var(--shadow-md);
 }
 
 .hero h1 {
@@ -42,20 +43,28 @@
 }
 
 .feature-card {
-  background-color: white;
+  background: var(--bg-card);
   padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
   text-align: center;
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+
+.feature-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-glow);
 }
 
 .feature-card h3 {
   font-size: 24px;
   margin-bottom: 10px;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .feature-card p {
-  color: #666;
+  color: var(--text-secondary);
   line-height: 1.6;
 }

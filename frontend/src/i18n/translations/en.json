@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Tool Manager",
+    "appName": "ToolBox Manager",
     "loading": "Loading...",
     "error": "Error",
     "success": "Success",
@@ -48,7 +48,7 @@
     "registerLink": "Register"
   },
   "home": {
-    "welcome": "Welcome to Digital Toolbox Manager",
+    "welcome": "Welcome to ToolBox Manager",
     "description": "Organize and manage all your digital tools, subscriptions, and licenses in one place.",
     "goToDashboard": "Go to Dashboard",
     "viewTools": "View Tools",
@@ -90,6 +90,7 @@
     "noTools": "No tools yet. Add your first tool to get started!",
     "name": "Name",
     "type": "Type",
+    "description": "Description",
     "url": "URL",
     "price": "Price (monthly)",
     "status": "Status",
@@ -190,7 +191,12 @@
     "averageCost": "Average Cost",
     "dangerZone": "Danger Zone",
     "dangerZoneDescription": "These actions are permanent and cannot be undone.",
-    "toggleTheme": "Toggle theme"
+    "toggleTheme": "Toggle theme",
+    "passwordHint": "Use your current password to change email or password.",
+    "currentPasswordRequired": "You need your current password to continue.",
+    "logout": "Logout",
+    "deleteAccount": "Delete account",
+    "deleteAccountConfirm": "Are you sure you want to delete your account? This cannot be undone."
   },
   "admin": {
     "dashboard": {

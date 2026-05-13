@@ -3,21 +3,22 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background: var(--bg-primary);
 }
 
 .auth-card {
-  background-color: white;
+  background: var(--bg-secondary);
   padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
   width: 100%;
   max-width: 400px;
+  border: 1px solid var(--border-color);
 }
 
 .auth-card h1 {
   margin-bottom: 20px;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .auth-link {
@@ -26,10 +27,11 @@
 }
 
 .auth-link a {
-  color: #007bff;
+  color: var(--primary-color);
   text-decoration: none;
+  font-weight: 600;
 }
 
 .auth-link a:hover {
-  text-decoration: underline;
+  color: var(--text-accent);
 }

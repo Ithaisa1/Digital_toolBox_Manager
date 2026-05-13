@@ -1,5 +1,6 @@
 import prisma from '../config/database.js';
 import { authenticateToken } from '../middleware/auth.js';
+import { attachToolLogo, attachSubscriptionLogo } from '../utils/productLogo.js';
 
 export const getAllTools = async (req, res, next) => {
   try {
@@ -14,7 +15,15 @@ export const getAllTools = async (req, res, next) => {
       where,
       include: {
         category: true,
-        subscriptions: true,
+        subscriptions: {
+          include: {
+            tool: {
+              include: {
+                category: true,
+              },
+            },
+          },
+        },
         _count: {
           select: { movements: true },
         },
@@ -22,7 +31,10 @@ export const getAllTools = async (req, res, next) => {
       orderBy: { createdAt: 'desc' },
     });
 
-    res.json(tools);
+    res.json(tools.map((tool) => ({
+      ...attachToolLogo(tool),
+      subscriptions: (tool.subscriptions || []).map(attachSubscriptionLogo),
+    })));
   } catch (error) {
     next(error);
   }
@@ -37,7 +49,15 @@ export const getToolById = async (req, res, next) => {
       where: { id, userId },
       include: {
         category: true,
-        subscriptions: true,
+        subscriptions: {
+          include: {
+            tool: {
+              include: {
+                category: true,
+              },
+            },
+          },
+        },
         movements: {
           orderBy: { createdAt: 'desc' },
           take: 10,
@@ -49,7 +69,10 @@ export const getToolById = async (req, res, next) => {
       return res.status(404).json({ error: 'Tool not found' });
     }
 
-    res.json(tool);
+    res.json({
+      ...attachToolLogo(tool),
+      subscriptions: (tool.subscriptions || []).map(attachSubscriptionLogo),
+    });
   } catch (error) {
     next(error);
   }
@@ -90,7 +113,7 @@ export const createTool = async (req, res, next) => {
       },
     });
 
-    res.status(201).json(tool);
+    res.status(201).json(attachToolLogo(tool));
   } catch (error) {
     next(error);
   }
@@ -137,7 +160,7 @@ export const updateTool = async (req, res, next) => {
       },
     });
 
-    res.json(tool);
+    res.json(attachToolLogo(tool));
   } catch (error) {
     next(error);
   }

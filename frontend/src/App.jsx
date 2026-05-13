@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
@@ -6,6 +7,7 @@ import Register from './pages/Register';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import ToolsList from './pages/ToolsList';
+import Subscriptions from './pages/Subscriptions';
 import ToolDetail from './pages/ToolDetail';
 import AdminDashboard from './pages/AdminDashboard';
 import Profile from './pages/Profile';
@@ -32,11 +34,23 @@ const AdminRoute = ({ children }) => {
 };
 
 function App() {
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
+
+  useEffect(() => {
+    document.body.classList.toggle('dark', theme === 'dark');
+    document.body.classList.toggle('light', theme !== 'dark');
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
+  };
+
   return (
     <AuthProvider>
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <div className="App">
-          <Navbar />
+          <Navbar theme={theme} onToggleTheme={toggleTheme} />
           <main className="main-content">
             <Routes>
               <Route path="/" element={<Home />} />
@@ -50,6 +64,11 @@ function App() {
               <Route path="/tools" element={
                 <ProtectedRoute>
                   <ToolsList />
+                </ProtectedRoute>
+              } />
+              <Route path="/subscriptions" element={
+                <ProtectedRoute>
+                  <Subscriptions />
                 </ProtectedRoute>
               } />
               <Route path="/tools/:id" element={

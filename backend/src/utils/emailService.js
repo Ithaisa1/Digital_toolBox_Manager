@@ -1,15 +1,15 @@
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
 
 class EmailService {
   constructor() {
-    this.transporter = nodemailer.createTransporter({
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: process.env.SMTP_PORT || 587,
+    this.transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST || "smtp.gmail.com",
+      port: parseInt(process.env.EMAIL_PORT, 10) || 587,
       secure: false,
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS
-      }
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
+      },
     });
   }
 
@@ -17,16 +17,22 @@ class EmailService {
   async sendRenewalReminder(user, subscription, daysUntilRenewal) {
     try {
       const mailOptions = {
-        from: process.env.SMTP_USER,
+        from: process.env.EMAIL_USER,
         to: user.email,
         subject: `🔄 Renewal Reminder: ${subscription.tool.name}`,
-        html: this.generateRenewalTemplate(user, subscription, daysUntilRenewal)
+        html: this.generateRenewalTemplate(
+          user,
+          subscription,
+          daysUntilRenewal,
+        ),
       };
 
       await this.transporter.sendMail(mailOptions);
-      console.log(`Renewal reminder sent to ${user.email} for ${subscription.tool.name}`);
+      console.log(
+        `Renewal reminder sent to ${user.email} for ${subscription.tool.name}`,
+      );
     } catch (error) {
-      console.error('Error sending renewal reminder:', error);
+      console.error("Error sending renewal reminder:", error);
     }
   }
 
@@ -34,16 +40,16 @@ class EmailService {
   async sendWelcomeEmail(user) {
     try {
       const mailOptions = {
-        from: process.env.SMTP_USER,
+        from: process.env.EMAIL_USER,
         to: user.email,
-        subject: `🎉 Welcome to Gestor de Herramientas`,
-        html: this.generateWelcomeTemplate(user)
+        subject: `🎉 Welcome to ToolBox Manager`,
+        html: this.generateWelcomeTemplate(user),
       };
 
       await this.transporter.sendMail(mailOptions);
       console.log(`Welcome email sent to ${user.email}`);
     } catch (error) {
-      console.error('Error sending welcome email:', error);
+      console.error("Error sending welcome email:", error);
     }
   }
 
@@ -51,24 +57,24 @@ class EmailService {
   async sendPasswordResetEmail(user, resetToken) {
     try {
       const mailOptions = {
-        from: process.env.SMTP_USER,
+        from: process.env.EMAIL_USER,
         to: user.email,
         subject: `🔐 Password Reset Request`,
-        html: this.generatePasswordResetTemplate(user, resetToken)
+        html: this.generatePasswordResetTemplate(user, resetToken),
       };
 
       await this.transporter.sendMail(mailOptions);
       console.log(`Password reset email sent to ${user.email}`);
     } catch (error) {
-      console.error('Error sending password reset email:', error);
+      console.error("Error sending password reset email:", error);
     }
   }
 
   // Generate renewal reminder email template
   generateRenewalTemplate(user, subscription, daysUntilRenewal) {
-    const urgency = daysUntilRenewal <= 7 ? 'high' : 'normal';
-    const urgencyColor = urgency === 'high' ? '#ef4444' : '#3b82f6';
-    
+    const urgency = daysUntilRenewal <= 7 ? "high" : "normal";
+    const urgencyColor = urgency === "high" ? "#ef4444" : "#3b82f6";
+
     return `
       <!DOCTYPE html>
       <html>
@@ -99,11 +105,11 @@ class EmailService {
               <p><strong>Billing Cycle:</strong> ${subscription.billingCycle}</p>
               <p><strong>Renewal Date:</strong> ${subscription.renewalDate.toLocaleDateString()}</p>
               <p><strong>Days Until Renewal:</strong> <span style="color: ${urgencyColor}; font-weight: bold;">${daysUntilRenewal} days</span></p>
-              ${subscription.tool.url ? `<a href="${subscription.tool.url}" class="btn">Manage Subscription</a>` : ''}
+              ${subscription.tool.url ? `<a href="${subscription.tool.url}" class="btn">Manage Subscription</a>` : ""}
             </div>
           </div>
           <div class="footer">
-            <p>This is an automated reminder from Gestor de Herramientas. You can manage your notification preferences in your profile settings.</p>
+            <p>This is an automated reminder from ToolBox Manager. You can manage your notification preferences in your profile settings.</p>
           </div>
         </div>
       </body>
@@ -119,7 +125,7 @@ class EmailService {
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Welcome to Gestor de Herramientas</title>
+        <title>Welcome to ToolBox Manager</title>
         <style>
           body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -134,7 +140,7 @@ class EmailService {
       <body>
         <div class="container">
           <div class="header">
-            <h1>🎉 Welcome to Gestor de Herramientas!</h1>
+            <h1>🎉 Welcome to ToolBox Manager!</h1>
             <p>Hi ${user.name}, thank you for joining us!</p>
           </div>
           <div class="content">
@@ -149,8 +155,8 @@ class EmailService {
               </ul>
             </div>
             <div style="text-align: center;">
-              <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/dashboard" class="btn">Go to Dashboard</a>
-              <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/profile" class="btn">Manage Profile</a>
+              <a href="${process.env.FRONTEND_URL || "http://localhost:3000"}/dashboard" class="btn">Go to Dashboard</a>
+              <a href="${process.env.FRONTEND_URL || "http://localhost:3000"}/profile" class="btn">Manage Profile</a>
             </div>
           </div>
           <div class="footer">
@@ -164,8 +170,8 @@ class EmailService {
 
   // Generate password reset email template
   generatePasswordResetTemplate(user, resetToken) {
-    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`;
-    
+    const resetUrl = `${process.env.FRONTEND_URL || "http://localhost:3000"}/reset-password?token=${resetToken}`;
+
     return `
       <!DOCTYPE html>
       <html>
@@ -210,10 +216,10 @@ class EmailService {
   async testConnection() {
     try {
       await this.transporter.verify();
-      console.log('Email service is ready to send messages');
+      console.log("Email service is ready to send messages");
       return true;
     } catch (error) {
-      console.error('Email service configuration error:', error);
+      console.error("Email service configuration error:", error);
       return false;
     }
   }

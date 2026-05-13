@@ -1,4 +1,5 @@
 import prisma from '../config/database.js';
+import { attachSubscriptionLogo, attachToolLogo } from '../utils/productLogo.js';
 
 export const getAllSubscriptions = async (req, res, next) => {
   try {
@@ -11,12 +12,16 @@ export const getAllSubscriptions = async (req, res, next) => {
     const subscriptions = await prisma.subscription.findMany({
       where,
       include: {
-        tool: true,
+        tool: {
+          include: {
+            category: true,
+          },
+        },
       },
       orderBy: { renewalDate: 'asc' },
     });
 
-    res.json(subscriptions);
+    res.json(subscriptions.map(attachSubscriptionLogo));
   } catch (error) {
     next(error);
   }
@@ -30,7 +35,11 @@ export const getSubscriptionById = async (req, res, next) => {
     const subscription = await prisma.subscription.findFirst({
       where: { id, userId },
       include: {
-        tool: true,
+        tool: {
+          include: {
+            category: true,
+          },
+        },
       },
     });
 
@@ -38,7 +47,7 @@ export const getSubscriptionById = async (req, res, next) => {
       return res.status(404).json({ error: 'Subscription not found' });
     }
 
-    res.json(subscription);
+    res.json(attachSubscriptionLogo(subscription));
   } catch (error) {
     next(error);
   }
@@ -72,11 +81,15 @@ export const createSubscription = async (req, res, next) => {
         userId,
       },
       include: {
-        tool: true,
+        tool: {
+          include: {
+            category: true,
+          },
+        },
       },
     });
 
-    res.status(201).json(subscription);
+    res.status(201).json(attachSubscriptionLogo(subscription));
   } catch (error) {
     next(error);
   }
@@ -105,11 +118,15 @@ export const updateSubscription = async (req, res, next) => {
         status: status || existingSubscription.status,
       },
       include: {
-        tool: true,
+        tool: {
+          include: {
+            category: true,
+          },
+        },
       },
     });
 
-    res.json(subscription);
+    res.json(attachSubscriptionLogo(subscription));
   } catch (error) {
     next(error);
   }
@@ -155,12 +172,16 @@ export const getUpcomingRenewals = async (req, res, next) => {
         },
       },
       include: {
-        tool: true,
+        tool: {
+          include: {
+            category: true,
+          },
+        },
       },
       orderBy: { renewalDate: 'asc' },
     });
 
-    res.json(subscriptions);
+    res.json(subscriptions.map(attachSubscriptionLogo));
   } catch (error) {
     next(error);
   }

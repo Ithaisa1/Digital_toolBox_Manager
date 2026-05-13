@@ -66,8 +66,25 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
   };
 
+  const refreshUser = async () => {
+    const storedToken = localStorage.getItem('token');
+    if (!storedToken) return null;
+
+    try {
+      const response = await api.get('/auth/profile');
+      setUser(response.data);
+      setToken(storedToken);
+      return response.data;
+    } catch (error) {
+      localStorage.removeItem('token');
+      setToken(null);
+      setUser(null);
+      return null;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, token, login, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, token, login, register, logout, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

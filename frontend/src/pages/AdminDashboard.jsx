@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 import { useTranslation } from 'react-i18next';
+import { formatEuro } from '../utils/formatCurrency';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -55,7 +56,7 @@ const AdminDashboard = () => {
           <h3>{t('admin.dashboard.totalSubscriptions')}</h3>
           <p className="stat-number">{stats.subscriptions.total}</p>
           <p className="stat-detail">
-            {t('admin.dashboard.monthlyRevenue')}: ${stats.subscriptions.monthlyRevenue.toFixed(2)}
+            {t('admin.dashboard.monthlyRevenue')}: {formatEuro(stats.subscriptions.monthlyRevenue)}
           </p>
         </div>
         

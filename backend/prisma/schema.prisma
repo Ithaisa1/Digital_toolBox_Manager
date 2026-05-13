@@ -67,6 +67,7 @@ model Tool {
   id          String      @id @default(uuid())
   name        String
   type        String
+  description String?
   url         String?
   price       Float?
   status      ToolStatus  @default(ACTIVE)

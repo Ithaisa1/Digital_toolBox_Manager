@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Gestor de Herramientas",
+    "appName": "ToolBox Manager",
     "loading": "Cargando...",
     "error": "Error",
     "success": "Éxito",
@@ -48,7 +48,7 @@
     "registerLink": "Regístrate"
   },
   "home": {
-    "welcome": "Bienvenido al Gestor de Caja de Herramientas Digitales",
+    "welcome": "Bienvenido a ToolBox Manager",
     "description": "Organiza y gestiona todas tus herramientas digitales, suscripciones y licencias en un solo lugar.",
     "goToDashboard": "Ir al Dashboard",
     "viewTools": "Ver Herramientas",
@@ -90,6 +90,7 @@
     "noTools": "Aún no hay herramientas. ¡Añade tu primera herramienta para comenzar!",
     "name": "Nombre",
     "type": "Tipo",
+    "description": "Descripción",
     "url": "URL",
     "price": "Precio (mensual)",
     "status": "Estado",
@@ -190,7 +191,12 @@
     "averageCost": "Costo Promedio",
     "dangerZone": "Zona de Peligro",
     "dangerZoneDescription": "Estas acciones son permanentes y no se pueden deshacer.",
-    "toggleTheme": "Cambiar tema"
+    "toggleTheme": "Cambiar tema",
+    "passwordHint": "Usa tu contraseña actual para cambiar email o contraseña.",
+    "currentPasswordRequired": "Necesitas tu contraseña actual para continuar.",
+    "logout": "Cerrar sesión",
+    "deleteAccount": "Eliminar cuenta",
+    "deleteAccountConfirm": "¿Seguro que quieres eliminar tu cuenta? Esta acción no se puede deshacer."
   },
   "admin": {
     "dashboard": {

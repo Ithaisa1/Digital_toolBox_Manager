@@ -1,28 +1,87 @@
-.language-selector {
-  display: flex;
+.language-dropdown {
+  position: relative;
+  display: inline-flex;
   align-items: center;
 }
 
-.language-selector {
-  position: relative;
-}
-
-.language-button {
-  background: var(--bg-tertiary);
+.language-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
   border: 1px solid var(--border-color);
-  color: var(--text-primary);
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.3s ease;
-}
-
-.language-button:hover {
   background: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
 }
 
-.language-select option {
-  background-color: var(--bg-tertiary);
+.language-trigger:hover {
+  transform: translateY(-1px);
+  border-color: var(--border-glow);
+  box-shadow: var(--shadow-glow);
+}
+
+.language-flag {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.language-caret {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+.language-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.6rem);
+  min-width: 12rem;
+  padding: 0.5rem;
+  border-radius: 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  z-index: 50;
+}
+
+.language-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid transparent;
+  border-radius: 0.8rem;
+  background: transparent;
   color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+}
+
+.language-option:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-glow);
+}
+
+.language-option.active {
+  background: var(--primary-gradient);
+  color: var(--text-inverse);
+}
+
+.language-label {
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .language-menu {
+    min-width: 10rem;
+  }
 }

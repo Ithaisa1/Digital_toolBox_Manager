@@ -5,7 +5,7 @@
 }
 
 .admin-dashboard-container h1 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 2rem;
   font-size: 2.5rem;
   font-weight: 700;
@@ -20,16 +20,16 @@
 
 .stat-card {
   background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-  color: white;
+  color: var(--text-inverse);
   padding: 2rem;
   border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
 }
 
 .stat-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-glow);
 }
 
 .stat-card h3 {
@@ -44,6 +44,8 @@
   font-weight: 700;
   margin: 0.5rem 0;
   line-height: 1;
+  color: var(--text-inverse);
+  text-shadow: none;
 }
 
 .stat-detail {
@@ -53,19 +55,20 @@
 }
 
 .admin-dashboard-section {
-  background: white;
-  border-radius: 16px;
+  background: var(--bg-card);
+  border-radius: var(--border-radius);
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
 }
 
 .admin-dashboard-section h2 {
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
   font-weight: 600;
-  border-bottom: 2px solid #667eea;
+  border-bottom: 2px solid var(--primary-color);
   padding-bottom: 0.5rem;
 }
 
@@ -80,30 +83,30 @@
   grid-template-columns: 1fr 2fr 1fr;
   gap: 1rem;
   padding: 1rem;
-  background: #f8f9fa;
-  border-radius: 8px;
-  border-left: 4px solid #667eea;
-  transition: background-color 0.2s ease;
+  background: var(--bg-tertiary);
+  border-radius: var(--border-radius-sm);
+  border-left: 4px solid var(--primary-color);
+  transition: var(--transition);
 }
 
 .activity-item:hover {
-  background: #e9ecef;
+  background: var(--bg-hover);
 }
 
 .activity-type {
   font-weight: 600;
-  color: #667eea;
+  color: var(--primary-color);
   text-transform: uppercase;
   font-size: 0.8rem;
 }
 
 .activity-description {
-  color: #495057;
+  color: var(--text-primary);
   font-size: 0.9rem;
 }
 
 .activity-date {
-  color: #6c757d;
+  color: var(--text-secondary);
   font-size: 0.8rem;
   text-align: right;
 }
@@ -119,28 +122,28 @@
   grid-template-columns: 2fr 2fr 1fr;
   gap: 1rem;
   padding: 1.5rem;
-  background: #f8f9fa;
-  border-radius: 8px;
-  border-left: 4px solid #28a745;
-  transition: background-color 0.2s ease;
+  background: var(--bg-tertiary);
+  border-radius: var(--border-radius-sm);
+  border-left: 4px solid #10b981;
+  transition: var(--transition);
 }
 
 .user-item:hover {
-  background: #e9ecef;
+  background: var(--bg-hover);
 }
 
 .user-name {
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 .user-email {
-  color: #6c757d;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
 .user-tools {
-  color: #28a745;
+  color: #10b981;
   font-weight: 600;
   text-align: right;
 }

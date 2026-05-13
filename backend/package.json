@@ -1,7 +1,7 @@
 {
   "name": "gestor-herramientas-backend",
   "version": "1.0.0",
-  "description": "Backend para Gestor de Herramientas",
+  "description": "Backend for ToolBox Manager",
   "main": "src/server.js",
   "type": "module",
   "scripts": {

@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom';
 import api from '../services/api';
 import { useTranslation } from 'react-i18next';
+import { formatEuro } from '../utils/formatCurrency';
+import { getToolDescription } from '../utils/productDescriptions';
 import './ToolDetail.css';
 
 const ToolDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [tool, setTool] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -20,6 +23,7 @@ const ToolDetail = () => {
   const [showEditForm, setShowEditForm] = useState(false);
   const [editData, setEditData] = useState({
     name: '',
+    description: '',
     type: '',
     url: '',
     price: '',
@@ -27,12 +31,19 @@ const ToolDetail = () => {
     categoryId: '',
   });
   const [categories, setCategories] = useState([]);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isSpanish = i18n.language?.startsWith('es');
 
   useEffect(() => {
     fetchTool();
     fetchCategories();
   }, [id]);
+
+  useEffect(() => {
+    if (searchParams.get('subscribe') === '1') {
+      setShowSubscriptionForm(true);
+    }
+  }, [searchParams]);
 
   const fetchTool = async () => {
     try {
@@ -40,6 +51,7 @@ const ToolDetail = () => {
       setTool(response.data);
       setEditData({
         name: response.data.name,
+        description: response.data.description || '',
         type: response.data.type,
         url: response.data.url || '',
         price: response.data.price || '',
@@ -147,8 +159,12 @@ const ToolDetail = () => {
             <span className="value">{tool.type}</span>
           </div>
           <div className="info-row">
+            <span className="label">{t('tools.description')}:</span>
+            <span className="value">{tool.description || getToolDescription(tool) || tool.type}</span>
+          </div>
+          <div className="info-row">
             <span className="label">{t('toolDetail.price')}:</span>
-            <span className="value">{tool.price ? `$${tool.price.toFixed(2)}/mo` : t('toolDetail.free')}</span>
+            <span className="value">{tool.price !== null && tool.price !== undefined ? `${formatEuro(tool.price)}/mo` : t('toolDetail.free')}</span>
           </div>
           {tool.url && (
             <div className="info-row">
@@ -194,6 +210,14 @@ const ToolDetail = () => {
                   value={editData.type}
                   onChange={(e) => setEditData({ ...editData, type: e.target.value })}
                   required
+                />
+              </div>
+              <div className="form-group">
+                <label>{t('tools.description')}:</label>
+                <textarea
+                  rows="3"
+                  value={editData.description}
+                  onChange={(e) => setEditData({ ...editData, description: e.target.value })}
                 />
               </div>
               <div className="form-group">
@@ -291,9 +315,23 @@ const ToolDetail = () => {
               {tool.subscriptions.map((sub) => (
                 <div key={sub.id} className="subscription-item">
                   <div className="subscription-info">
-                    <p className="subscription-price">${sub.price.toFixed(2)}/{sub.billingCycle}</p>
+                    <div className="subscription-brand">
+                      <img
+                        src={sub.tool?.logoUrl}
+                        alt={`${sub.tool?.name || sub.tool?.type || 'Subscription'} logo`}
+                        className="subscription-logo"
+                      />
+                        <div className="subscription-brand-text">
+                          <p className="subscription-tool-name">{sub.tool?.name || tool.name}</p>
+                        <p className="subscription-price">{formatEuro(sub.price)}/{sub.billingCycle}</p>
+                        </div>
+                    </div>
                     <p className="subscription-renewal">{t('toolDetail.renews')}: {new Date(sub.renewalDate).toLocaleDateString()}</p>
-                    <span className={`badge ${sub.status.toLowerCase()}`}>{sub.status}</span>
+                    <span className={`badge ${sub.status.toLowerCase()}`}>
+                      {isSpanish
+                        ? (sub.status === 'ACTIVE' ? 'Activa' : sub.status === 'INACTIVE' ? 'Inactiva' : 'Archivada')
+                        : sub.status}
+                    </span>
                   </div>
                   <button 
                     onClick={() => handleDeleteSubscription(sub.id)} 
