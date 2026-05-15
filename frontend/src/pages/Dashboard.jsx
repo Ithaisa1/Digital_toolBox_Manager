@@ -53,7 +53,7 @@ const Dashboard = () => {
           <h3>{t('dashboard.totalTools')}</h3>
           <p className="stat-number">{stats.tools.total}</p>
           <p className="stat-detail">
-            {t('dashboard.active')}: {stats.tools.byStatus?.ACTIVE || 0} | {t('dashboard.inactive')}: {stats.tools.byStatus?.INACTIVE || 0} | {isSpanish ? 'Archivadas' : 'Archived'}: {stats.tools.byStatus?.ARCHIVED || 0}
+            {t('dashboard.active')}: {stats.tools.byStatus?.ACTIVE || 0} | {t('dashboard.inactive')}: {stats.tools.byStatus?.INACTIVE || 0}
           </p>
           <span className="stat-card-link-text">{viewToolsLabel}</span>
         </Link>
@@ -79,6 +79,38 @@ const Dashboard = () => {
           <p className="stat-detail">Tool categories</p>
         </div>
       </div>
+
+      {/* SUSCRIPCIONES AGRUPADAS POR HERRAMIENTA */}
+      {stats.subscriptions.byTool && stats.subscriptions.byTool.length > 0 && (
+        <div className="dashboard-section">
+          <h2>Your Subscriptions</h2>
+          <div className="subscriptions-grid">
+            {stats.subscriptions.byTool.map((toolGroup) => (
+              <div key={toolGroup.toolId} className="tool-subscription-card">
+                <div className="tool-sub-header">
+                  <h4>{toolGroup.toolName}</h4>
+                  <span className="category-badge">{toolGroup.category}</span>
+                </div>
+                
+                <div className="plans-list">
+                  {toolGroup.subscriptions.map((sub) => (
+                    <div key={sub.id} className="plan-row">
+                      <div className="plan-info">
+                        <span className="plan-name">{sub.plan}</span>
+                        <span className="plan-cycle">{sub.billingCycle === 'yearly' ? 'Yearly' : 'Monthly'}</span>
+                      </div>
+                      <div className="plan-right">
+                        <span className="plan-price">{formatEuro(sub.price)}</span>
+                        <span className="plan-renewal">{new Date(sub.renewalDate).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="dashboard-section">
         <h2>Most Expensive Tools</h2>

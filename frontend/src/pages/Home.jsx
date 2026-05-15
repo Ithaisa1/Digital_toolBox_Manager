@@ -1,15 +1,24 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import './Home.css';
 
 const Home = () => {
+  const { user } = useAuth();
+
   return (
     <div className="home-container">
       <div className="hero">
         <h1>Digital Toolbox Manager</h1>
         <p>Manage your digital tools efficiently</p>
         <div className="hero-actions">
-          <Link to="/dashboard" className="btn btn-primary">Go to Dashboard</Link>
-          <Link to="/tools" className="btn btn-secondary">View Tools</Link>
+          {!user ? (
+            <>
+              <Link to="/login" className="btn btn-primary">Iniciar sesión</Link>
+              <Link to="/register" className="btn btn-secondary">Registrarse</Link>
+            </>
+          ) : (
+            <Link to="/dashboard" className="btn btn-primary">Dashboard</Link>
+          )}
         </div>
       </div>
       <div className="features">

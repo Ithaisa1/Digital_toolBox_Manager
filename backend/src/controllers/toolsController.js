@@ -1,6 +1,9 @@
-import prisma from '../config/database.js';
-import { authenticateToken } from '../middleware/auth.js';
-import { attachToolLogo, attachSubscriptionLogo } from '../utils/productLogo.js';
+import prisma from "../config/database.js";
+import { authenticateToken } from "../middleware/auth.js";
+import {
+  attachToolLogo,
+  attachSubscriptionLogo,
+} from "../utils/productLogo.js";
 
 export const getAllTools = async (req, res, next) => {
   try {
@@ -28,13 +31,15 @@ export const getAllTools = async (req, res, next) => {
           select: { movements: true },
         },
       },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
     });
 
-    res.json(tools.map((tool) => ({
-      ...attachToolLogo(tool),
-      subscriptions: (tool.subscriptions || []).map(attachSubscriptionLogo),
-    })));
+    res.json(
+      tools.map((tool) => ({
+        ...attachToolLogo(tool),
+        subscriptions: (tool.subscriptions || []).map(attachSubscriptionLogo),
+      })),
+    );
   } catch (error) {
     next(error);
   }
@@ -59,14 +64,14 @@ export const getToolById = async (req, res, next) => {
           },
         },
         movements: {
-          orderBy: { createdAt: 'desc' },
+          orderBy: { createdAt: "desc" },
           take: 10,
         },
       },
     });
 
     if (!tool) {
-      return res.status(404).json({ error: 'Tool not found' });
+      return res.status(404).json({ error: "Tool not found" });
     }
 
     res.json({
@@ -84,7 +89,7 @@ export const createTool = async (req, res, next) => {
     const { name, type, url, price, status, categoryId } = req.body;
 
     if (!name || !type) {
-      return res.status(400).json({ error: 'Name and type are required' });
+      return res.status(400).json({ error: "Name and type are required" });
     }
 
     const tool = await prisma.tool.create({
@@ -92,8 +97,8 @@ export const createTool = async (req, res, next) => {
         name,
         type,
         url,
-        price: price ? parseFloat(price) : null,
-        status: status || 'ACTIVE',
+        price: price !== undefined && price !== null ? parseFloat(price) : null,
+        status: status || "ACTIVE",
         categoryId,
         userId,
       },
@@ -107,7 +112,7 @@ export const createTool = async (req, res, next) => {
       data: {
         toolId: tool.id,
         userId,
-        type: 'CREATED',
+        type: "CREATED",
         description: `Tool "${name}" was created`,
         newData: JSON.stringify(tool),
       },
@@ -130,7 +135,7 @@ export const updateTool = async (req, res, next) => {
     });
 
     if (!existingTool) {
-      return res.status(404).json({ error: 'Tool not found' });
+      return res.status(404).json({ error: "Tool not found" });
     }
 
     const tool = await prisma.tool.update({
@@ -139,9 +144,13 @@ export const updateTool = async (req, res, next) => {
         name: name || existingTool.name,
         type: type || existingTool.type,
         url: url !== undefined ? url : existingTool.url,
-        price: price !== undefined ? parseFloat(price) : existingTool.price,
+        price:
+          price !== undefined && price !== null
+            ? parseFloat(price)
+            : existingTool.price,
         status: status || existingTool.status,
-        categoryId: categoryId !== undefined ? categoryId : existingTool.categoryId,
+        categoryId:
+          categoryId !== undefined ? categoryId : existingTool.categoryId,
       },
       include: {
         category: true,
@@ -153,7 +162,7 @@ export const updateTool = async (req, res, next) => {
       data: {
         toolId: tool.id,
         userId,
-        type: 'UPDATED',
+        type: "UPDATED",
         description: `Tool "${name}" was updated`,
         previousData: JSON.stringify(existingTool),
         newData: JSON.stringify(tool),
@@ -176,7 +185,7 @@ export const deleteTool = async (req, res, next) => {
     });
 
     if (!tool) {
-      return res.status(404).json({ error: 'Tool not found' });
+      return res.status(404).json({ error: "Tool not found" });
     }
 
     await prisma.tool.delete({
@@ -187,13 +196,13 @@ export const deleteTool = async (req, res, next) => {
     await prisma.movement.create({
       data: {
         userId,
-        type: 'DELETED',
+        type: "DELETED",
         description: `Tool "${tool.name}" was deleted`,
         previousData: JSON.stringify(tool),
       },
     });
 
-    res.json({ message: 'Tool deleted successfully' });
+    res.json({ message: "Tool deleted successfully" });
   } catch (error) {
     next(error);
   }

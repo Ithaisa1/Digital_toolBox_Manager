@@ -52,6 +52,47 @@ export const getDashboardStats = async (req, res, next) => {
       include: { category: true },
     });
 
+    // Get subscriptions grouped by tool with plan differentiation
+    const allSubscriptions = await prisma.subscription.findMany({
+      where: { userId, status: 'ACTIVE' },
+      include: {
+        tool: {
+          include: {
+            category: true,
+          },
+        },
+      },
+      orderBy: { renewalDate: 'asc' },
+    });
+
+    // Group subscriptions by tool and add plan label
+    const subscriptionsByTool = allSubscriptions.reduce((acc, sub) => {
+      const toolName = sub.tool.name;
+      if (!acc[toolName]) {
+        acc[toolName] = {
+          toolId: sub.tool.id,
+          toolName: sub.tool.name,
+          category: sub.tool.category?.name || 'Uncategorized',
+          price: sub.tool.price,
+          subscriptions: [],
+        };
+      }
+      acc[toolName].subscriptions.push({
+        id: sub.id,
+        plan: sub.plan || 'Default',
+        price: sub.price,
+        billingCycle: sub.billingCycle,
+        renewalDate: sub.renewalDate,
+        status: sub.status,
+      });
+      return acc;
+    }, {});
+
+    // Convert to array and sort
+    const subscriptionsGrouped = Object.values(subscriptionsByTool).sort(
+      (a, b) => b.price - a.price
+    );
+
     res.json({
       tools: {
         total: toolsByStatus.reduce((sum, item) => sum + item._count._all, 0),
@@ -64,6 +105,7 @@ export const getDashboardStats = async (req, res, next) => {
         total: totalSubscriptions,
         monthlyCost: Math.round(monthlyCost * 100) / 100,
         upcomingRenewals,
+        byTool: subscriptionsGrouped,
       },
       categories: toolsByCategory.length,
       expensiveTools,

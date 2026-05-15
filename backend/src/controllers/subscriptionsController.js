@@ -56,7 +56,7 @@ export const getSubscriptionById = async (req, res, next) => {
 export const createSubscription = async (req, res, next) => {
   try {
     const userId = req.user.userId;
-    const { toolId, renewalDate, price, billingCycle, status } = req.body;
+    const { toolId, renewalDate, price, billingCycle, plan, status } = req.body;
 
     if (!toolId || !renewalDate || !price || !billingCycle) {
       return res.status(400).json({ error: 'Tool ID, renewal date, price, and billing cycle are required' });
@@ -77,6 +77,7 @@ export const createSubscription = async (req, res, next) => {
         renewalDate: new Date(renewalDate),
         price: parseFloat(price),
         billingCycle,
+        plan: plan || null,
         status: status || 'ACTIVE',
         userId,
       },
@@ -99,7 +100,7 @@ export const updateSubscription = async (req, res, next) => {
   try {
     const { id } = req.params;
     const userId = req.user.userId;
-    const { renewalDate, price, billingCycle, status } = req.body;
+    const { renewalDate, price, billingCycle, plan, status } = req.body;
 
     const existingSubscription = await prisma.subscription.findFirst({
       where: { id, userId },
@@ -115,6 +116,7 @@ export const updateSubscription = async (req, res, next) => {
         renewalDate: renewalDate ? new Date(renewalDate) : existingSubscription.renewalDate,
         price: price !== undefined ? parseFloat(price) : existingSubscription.price,
         billingCycle: billingCycle || existingSubscription.billingCycle,
+        plan: plan !== undefined ? plan : existingSubscription.plan,
         status: status || existingSubscription.status,
       },
       include: {

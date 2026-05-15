@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 import { useTranslation } from 'react-i18next';
@@ -94,6 +94,22 @@ const Subscriptions = () => {
     return status || '';
   };
 
+  const uniqueSubscriptions = useMemo(() => {
+    const seen = new Set();
+    return subscriptions.filter((subscription) => {
+      const key = [
+        subscription.tool?.name?.trim().toLowerCase() || '',
+        subscription.billingCycle?.trim().toLowerCase() || '',
+        subscription.status?.trim().toLowerCase() || '',
+        subscription.price?.toString() || '',
+      ].join('|');
+
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }, [subscriptions]);
+
   if (loading) return <div className="loading">{t('common.loading')}</div>;
   if (error) return <div className="error">{error}</div>;
 
@@ -106,13 +122,13 @@ const Subscriptions = () => {
         </div>
       </div>
 
-      {subscriptions.length === 0 ? (
+      {uniqueSubscriptions.length === 0 ? (
         <div className="subscriptions-empty card">
           <p>{copy.empty}</p>
         </div>
       ) : (
         <div className="subscriptions-grid">
-          {subscriptions.map((subscription) => (
+          {uniqueSubscriptions.map((subscription) => (
             <article key={subscription.id} className="subscription-card card">
               <div className="subscription-card-top">
                 <div className="subscription-brand">

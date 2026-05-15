@@ -241,6 +241,21 @@ npm run dev
 
 The backend will run on `http://localhost:3001`
 
+### Colección de Postman
+- Importa `backend/postman_collection.json` en Postman.
+- Configura la variable `base_url` a `http://localhost:3001`.
+- Usa la respuesta de `POST /api/auth/login` para llenar `jwt_token` y probar las rutas protegidas.
+
+### Pruebas del backend
+- Ejecuta las pruebas unitarias con:
+```bash
+npm test
+```
+- Para ver cobertura:
+```bash
+npm run test:coverage
+```
+
 #### Frontend Setup
 
 1. Navigate to the frontend directory:
@@ -248,17 +263,33 @@ The backend will run on `http://localhost:3001`
 cd frontend
 ```
 
-2. Install dependencies:
+2. Copy the environment template:
+```bash
+cp .env.example .env
+```
+
+3. Edit `.env` if needed:
+```env
+VITE_API_URL=http://localhost:3001
+```
+
+4. Install dependencies:
 ```bash
 npm install
 ```
 
-3. Start the development server:
+5. Start the development server:
 ```bash
 npm run dev
 ```
 
 The frontend will run on `http://localhost:3000`
+
+## 📌 Estado Actual del Proyecto
+- Backend implementado con rutas principales: autenticación, herramientas, categorías, suscripciones, movimientos, dashboard, alertas y exportación de datos.
+- Frontend integrado y listo para conexión con la API local.
+- Faltan pruebas en Postman para todas las rutas protegidas y documentación de colecciones.
+- Se añadió la colección de Postman en `backend/postman_collection.json` para iniciar pruebas rápidas.
 
 ## 📁 Estructura del Proyecto
 
@@ -346,6 +377,17 @@ Digital_Toolbox_Manager/
 
 ### Dashboard
 - `GET /api/dashboard/stats` - Obtener estadísticas del dashboard (protegido)
+
+### Alertas
+- `GET /api/alerts/upcoming` - Obtener renovaciones próximas (protegido)
+- `GET /api/alerts` - Listar alertas del usuario (protegido)
+- `POST /api/alerts` - Crear alertas de notificación (protegido)
+- `PATCH /api/alerts/:alertId/read` - Marcar alerta como leída (protegido)
+- `DELETE /api/alerts/:alertId` - Eliminar alerta (protegido)
+
+### Exportación
+- `GET /api/export/data` - Exportar datos del usuario en CSV o JSON (protegido)
+- `GET /api/export/analytics` - Generar reporte analítico (protegido)
 
 ### Movimientos
 - `GET /api/movements` - Obtener todos los movimientos (protegido)
@@ -506,19 +548,48 @@ Backend `.env`:
 - [x] **Moneda en euros**: Cambio de dólar a euro
 - [x] **Accesibilidad**: Mejoras de contraste y usabilidad
 
-## 🎯 Mejoras Futuras
+## 📋 Checklist Final Antes de Presentación
 
-- Notificaciones por email para renovaciones de suscripciones
-- Integración de webhooks con n8n para automatización
-- Analíticas avanzadas y reportes
-- Archivos adjuntos para herramientas
-- Funcionalidades de equipo/colaboración
-- Exportar datos a CSV/PDF
-- Aplicación móvil nativa
-- Búsqueda avanzada y filtros
-- Recomendaciones de herramientas basadas en uso
-- Sistema de backup y recuperación
-- Integración con APIs externas (Stripe, PayPal)
+### Backend:
+- [x] `npm run dev` funciona sin errores
+- [x] Todas las rutas responden correctamente en Postman/Thunder Client
+- [x] `npm test` → todos los tests pasan (19/19 ✅)
+- [x] `.env` con todas las variables necesarias
+- [ ] API desplegada y accesible (pendiente)
+- [x] Base de datos PostgreSQL configurada
+
+### Frontend:
+- [x] `npm run dev` funciona sin errores en consola
+- [x] Login y registro funcionan contra la API local
+- [x] El CRUD principal funciona de extremo a extremo
+- [x] El diseño es responsive (mobile y desktop)
+- [ ] Frontend desplegado y accesible (pendiente)
+
+### General:
+- [x] README con: descripción, instrucciones de instalación, lista de endpoints
+- [x] `.gitignore` incluye `node_modules` y `.env`
+- [x] Las contraseñas NO están en el código fuente
+- [x] Demo preparada y probada el día antes (pendiente)
+
+## 🚀 Próximos Pasos para Despliegue
+
+1. **Desplegar Backend:**
+   - Railway: `railway login`, `railway link`, `railway up`
+   - Configurar variables de entorno en Railway
+   - Ejecutar `npx prisma migrate deploy`
+
+2. **Desplegar Frontend:**
+   - Vercel: `vercel --prod`
+   - Configurar `VITE_API_URL` apuntando al backend desplegado
+
+3. **Base de Datos:**
+   - Railway PostgreSQL o Supabase
+   - Ejecutar seed si es necesario
+
+4. **Verificación Final:**
+   - Frontend se conecta al backend en producción
+   - Todas las funcionalidades funcionan end-to-end
+
 
 ## 📄 Licencia
 
@@ -528,7 +599,3 @@ MIT
 
 Creado por Ithaisa sánchez González.
 
-## 🙏 Agradecimientos
-
-- Ironhack por los requisitos del proyecto
-- La comunidad de open-source por las herramientas y librerías utilizadas

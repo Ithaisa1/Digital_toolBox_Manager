@@ -5,8 +5,6 @@ import { formatEuro } from '../utils/formatCurrency';
 import { getToolDescription } from '../utils/productDescriptions';
 import './ToolsList.css';
 
-const FILTERS = ['all', 'free', 'subscribed', 'available', 'premium'];
-
 const getFallbackLogo = (name = 'TB') => {
   const initials = (name || 'TB')
     .trim()
@@ -36,29 +34,20 @@ const ToolsList = () => {
   const [tools, setTools] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeFilter, setActiveFilter] = useState('all');
   const [subscriptionPanel, setSubscriptionPanel] = useState(null);
   const [subscriptionForm, setSubscriptionForm] = useState({
     price: '',
     billingCycle: 'monthly',
     renewalDate: '',
+    plan: '',
   });
   const { t, i18n } = useTranslation();
   const isSpanish = i18n.language?.startsWith('es');
 
   const copy = isSpanish
     ? {
-        title: 'Mi Inventario',
-        subtitle: 'Gestiona todas tus herramientas digitales en un solo lugar',
-        searchPlaceholder: 'Buscar herramientas...',
-        filters: {
-          all: 'Todas',
-          free: 'Gratis',
-          subscribed: 'Suscritas',
-          available: 'Disponibles',
-          premium: 'Premium',
-        },
+        title: 'Herramientas',
+        subtitle: 'Descubre y gestiona todas tus herramientas digitales',
         status: {
           free: 'Gratis',
           subscribed: 'Suscrito',
@@ -74,6 +63,7 @@ const ToolsList = () => {
         subscription: {
           title: 'Gestionar Suscripcion',
           price: 'Precio',
+          plan: 'Plan',
           billingCycle: 'Ciclo de facturacion',
           renewalDate: 'Fecha de renovacion',
           status: 'Estado',
@@ -96,16 +86,8 @@ const ToolsList = () => {
         loadFailed: 'Error al cargar herramientas',
       }
     : {
-        title: 'My Inventory',
-        subtitle: 'Manage all your digital tools in one place',
-        searchPlaceholder: 'Search tools...',
-        filters: {
-          all: 'All',
-          free: 'Free',
-          subscribed: 'Subscribed',
-          available: 'Available',
-          premium: 'Premium',
-        },
+        title: 'Tools',
+        subtitle: 'Discover and manage all your digital tools',
         status: {
           free: 'Free',
           subscribed: 'Subscribed',
@@ -121,6 +103,7 @@ const ToolsList = () => {
         subscription: {
           title: 'Manage Subscription',
           price: 'Price',
+          plan: 'Plan',
           billingCycle: 'Billing cycle',
           renewalDate: 'Renewal date',
           status: 'Status',
@@ -173,46 +156,31 @@ const ToolsList = () => {
     return tool.subscriptions?.find((sub) => sub.status === 'ACTIVE') || null;
   };
 
+  const uniqueTools = useMemo(() => {
+    const seen = new Set();
+    return tools.filter((tool) => {
+      const key = tool?.name?.trim().toLowerCase() || '';
+      if (!key || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }, [tools]);
+
+  // FILTRAR: Solo herramientas sin suscripción activa
   const filteredTools = useMemo(() => {
-    let result = tools;
-
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      result = result.filter(
-        (tool) =>
-          tool.name?.toLowerCase().includes(query) ||
-          tool.type?.toLowerCase().includes(query) ||
-          tool.category?.name?.toLowerCase().includes(query)
-      );
-    }
-
-    result = result.filter((tool) => {
-      const isFree = !tool.price || tool.price === 0;
+    return uniqueTools.filter((tool) => {
       const hasActiveSubscription = tool.subscriptions?.some(
         (sub) => sub.status === 'ACTIVE'
       );
-
-      switch (activeFilter) {
-        case 'free':
-          return isFree;
-        case 'subscribed':
-          return hasActiveSubscription;
-        case 'available':
-          return !isFree && !hasActiveSubscription;
-        case 'premium':
-          return !isFree;
-        default:
-          return true;
-      }
+      return !hasActiveSubscription; // Solo mostrar si NO tiene suscripción activa
     });
-
-    return result;
-  }, [tools, searchQuery, activeFilter]);
+  }, [uniqueTools]);
 
   const handleOpenSubscriptionPanel = (tool, existingSub = null) => {
     if (existingSub) {
       setSubscriptionForm({
         price: existingSub.price.toString(),
+        plan: existingSub.plan || '',
         billingCycle: existingSub.billingCycle,
         renewalDate: existingSub.renewalDate?.split('T')[0] || '',
       });
@@ -221,6 +189,7 @@ const ToolsList = () => {
       nextMonth.setMonth(nextMonth.getMonth() + 1);
       setSubscriptionForm({
         price: tool.price?.toString() || '',
+        plan: '',
         billingCycle: 'monthly',
         renewalDate: nextMonth.toISOString().split('T')[0],
       });
@@ -293,41 +262,12 @@ const ToolsList = () => {
         </div>
       </div>
 
-      <div className="tools-filters">
-        <div className="search-box">
-          <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="11" cy="11" r="8" />
-            <path d="M21 21l-4.35-4.35" />
-          </svg>
-          <input
-            type="text"
-            placeholder={copy.searchPlaceholder}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-input"
-          />
-        </div>
-
-        <div className="filter-tabs">
-          {FILTERS.map((filter) => (
-            <button
-              key={filter}
-              className={`filter-tab ${activeFilter === filter ? 'active' : ''}`}
-              onClick={() => setActiveFilter(filter)}
-            >
-              {copy.filters[filter]}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {filteredTools.length === 0 ? (
         <div className="empty-state">{copy.noResults}</div>
       ) : (
         <div className="tools-grid">
           {filteredTools.map((tool) => {
             const status = getToolStatus(tool);
-            const activeSub = getActiveSubscription(tool);
             const isFree = !tool.price || tool.price === 0;
 
             return (
@@ -359,29 +299,6 @@ const ToolsList = () => {
                   </p>
                 </div>
 
-                {activeSub && (
-                  <div className="tool-subscription-info">
-                    <div className="sub-info-row">
-                      <span className="sub-label">{copy.subscription.price}:</span>
-                      <span className="sub-value">{formatEuro(activeSub.price)}</span>
-                    </div>
-                    <div className="sub-info-row">
-                      <span className="sub-label">{copy.subscription.billingCycle}:</span>
-                      <span className="sub-value">
-                        {activeSub.billingCycle === 'yearly'
-                          ? copy.subscription.yearly
-                          : copy.subscription.monthly}
-                      </span>
-                    </div>
-                    <div className="sub-info-row">
-                      <span className="sub-label">{copy.renewal}:</span>
-                      <span className="sub-value">
-                        {new Date(activeSub.renewalDate).toLocaleDateString()}
-                      </span>
-                    </div>
-                  </div>
-                )}
-
                 {tool.price && !isFree && (
                   <p className="tool-price">{formatEuro(tool.price)}/mo</p>
                 )}
@@ -394,23 +311,6 @@ const ToolsList = () => {
                     >
                       {copy.actions.useTool}
                     </button>
-                  )}
-
-                  {status === 'subscribed' && (
-                    <>
-                      <button
-                        className="btn btn-secondary"
-                        onClick={() => handleOpenTool(tool)}
-                      >
-                        {copy.actions.openTool}
-                      </button>
-                      <button
-                        className="btn btn-outline"
-                        onClick={() => handleOpenSubscriptionPanel(tool, activeSub)}
-                      >
-                        {copy.actions.manageSubscription}
-                      </button>
-                    </>
                   )}
 
                   {status === 'notSubscribed' && (
@@ -448,19 +348,20 @@ const ToolsList = () => {
               />
               <div>
                 <h3>{subscriptionPanel.tool.name}</h3>
-                {subscriptionPanel.existingSub && (
-                  <span className={`badge-status ${subscriptionPanel.existingSub.status.toLowerCase()}`}>
-                    {subscriptionPanel.existingSub.status === 'ACTIVE'
-                      ? copy.subscription.active
-                      : subscriptionPanel.existingSub.status === 'CANCELLED'
-                        ? copy.subscription.cancelled
-                        : copy.subscription.expired}
-                  </span>
-                )}
               </div>
             </div>
 
             <div className="panel-form">
+              <div className="form-group">
+                <label>{copy.subscription.plan}</label>
+                <input
+                  type="text"
+                  placeholder="e.g., Personal, Business, Enterprise"
+                  value={subscriptionForm.plan}
+                  onChange={(e) => setSubscriptionForm({ ...subscriptionForm, plan: e.target.value })}
+                />
+              </div>
+
               <div className="form-group">
                 <label>{copy.subscription.price} (EUR)</label>
                 <input
@@ -496,12 +397,6 @@ const ToolsList = () => {
               <button className="btn btn-primary" onClick={handleSaveSubscription}>
                 {subscriptionPanel.existingSub ? copy.subscription.save : copy.subscription.create}
               </button>
-
-              {subscriptionPanel.existingSub && (
-                <button className="btn btn-danger" onClick={handleCancelSubscription}>
-                  {copy.subscription.cancel}
-                </button>
-              )}
 
               <button className="btn btn-outline" onClick={handleCloseSubscriptionPanel}>
                 {copy.subscription.close}

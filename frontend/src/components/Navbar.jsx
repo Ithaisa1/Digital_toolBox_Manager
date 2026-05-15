@@ -21,27 +21,25 @@ const Navbar = ({ theme, onToggleTheme }) => {
         </Link>
       </div>
       <div className="navbar-links">
-        <NavLink to="/dashboard" className={navLinkClass}>
-          {t('nav.dashboard')}
-        </NavLink>
-        <NavLink to="/tools" className={navLinkClass}>
-          {t('nav.tools')}
-        </NavLink>
-        <NavLink to="/subscriptions" className={navLinkClass}>
-          {t('subscriptions.title')}
-        </NavLink>
-        {user?.role === 'ADMIN' && (
-          <NavLink
-            to="/admin"
-            className={({ isActive }) => `admin-link navbar-link${isActive ? ' active' : ''}`}
-          >
-            {t('nav.admin')}
-          </NavLink>
-        )}
-        <ThemeToggle theme={theme} onToggle={onToggleTheme} />
-        <LanguageSelector />
-        {user && (
+        {user ? (
           <>
+            <NavLink to="/dashboard" className={navLinkClass}>
+              {t('nav.dashboard')}
+            </NavLink>
+            <NavLink to="/tools" className={navLinkClass}>
+              {t('nav.tools')}
+            </NavLink>
+            <NavLink to="/subscriptions" className={navLinkClass}>
+              {t('subscriptions.title')}
+            </NavLink>
+            {user.role === 'ADMIN' && (
+              <NavLink
+                to="/admin"
+                className={({ isActive }) => `admin-link navbar-link${isActive ? ' active' : ''}`}
+              >
+                {t('nav.admin')}
+              </NavLink>
+            )}
             <Link
               to="/profile"
               className="navbar-profile-link"
@@ -52,7 +50,12 @@ const Navbar = ({ theme, onToggleTheme }) => {
             </Link>
             <button onClick={logout} className="btn btn-secondary">{t('profile.logout')}</button>
           </>
+        ) : (
+          <>
+          </>
         )}
+        <ThemeToggle theme={theme} onToggle={onToggleTheme} />
+        <LanguageSelector />
       </div>
     </nav>
   );

@@ -90,6 +90,7 @@ model Subscription {
   renewalDate   DateTime
   price         Float
   billingCycle  String             // "monthly" or "yearly"
+  plan          String?            // Nuevo campo para diferenciar suscripciones
   status        SubscriptionStatus @default(ACTIVE)
   userId        String
   createdAt     DateTime           @default(now())
