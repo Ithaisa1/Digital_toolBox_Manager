@@ -1,36 +1,33 @@
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import './Home.css';
 
 const Home = () => {
-  const { t } = useTranslation();
-
   return (
     <div className="home-container">
       <div className="hero">
-        <h1>{t('home.welcome')}</h1>
-        <p>{t('home.description')}</p>
+        <h1>Digital Toolbox Manager</h1>
+        <p>Manage your digital tools efficiently</p>
         <div className="hero-actions">
-          <Link to="/dashboard" className="btn btn-primary">{t('home.goToDashboard')}</Link>
-          <Link to="/tools" className="btn btn-secondary">{t('home.viewTools')}</Link>
+          <Link to="/dashboard" className="btn btn-primary">Go to Dashboard</Link>
+          <Link to="/tools" className="btn btn-secondary">View Tools</Link>
         </div>
       </div>
       <div className="features">
         <div className="feature-card">
-          <h3>{t('home.feature1.title')}</h3>
-          <p>{t('home.feature1.description')}</p>
+          <h3>Tool Management</h3>
+          <p>Organize and track all your digital tools in one place</p>
         </div>
         <div className="feature-card">
-          <h3>{t('home.feature2.title')}</h3>
-          <p>{t('home.feature2.description')}</p>
+          <h3>Subscription Tracking</h3>
+          <p>Monitor your tool subscriptions and renewal dates</p>
         </div>
         <div className="feature-card">
-          <h3>{t('home.feature3.title')}</h3>
-          <p>{t('home.feature3.description')}</p>
+          <h3>Categories</h3>
+          <p>Group your tools by categories for better organization</p>
         </div>
         <div className="feature-card">
-          <h3>{t('home.feature4.title')}</h3>
-          <p>{t('home.feature4.description')}</p>
+          <h3>Activity Log</h3>
+          <p>Track all changes and movements in your toolbox</p>
         </div>
       </div>
     </div>

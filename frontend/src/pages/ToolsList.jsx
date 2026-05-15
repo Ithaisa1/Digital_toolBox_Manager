@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import api from '../services/api';
 import { useTranslation } from 'react-i18next';
 import { formatEuro } from '../utils/formatCurrency';
@@ -91,7 +90,6 @@ const ToolsList = () => {
         },
         noTools: 'No hay herramientas en tu inventario',
         noResults: 'No se encontraron herramientas',
-        addTool: '+ Anadir herramienta',
         category: 'Categoria',
         uncategorized: 'Sin categoria',
         renewal: 'Renovacion',
@@ -139,7 +137,6 @@ const ToolsList = () => {
         },
         noTools: 'No tools in your inventory',
         noResults: 'No tools found',
-        addTool: '+ Add tool',
         category: 'Category',
         uncategorized: 'Uncategorized',
         renewal: 'Renewal',
@@ -190,7 +187,6 @@ const ToolsList = () => {
     }
 
     result = result.filter((tool) => {
-      const status = getToolStatus(tool);
       const isFree = !tool.price || tool.price === 0;
       const hasActiveSubscription = tool.subscriptions?.some(
         (sub) => sub.status === 'ACTIVE'

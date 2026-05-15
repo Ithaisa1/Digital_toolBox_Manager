@@ -27,15 +27,15 @@ const Dashboard = () => {
       const response = await api.get('/dashboard/stats');
       setStats(response.data);
     } catch (err) {
-      setError(t('common.error'));
+      setError('Failed to load dashboard data');
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) return <div className="loading">{t('common.loading')}</div>;
+  if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
-  if (!stats) return <div className="error">{t('dashboard.noData')}</div>;
+  if (!stats) return <div className="error">No data available</div>;
 
   return (
     <div className="dashboard-container">
@@ -70,18 +70,18 @@ const Dashboard = () => {
         <div className="stat-card dashboard-stat-card">
           <h3>{t('dashboard.upcomingRenewals')}</h3>
           <p className="stat-number">{stats.subscriptions.upcomingRenewals}</p>
-          <p className="stat-detail">{t('dashboard.next30Days')}</p>
+          <p className="stat-detail">Next 30 days</p>
         </div>
 
         <div className="stat-card dashboard-stat-card">
           <h3>{t('dashboard.categories')}</h3>
           <p className="stat-number">{stats.categories}</p>
-          <p className="stat-detail">{t('dashboard.toolCategories')}</p>
+          <p className="stat-detail">Tool categories</p>
         </div>
       </div>
 
       <div className="dashboard-section">
-        <h2>{t('dashboard.mostExpensiveTools')}</h2>
+        <h2>Most Expensive Tools</h2>
         {stats.expensiveTools.length > 0 ? (
           <div className="tools-list">
             {stats.expensiveTools.map((tool) => (
@@ -93,7 +93,7 @@ const Dashboard = () => {
             ))}
           </div>
         ) : (
-          <p className="empty-state">{t('dashboard.noPricingInfo')}</p>
+          <p className="empty-state">No pricing information available</p>
         )}
       </div>
     </div>

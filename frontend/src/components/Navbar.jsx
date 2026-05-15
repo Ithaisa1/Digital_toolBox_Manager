@@ -1,8 +1,8 @@
 import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useTranslation } from 'react-i18next';
-import LanguageSelector from './LanguageSelector';
 import ThemeToggle from './ThemeToggle';
+import LanguageSelector from './LanguageSelector';
+import { useTranslation } from 'react-i18next';
 import './Navbar.css';
 
 const Navbar = ({ theme, onToggleTheme }) => {

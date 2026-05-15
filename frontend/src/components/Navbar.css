@@ -9,7 +9,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: var(--transition);
+  position: sticky;
+  top: 20px;
+  z-index: 100;
+  box-shadow: var(--shadow-md);
 }
 
 .navbar-dark {
@@ -37,7 +40,7 @@
 
 .brand-link {
   text-decoration: none;
-  font-size: 20px;
+  font-size: 1.5rem;
   font-weight: 700;
   transition: var(--transition);
   letter-spacing: -0.04em;
@@ -127,7 +130,7 @@
   box-shadow: var(--shadow-sm);
 }
 
-.navbar .admin-link {
+.admin-link {
   background: var(--primary-gradient);
   color: var(--text-inverse) !important;
   font-weight: 600;

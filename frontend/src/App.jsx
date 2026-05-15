@@ -11,27 +11,9 @@ import Subscriptions from './pages/Subscriptions';
 import ToolDetail from './pages/ToolDetail';
 import AdminDashboard from './pages/AdminDashboard';
 import Profile from './pages/Profile';
+import ProtectedRoute from './components/ProtectedRoute';
+import Spinner from './components/Spinner';
 import './App.css';
-
-const ProtectedRoute = ({ children }) => {
-  const { user, loading } = useAuth();
-  
-  if (loading) {
-    return <div className="loading">Loading...</div>;
-  }
-  
-  return user ? children : <Navigate to="/login" />;
-};
-
-const AdminRoute = ({ children }) => {
-  const { user, loading } = useAuth();
-  
-  if (loading) {
-    return <div className="loading">Loading...</div>;
-  }
-  
-  return user?.role === 'ADMIN' ? children : <Navigate to="/dashboard" />;
-};
 
 function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
@@ -77,9 +59,9 @@ function App() {
                 </ProtectedRoute>
               } />
               <Route path="/admin" element={
-                <AdminRoute>
+                <ProtectedRoute requiredRole="ADMIN">
                   <AdminDashboard />
-                </AdminRoute>
+                </ProtectedRoute>
               } />
               <Route path="/profile" element={
                 <ProtectedRoute>
