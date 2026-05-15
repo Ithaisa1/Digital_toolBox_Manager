@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect, useMemo } from 'react';
 import api from '../services/api';
 import { useTranslation } from 'react-i18next';
 import { formatEuro } from '../utils/formatCurrency';
 import { getToolDescription } from '../utils/productDescriptions';
 import './Subscriptions.css';
+
+const FILTERS = ['all', 'active', 'inactive', 'cancelled', 'expired'];
 
 const getFallbackLogo = (name = 'TB') => {
   const initials = (name || 'TB')
@@ -32,35 +33,105 @@ const getFallbackLogo = (name = 'TB') => {
 };
 
 const Subscriptions = () => {
-  const { t, i18n } = useTranslation();
-  const isSpanish = i18n.language?.startsWith('es');
   const [subscriptions, setSubscriptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState('all');
+  const { t, i18n } = useTranslation();
+  const isSpanish = i18n.language?.startsWith('es');
 
   const copy = isSpanish
     ? {
-        subtitle: 'Consulta todas las suscripciones de tu cuenta en un solo lugar.',
-        empty: 'Todavia no tienes suscripciones registradas.',
-        manage: 'Gestionar',
-        active: 'Activa',
-        inactive: 'Inactiva',
-        archived: 'Archivada',
+        title: 'Mis Suscripciones',
+        subtitle: 'Gestiona todas tus suscripciones en un solo lugar',
+        searchPlaceholder: 'Buscar suscripciones...',
+        filters: {
+          all: 'Todas',
+          active: 'Activas',
+          inactive: 'Inactivas',
+          cancelled: 'Canceladas',
+          expired: 'Expiradas',
+        },
+        status: {
+          free: 'Gratis',
+          subscribed: 'Suscrito',
+          notSubscribed: 'Suscribirse',
+          premium: 'Premium',
+        },
+        actions: {
+          useTool: 'Usar',
+          openTool: 'Abrir',
+          manageSubscription: 'Gestionar',
+          subscribe: 'Suscribirse',
+        },
+        subscription: {
+          title: 'Gestionar Suscripcion',
+          price: 'Precio',
+          billingCycle: 'Ciclo',
+          renewalDate: 'Renovacion',
+          status: 'Estado',
+          monthly: 'Mensual',
+          yearly: 'Anual',
+          active: 'Activa',
+          cancelled: 'Cancelada',
+          expired: 'Expirada',
+          save: 'Guardar',
+          cancel: 'Cancelar',
+          close: 'Cerrar',
+          create: 'Crear',
+        },
+        noTools: 'No hay suscripciones en tu inventario',
+        noResults: 'No se encontraron suscripciones',
         category: 'Categoria',
-        descriptionFallback: 'Sin descripcion',
         uncategorized: 'Sin categoria',
+        renewal: 'Renovacion',
         loadFailed: 'Error al cargar suscripciones',
       }
     : {
-        subtitle: 'See all subscriptions for your account in one place.',
-        empty: 'You do not have any subscriptions yet.',
-        manage: 'Manage',
-        active: 'Active',
-        inactive: 'Inactive',
-        archived: 'Archived',
+        title: 'My Subscriptions',
+        subtitle: 'Manage all your subscriptions in one place',
+        searchPlaceholder: 'Search subscriptions...',
+        filters: {
+          all: 'All',
+          active: 'Active',
+          inactive: 'Inactive',
+          cancelled: 'Cancelled',
+          expired: 'Expired',
+        },
+        status: {
+          free: 'Free',
+          subscribed: 'Subscribed',
+          notSubscribed: 'Subscribe',
+          premium: 'Premium',
+        },
+        actions: {
+          useTool: 'Use',
+          openTool: 'Open',
+          manageSubscription: 'Manage',
+          subscribe: 'Subscribe',
+        },
+        subscription: {
+          title: 'Manage Subscription',
+          price: 'Price',
+          billingCycle: 'Billing',
+          renewalDate: 'Renewal',
+          status: 'Status',
+          monthly: 'Monthly',
+          yearly: 'Yearly',
+          active: 'Active',
+          cancelled: 'Cancelled',
+          expired: 'Expired',
+          save: 'Save',
+          cancel: 'Cancel',
+          close: 'Close',
+          create: 'Create',
+        },
+        noTools: 'No subscriptions in your inventory',
+        noResults: 'No subscriptions found',
         category: 'Category',
-        descriptionFallback: 'No description available',
         uncategorized: 'Uncategorized',
+        renewal: 'Renewal',
         loadFailed: 'Failed to load subscriptions',
       };
 
@@ -81,17 +152,29 @@ const Subscriptions = () => {
 
   const getBillingCycleLabel = (cycle) => {
     const key = cycle?.toLowerCase();
-    if (key === 'monthly') return isSpanish ? 'Mensual' : 'Monthly';
-    if (key === 'yearly') return isSpanish ? 'Anual' : 'Yearly';
+    if (key === 'monthly') return copy.subscription.monthly;
+    if (key === 'yearly') return copy.subscription.yearly;
     return cycle || '';
   };
 
   const getToolStatusLabel = (status) => {
     const key = status?.toLowerCase();
-    if (key === 'active') return copy.active;
-    if (key === 'inactive') return copy.inactive;
-    if (key === 'archived') return copy.archived;
+    if (key === 'active') return copy.subscription.active;
+    if (key === 'inactive') return isSpanish ? 'Inactiva' : 'Inactive';
+    if (key === 'archived') return isSpanish ? 'Archivada' : 'Archived';
+    if (key === 'cancelled') return copy.subscription.cancelled;
+    if (key === 'expired') return copy.subscription.expired;
     return status || '';
+  };
+
+  const getSubscriptionStatus = (subscription) => {
+    const status = subscription.tool?.status?.toLowerCase();
+    if (status === 'active') return 'active';
+    if (status === 'inactive') return 'inactive';
+    if (status === 'archived') return 'archived';
+    if (subscription.status?.toLowerCase() === 'cancelled') return 'cancelled';
+    if (subscription.status?.toLowerCase() === 'expired') return 'expired';
+    return status || 'inactive';
   };
 
   const uniqueSubscriptions = useMemo(() => {
@@ -99,6 +182,7 @@ const Subscriptions = () => {
     return subscriptions.filter((subscription) => {
       const key = [
         subscription.tool?.name?.trim().toLowerCase() || '',
+        subscription.tool?.id || '',
         subscription.billingCycle?.trim().toLowerCase() || '',
         subscription.status?.trim().toLowerCase() || '',
         subscription.price?.toString() || '',
@@ -110,78 +194,160 @@ const Subscriptions = () => {
     });
   }, [subscriptions]);
 
+  const filteredSubscriptions = useMemo(() => {
+    let result = uniqueSubscriptions;
+
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        (sub) =>
+          sub.tool?.name?.toLowerCase().includes(query) ||
+          sub.tool?.type?.toLowerCase().includes(query) ||
+          sub.tool?.category?.name?.toLowerCase().includes(query) ||
+          sub.tool?.description?.toLowerCase().includes(query)
+      );
+    }
+
+    result = result.filter((sub) => {
+      const status = getSubscriptionStatus(sub);
+
+      switch (activeFilter) {
+        case 'active':
+          return status === 'active';
+        case 'inactive':
+          return status === 'inactive';
+        case 'archived':
+          return status === 'archived';
+        case 'cancelled':
+          return status === 'cancelled';
+        case 'expired':
+          return status === 'expired';
+        default:
+          return true;
+      }
+    });
+
+    return result;
+  }, [uniqueSubscriptions, searchQuery, activeFilter]);
+
+  const handleOpenTool = (tool) => {
+    if (tool.url) {
+      window.open(tool.url, '_blank');
+    }
+  };
+
   if (loading) return <div className="loading">{t('common.loading')}</div>;
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div className="subscriptions-page">
-      <div className="subscriptions-header">
-        <div className="subscriptions-heading">
-          <h1>{t('subscriptions.title')}</h1>
-          <p>{copy.subtitle}</p>
+    <div className="tools-container">
+      <div className="tools-header">
+        <div className="tools-header-copy">
+          <h1>{copy.title}</h1>
+          <p className="tools-subtitle">{copy.subtitle}</p>
         </div>
       </div>
 
-      {uniqueSubscriptions.length === 0 ? (
-        <div className="subscriptions-empty card">
-          <p>{copy.empty}</p>
+      <div className="tools-filters">
+        <div className="search-box">
+          <svg className="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" />
+          </svg>
+          <input
+            type="text"
+            placeholder={copy.searchPlaceholder}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+          />
         </div>
+
+        <div className="filter-tabs">
+          {FILTERS.map((filter) => (
+            <button
+              key={filter}
+              className={`filter-tab ${activeFilter === filter ? 'active' : ''}`}
+              onClick={() => setActiveFilter(filter)}
+            >
+              {copy.filters[filter]}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {filteredSubscriptions.length === 0 ? (
+        <div className="empty-state">{copy.noResults}</div>
       ) : (
-        <div className="subscriptions-grid">
-          {uniqueSubscriptions.map((subscription) => (
-            <article key={subscription.id} className="subscription-card card">
-              <div className="subscription-card-top">
-                <div className="subscription-brand">
+        <div className="tools-grid">
+          {filteredSubscriptions.map((subscription) => {
+            const toolStatus = getSubscriptionStatus(subscription);
+            const isFree = !subscription.tool?.price || subscription.tool?.price === 0;
+
+            return (
+              <article key={subscription.id} className={`tool-card status-${toolStatus}`}>
+                <div className="tool-card-header">
                   <img
                     src={subscription.tool?.logoUrl || getFallbackLogo(subscription.tool?.name)}
-                    alt={`${subscription.tool?.name || subscription.tool?.type || 'Subscription'} logo`}
-                    className="subscription-logo"
+                    alt={`${subscription.tool?.name || 'Subscription'} logo`}
+                    className="tool-icon"
                     onError={(event) => {
                       event.currentTarget.src = getFallbackLogo(subscription.tool?.name);
                     }}
                   />
-                  <div className="subscription-brand-text">
-                    <h3>{subscription.tool?.name || t('subscriptions.title')}</h3>
-                    <p>
-                      {subscription.tool?.description
-                        || getToolDescription(subscription.tool)
-                        || subscription.tool?.type
-                        || copy.descriptionFallback}
-                    </p>
+                  <div className="tool-badges">
+                    <span className={`badge-status ${toolStatus}`}>
+                      {getToolStatusLabel(subscription.tool?.status || subscription.status)}
+                    </span>
+                    {isFree && <span className="badge-free">FREE</span>}
                   </div>
                 </div>
-                <div className="subscription-card-actions">
-                  <span className={`subscription-status ${subscription.tool?.status?.toLowerCase()}`}>
-                    {getToolStatusLabel(subscription.tool?.status)}
-                  </span>
-                  {subscription.toolId && (
-                    <Link to={`/tools/${subscription.toolId}`} className="btn btn-secondary">
-                      {copy.manage}
-                    </Link>
-                  )}
-                </div>
-              </div>
 
-              <div className="subscription-meta">
-                <div>
-                  <span className="meta-label">{t('subscriptions.price')}</span>
-                  <span className="meta-value">{formatEuro(subscription.price)}</span>
+                <div className="tool-card-body">
+                  <h3>{subscription.tool?.name || 'Subscription'}</h3>
+                  <p className="tool-description">
+                    {subscription.tool?.description || getToolDescription(subscription.tool) || subscription.tool?.type || '-'}
+                  </p>
+                  <p className="tool-category">
+                    {copy.category}: {subscription.tool?.category?.name || copy.uncategorized}
+                  </p>
                 </div>
-                <div>
-                  <span className="meta-label">{t('subscriptions.billingCycle')}</span>
-                  <span className="meta-value">{getBillingCycleLabel(subscription.billingCycle)}</span>
+
+                <div className="tool-subscription-info">
+                  <div className="sub-info-row">
+                    <span className="sub-label">{copy.subscription.price}:</span>
+                    <span className="sub-value">{formatEuro(subscription.price)}</span>
+                  </div>
+                  <div className="sub-info-row">
+                    <span className="sub-label">{copy.subscription.billingCycle}:</span>
+                    <span className="sub-value">
+                      {getBillingCycleLabel(subscription.billingCycle)}
+                    </span>
+                  </div>
+                  <div className="sub-info-row">
+                    <span className="sub-label">{copy.renewal}:</span>
+                    <span className="sub-value">
+                      {new Date(subscription.renewalDate).toLocaleDateString()}
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <span className="meta-label">{t('subscriptions.renewalDate')}</span>
-                  <span className="meta-value">{new Date(subscription.renewalDate).toLocaleDateString()}</span>
+
+                <div className="tool-actions">
+                  {subscription.tool?.url && (
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => handleOpenTool(subscription.tool)}
+                    >
+                      {copy.actions.openTool}
+                    </button>
+                  )}
+                  <button className="btn btn-outline">
+                    {copy.actions.manageSubscription}
+                  </button>
                 </div>
-                <div>
-                  <span className="meta-label">{copy.category}</span>
-                  <span className="meta-value">{subscription.tool?.category?.name || copy.uncategorized}</span>
-                </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
         </div>
       )}
     </div>

@@ -2,10 +2,12 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  word-break: break-word;
 }
 
 html {
   scroll-behavior: smooth;
+  font-size: clamp(14px, 1vw, 18px);
 }
 
 body {
@@ -14,10 +16,24 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   transition: var(--transition);
+  font-size: 1rem;
+  line-height: 1.6;
+  overflow-x: hidden;
 }
 
 #root {
   min-height: 100vh;
+}
+
+img,
+svg,
+picture,
+video,
+iframe,
+canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 a {
@@ -32,9 +48,10 @@ textarea {
 }
 
 .container {
-  max-width: 1200px;
+  width: 100%;
+  max-width: min(1200px, 100%);
   margin: 0 auto;
-  padding: 20px;
+  padding: clamp(1rem, 2vw, 2rem);
 }
 
 .btn {
