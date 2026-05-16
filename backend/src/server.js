@@ -21,11 +21,13 @@ dotenv.config();
 const app = express();
 const PORT = Number(process.env.PORT) || 3001;
 
-// CORS: acepta todos los orígenes en producción
+// ✅ CORS CONFIGURADO CORRECTAMENTE
 app.use(
   cors({
-    origin: true,
+    origin: corsOriginCallback,
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
 app.use(express.json());
