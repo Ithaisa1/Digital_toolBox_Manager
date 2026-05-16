@@ -1,6 +1,6 @@
 services:
   - name: digital-toolbox-db
-    type: psql
+    type: pg
     plan: free
     region: oregon
 
