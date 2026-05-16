@@ -1,4 +1,9 @@
 services:
+  - name: digital-toolbox-db
+    type: psql
+    plan: free
+    region: oregon
+
   - type: web
     name: digital-toolbox-api
     runtime: node
