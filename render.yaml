@@ -4,8 +4,8 @@ services:
     runtime: node
     region: oregon
     plan: free
-    buildCommand: cd backend && npm install && npx prisma generate --schema ../database/prisma/schema.prisma && npm run prisma:migrate
-    startCommand: cd backend && npm start
+    buildCommand: cd backend && npm install && npx prisma generate --schema ../database/prisma/schema.prisma
+    startCommand: cd backend && node src/server.js
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
@@ -13,26 +13,12 @@ services:
       - key: PORT
         value: 3001
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: digital-toolbox-db
+          property: connectionString
       - key: JWT_SECRET
         generateValue: true
       - key: FRONTEND_URL
-        sync: false
-
-  - type: web
-    name: digital-toolbox-manager
-    runtime: static
-    region: oregon
-    plan: free
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: dist
-    headers:
-      - path: /*
-        name: Cache-Control
-        value: no-cache
-    envVars:
-      - key: VITE_API_URL
-        sync: false
-    routes:
-      - path: /*
-        destination: /
+        value: https://digital-toolbox-manager.onrender.com
+      - key: AUTO_DB_SETUP
+        value: "false"
