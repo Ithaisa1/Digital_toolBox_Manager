@@ -1,9 +1,4 @@
 services:
-  - name: digital-toolbox-db
-    type: pg
-    plan: free
-    region: oregon
-
   - type: web
     name: digital-toolbox-api
     runtime: node
@@ -17,13 +12,9 @@ services:
         value: production
       - key: PORT
         value: 3001
-      - key: DATABASE_URL
-        fromDatabase:
-          name: digital-toolbox-db
-          property: connectionString
       - key: JWT_SECRET
         generateValue: true
-      - key: FRONTEND_URL
-        value: https://digital-toolbox-manager.onrender.com
       - key: AUTO_DB_SETUP
         value: "false"
+      - key: FRONTEND_URL
+        value: https://digital-toolbox-manager.onrender.com
