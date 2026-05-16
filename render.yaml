@@ -1,5 +1,5 @@
 services:
-  - type: postgresql
+  - type: pg
     name: digital-toolbox-db
     plan: free
 
