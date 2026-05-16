@@ -12,6 +12,8 @@ export function getCorsOrigins() {
     "http://127.0.0.1:3002",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://digital-toolbox-manager.vercel.app",
+    /\.vercel\.app$/,
   ];
 }
 
@@ -24,8 +26,15 @@ export function corsOriginCallback(origin, callback) {
   }
 
   const allowed = getCorsOrigins();
-  if (allowed.includes(origin)) {
-    return callback(null, true);
+
+  for (const pattern of allowed) {
+    if (pattern instanceof RegExp) {
+      if (pattern.test(origin)) {
+        return callback(null, true);
+      }
+    } else if (allowed.includes(origin)) {
+      return callback(null, true);
+    }
   }
 
   if (process.env.NODE_ENV === "development") {

@@ -21,10 +21,10 @@ dotenv.config();
 const app = express();
 const PORT = Number(process.env.PORT) || 3001;
 
-// CORS: frontend :3000, API :3001 (en dev acepta otros puertos localhost)
+// CORS: acepta todos los orígenes en producción
 app.use(
   cors({
-    origin: corsOriginCallback,
+    origin: true,
     credentials: true,
   }),
 );
