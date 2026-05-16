@@ -1,3 +1,7 @@
+/**
+ * Configuración de Jest para tests de integración del backend.
+ * Solo ejecuta archivos en tests/ (no los .test.js sueltos en src/).
+ */
 export default {
   testEnvironment: "node",
   setupFilesAfterEnv: ["<rootDir>/tests/setup.js"],

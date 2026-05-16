@@ -1,5 +1,16 @@
+/**
+ * Controlador de consulta del historial de movimientos (auditoría).
+ * Los movimientos registran acciones sobre herramientas: creación, actualización y eliminación.
+ */
+
 import prisma from '../config/database.js';
 
+/**
+ * Lista los últimos movimientos del usuario, opcionalmente filtrados por herramienta.
+ * @param {import('express').Request} req - query: { toolId? }.
+ * @param {import('express').Response} res - 200 con hasta 50 movimientos ordenados por fecha descendente.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const getAllMovements = async (req, res, next) => {
   try {
     const userId = req.user.userId;
@@ -23,6 +34,12 @@ export const getAllMovements = async (req, res, next) => {
   }
 };
 
+/**
+ * Obtiene un movimiento por ID si pertenece al usuario autenticado.
+ * @param {import('express').Request} req - params: { id }.
+ * @param {import('express').Response} res - 200 con el movimiento y su herramienta, o 404.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const getMovementById = async (req, res, next) => {
   try {
     const { id } = req.params;

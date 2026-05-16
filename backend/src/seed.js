@@ -1,11 +1,18 @@
-import prisma from './config/database.js';
-import bcrypt from 'bcryptjs';
+/**
+ * Datos de demostración: usuarios, categorías, herramientas y suscripciones.
+ * Ejecutable con `node src/seed.js` o invocado desde bootstrapDatabase.
+ */
+import prisma from "./config/database.js";
+import bcrypt from "bcryptjs";
+import path from "path";
+import { fileURLToPath } from "url";
 
-const seed = async () => {
+/** Puebla la base de datos con datos de ejemplo si no existen (upsert/create). */
+export const seedDatabase = async () => {
   try {
     console.log('Starting seed...');
 
-    // Create admin user
+    // Usuario administrador
     const hashedPassword = await bcrypt.hash('admin123', 10);
     const admin = await prisma.user.upsert({
       where: { email: 'admin@example.com' },
@@ -19,7 +26,7 @@ const seed = async () => {
     });
     console.log('Created admin user:', admin.email);
 
-    // Create regular user
+    // Usuario estándar
     const userPassword = await bcrypt.hash('user123', 10);
     const user = await prisma.user.upsert({
       where: { email: 'user@example.com' },
@@ -33,7 +40,7 @@ const seed = async () => {
     });
     console.log('Created regular user:', user.email);
 
-    // Create categories
+    // Categorías de herramientas
     const categories = await Promise.all([
       prisma.category.upsert({
         where: { name: 'Development' },
@@ -63,7 +70,7 @@ const seed = async () => {
     ]);
     console.log('Created categories');
 
-    // Create tools for user
+    // Herramientas asociadas al usuario de prueba
     const devCategory = categories.find(c => c.name === 'Development');
     const designCategory = categories.find(c => c.name === 'Design');
     const prodCategory = categories.find(c => c.name === 'Productivity');
@@ -270,7 +277,7 @@ const seed = async () => {
     ]);
     console.log('Created tools');
 
-    // Create subscriptions (simplified - only for tools that exist)
+    // Suscripciones solo para herramientas creadas correctamente
     const figma = tools.find(t => t.name === 'Figma');
     const notion = tools.find(t => t.name === 'Notion');
     const copilot = tools.find(t => t.name === 'GitHub Copilot');
@@ -354,12 +361,20 @@ const seed = async () => {
     await Promise.all(subscriptions);
     console.log('Created subscriptions');
 
-    console.log('Seed completed successfully!');
+    console.log("Seed completed successfully!");
   } catch (error) {
-    console.error('Error during seed:', error);
-  } finally {
-    await prisma.$disconnect();
+    console.error("Error during seed:", error);
+    throw error;
   }
 };
 
-seed();
+// Ejecución directa del script (no importación como módulo)
+const isDirectRun =
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+
+if (isDirectRun) {
+  seedDatabase()
+    .catch(() => process.exit(1))
+    .finally(() => prisma.$disconnect());
+}

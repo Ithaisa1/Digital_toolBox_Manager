@@ -1,3 +1,6 @@
+/**
+ * Envuelve rutas privadas: exige sesión y opcionalmente un rol concreto.
+ */
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Spinner from './Spinner';
@@ -5,6 +8,7 @@ import Spinner from './Spinner';
 const ProtectedRoute = ({ children, requiredRole = null }) => {
   const { user, loading } = useAuth();
 
+  // Espera a resolver la sesión antes de redirigir
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -17,6 +21,7 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
     return <Navigate to="/login" replace />;
   }
 
+  // Comprueba rol cuando la ruta lo exige (p. ej. ADMIN)
   if (requiredRole && user.role !== requiredRole) {
     return (
       <div className="flex flex-col justify-center items-center min-h-screen">

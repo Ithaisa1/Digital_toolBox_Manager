@@ -71,6 +71,10 @@
   },
   "dashboard": {
     "title": "Dashboard",
+    "subtitle": "Centralize and manage your tools in one place",
+    "viewAllSubscriptions": "View all",
+    "viewTools": "View tools",
+    "yourSubscriptions": "Your Subscriptions",
     "totalTools": "Total Tools",
     "active": "Active",
     "inactive": "Inactive",
@@ -81,8 +85,9 @@
     "categories": "Categories",
     "toolCategories": "Tool categories",
     "mostExpensiveTools": "Most Expensive Tools",
-    "noPricingInfo": "No tools with pricing information",
-    "noData": "No data available"
+    "noPricingInfo": "No pricing information available",
+    "noData": "No data available",
+    "loadFailed": "Failed to load dashboard data"
   },
   "tools": {
     "title": "My Tools",
@@ -130,15 +135,50 @@
     "type": "Type"
   },
   "subscriptions": {
-    "title": "Subscriptions",
-    "upcoming": "Upcoming Renewals",
-    "renewalDate": "Renewal Date",
-    "price": "Price",
-    "billingCycle": "Billing Cycle",
-    "status": "Status",
-    "active": "Active",
-    "cancelled": "Cancelled",
-    "expired": "Expired"
+    "title": "My Subscriptions",
+    "subtitle": "Manage all your subscriptions in one place",
+    "searchPlaceholder": "Search subscriptions...",
+    "filters": {
+      "all": "All",
+      "active": "Active",
+      "inactive": "Inactive",
+      "cancelled": "Cancelled",
+      "expired": "Expired"
+    },
+    "status": {
+      "free": "Free",
+      "subscribed": "Subscribed",
+      "notSubscribed": "Subscribe",
+      "premium": "Premium"
+    },
+    "actions": {
+      "useTool": "Use",
+      "openTool": "Open",
+      "manageSubscription": "Manage",
+      "subscribe": "Subscribe"
+    },
+    "subscription": {
+      "title": "Manage Subscription",
+      "price": "Price",
+      "billingCycle": "Billing",
+      "renewalDate": "Renewal",
+      "status": "Status",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "active": "Active",
+      "cancelled": "Cancelled",
+      "expired": "Expired",
+      "save": "Save",
+      "cancel": "Cancel",
+      "close": "Close",
+      "create": "Create"
+    },
+    "noTools": "No subscriptions in your inventory",
+    "noResults": "No subscriptions found",
+    "category": "Category",
+    "uncategorized": "Uncategorized",
+    "renewal": "Renewal",
+    "loadFailed": "Failed to load subscriptions"
   },
   "categories": {
     "title": "Categories",
@@ -196,7 +236,9 @@
     "currentPasswordRequired": "You need your current password to continue.",
     "logout": "Logout",
     "deleteAccount": "Delete account",
-    "deleteAccountConfirm": "Are you sure you want to delete your account? This cannot be undone."
+    "deleteAccountConfirm": "Are you sure you want to delete your account? This cannot be undone.",
+    "profileImage": "Profile image URL",
+    "profileImagePlaceholder": "Paste a direct image URL"
   },
   "admin": {
     "dashboard": {

@@ -1,3 +1,7 @@
+/**
+ * Tests de integración: registro, login y validaciones de autenticación.
+ * Usa app.js (Express sin listen) y una BD real configurada en .env.
+ */
 import request from "supertest";
 import app from "../src/app.js";
 import prisma from "../src/config/database.js";
@@ -77,7 +81,7 @@ describe("Auth Endpoints", () => {
         expect.arrayContaining([
           expect.objectContaining({
             campo: "password",
-            mensaje: expect.stringContaining("contraseña debe contener"),
+            mensaje: expect.stringContaining("al menos 6 caracteres"),
           }),
         ]),
       );

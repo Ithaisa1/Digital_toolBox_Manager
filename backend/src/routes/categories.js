@@ -1,3 +1,7 @@
+/**
+ * Rutas de categorías: lectura pública; escritura solo administradores.
+ * Prefijo: /api/categories
+ */
 import express from 'express';
 import { getAllCategories, getCategoryById, createCategory, updateCategory, deleteCategory } from '../controllers/categoriesController.js';
 import { authenticateToken, requireAdmin } from '../middleware/auth.js';

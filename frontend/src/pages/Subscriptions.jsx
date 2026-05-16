@@ -5,7 +5,7 @@ import { formatEuro } from '../utils/formatCurrency';
 import { getToolDescription } from '../utils/productDescriptions';
 import './Subscriptions.css';
 
-const FILTERS = ['all', 'active', 'inactive', 'cancelled', 'expired'];
+const FILTERS = ['all', 'active', 'inactive', 'cancelled', 'expired', 'archived'];
 
 const getFallbackLogo = (name = 'TB') => {
   const initials = (name || 'TB')
@@ -52,12 +52,12 @@ const Subscriptions = () => {
           inactive: 'Inactivas',
           cancelled: 'Canceladas',
           expired: 'Expiradas',
+          archived: 'Archivadas',
         },
         status: {
-          free: 'Gratis',
-          subscribed: 'Suscrito',
-          notSubscribed: 'Suscribirse',
-          premium: 'Premium',
+          active: 'Activa',
+          inactive: 'Inactiva',
+          archived: 'Archivada',
         },
         actions: {
           useTool: 'Usar',
@@ -76,6 +76,8 @@ const Subscriptions = () => {
           active: 'Activa',
           cancelled: 'Cancelada',
           expired: 'Expirada',
+          archived: 'Archivada',
+          inactive: 'Inactiva',
           save: 'Guardar',
           cancel: 'Cancelar',
           close: 'Cerrar',
@@ -98,12 +100,12 @@ const Subscriptions = () => {
           inactive: 'Inactive',
           cancelled: 'Cancelled',
           expired: 'Expired',
+          archived: 'Archived',
         },
         status: {
-          free: 'Free',
-          subscribed: 'Subscribed',
-          notSubscribed: 'Subscribe',
-          premium: 'Premium',
+          active: 'Active',
+          inactive: 'Inactive',
+          archived: 'Archived',
         },
         actions: {
           useTool: 'Use',
@@ -122,6 +124,8 @@ const Subscriptions = () => {
           active: 'Active',
           cancelled: 'Cancelled',
           expired: 'Expired',
+          archived: 'Archived',
+          inactive: 'Inactive',
           save: 'Save',
           cancel: 'Cancel',
           close: 'Close',
@@ -160,21 +164,25 @@ const Subscriptions = () => {
   const getToolStatusLabel = (status) => {
     const key = status?.toLowerCase();
     if (key === 'active') return copy.subscription.active;
-    if (key === 'inactive') return isSpanish ? 'Inactiva' : 'Inactive';
-    if (key === 'archived') return isSpanish ? 'Archivada' : 'Archived';
+    if (key === 'inactive') return copy.status.inactive;
+    if (key === 'archived') return copy.status.archived;
     if (key === 'cancelled') return copy.subscription.cancelled;
     if (key === 'expired') return copy.subscription.expired;
     return status || '';
   };
 
   const getSubscriptionStatus = (subscription) => {
-    const status = subscription.tool?.status?.toLowerCase();
-    if (status === 'active') return 'active';
-    if (status === 'inactive') return 'inactive';
-    if (status === 'archived') return 'archived';
-    if (subscription.status?.toLowerCase() === 'cancelled') return 'cancelled';
-    if (subscription.status?.toLowerCase() === 'expired') return 'expired';
-    return status || 'inactive';
+    const subscriptionStatus = subscription.status?.toLowerCase();
+    if (['active', 'inactive', 'archived', 'cancelled', 'expired'].includes(subscriptionStatus)) {
+      return subscriptionStatus;
+    }
+
+    const toolStatus = subscription.tool?.status?.toLowerCase();
+    if (['active', 'inactive', 'archived'].includes(toolStatus)) {
+      return toolStatus;
+    }
+
+    return 'inactive';
   };
 
   const uniqueSubscriptions = useMemo(() => {
@@ -216,12 +224,12 @@ const Subscriptions = () => {
           return status === 'active';
         case 'inactive':
           return status === 'inactive';
-        case 'archived':
-          return status === 'archived';
         case 'cancelled':
           return status === 'cancelled';
         case 'expired':
           return status === 'expired';
+        case 'archived':
+          return status === 'archived';
         default:
           return true;
       }

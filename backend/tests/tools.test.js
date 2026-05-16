@@ -1,3 +1,6 @@
+/**
+ * Tests de integración: CRUD de herramientas con JWT.
+ */
 import request from "supertest";
 import app from "../src/app.js";
 import prisma from "../src/config/database.js";

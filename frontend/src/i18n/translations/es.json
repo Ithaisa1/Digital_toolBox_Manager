@@ -71,6 +71,10 @@
   },
   "dashboard": {
     "title": "Dashboard",
+    "subtitle": "Centraliza y gestiona tus herramientas en un solo lugar",
+    "viewAllSubscriptions": "Ver todas",
+    "viewTools": "Ver herramientas",
+    "yourSubscriptions": "Tus Suscripciones",
     "totalTools": "Total de Herramientas",
     "active": "Activas",
     "inactive": "Inactivas",
@@ -82,7 +86,8 @@
     "toolCategories": "Categorías de herramientas",
     "mostExpensiveTools": "Herramientas Más Costosas",
     "noPricingInfo": "Sin información de precios",
-    "noData": "Sin datos disponibles"
+    "noData": "Sin datos disponibles",
+    "loadFailed": "Error al cargar datos del dashboard"
   },
   "tools": {
     "title": "Mis Herramientas",
@@ -130,15 +135,50 @@
     "type": "Tipo"
   },
   "subscriptions": {
-    "title": "Suscripciones",
-    "upcoming": "Renovaciones Próximas",
-    "renewalDate": "Fecha de Renovación",
-    "price": "Precio",
-    "billingCycle": "Ciclo de Facturación",
-    "status": "Estado",
-    "active": "Activa",
-    "cancelled": "Cancelada",
-    "expired": "Expirada"
+    "title": "Mis Suscripciones",
+    "subtitle": "Gestiona todas tus suscripciones en un solo lugar",
+    "searchPlaceholder": "Buscar suscripciones...",
+    "filters": {
+      "all": "Todas",
+      "active": "Activas",
+      "inactive": "Inactivas",
+      "cancelled": "Canceladas",
+      "expired": "Expiradas"
+    },
+    "status": {
+      "free": "Gratis",
+      "subscribed": "Suscrito",
+      "notSubscribed": "Suscribirse",
+      "premium": "Premium"
+    },
+    "actions": {
+      "useTool": "Usar",
+      "openTool": "Abrir",
+      "manageSubscription": "Gestionar",
+      "subscribe": "Suscribirse"
+    },
+    "subscription": {
+      "title": "Gestionar Suscripción",
+      "price": "Precio",
+      "billingCycle": "Ciclo",
+      "renewalDate": "Renovación",
+      "status": "Estado",
+      "monthly": "Mensual",
+      "yearly": "Anual",
+      "active": "Activa",
+      "cancelled": "Cancelada",
+      "expired": "Expirada",
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "close": "Cerrar",
+      "create": "Crear"
+    },
+    "noTools": "No hay suscripciones en tu inventario",
+    "noResults": "No se encontraron suscripciones",
+    "category": "Categoría",
+    "uncategorized": "Sin categoría",
+    "renewal": "Renovación",
+    "loadFailed": "Error al cargar suscripciones"
   },
   "categories": {
     "title": "Categorías",
@@ -196,7 +236,9 @@
     "currentPasswordRequired": "Necesitas tu contraseña actual para continuar.",
     "logout": "Cerrar sesión",
     "deleteAccount": "Eliminar cuenta",
-    "deleteAccountConfirm": "¿Seguro que quieres eliminar tu cuenta? Esta acción no se puede deshacer."
+    "deleteAccountConfirm": "¿Seguro que quieres eliminar tu cuenta? Esta acción no se puede deshacer.",
+    "profileImage": "URL de foto de perfil",
+    "profileImagePlaceholder": "Pega la URL de una imagen directa"
   },
   "admin": {
     "dashboard": {

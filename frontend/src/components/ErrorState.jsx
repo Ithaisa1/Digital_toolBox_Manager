@@ -1,3 +1,6 @@
+/**
+ * Muestra un error con opciones de reintentar o cerrar.
+ */
 const ErrorState = ({ error, onRetry, onDismiss }) => {
   return (
     <div className="bg-red-50 border border-red-200 rounded-lg p-4 m-4">

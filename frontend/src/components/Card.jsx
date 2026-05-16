@@ -1,3 +1,6 @@
+/**
+ * Tarjeta con cabecera, cuerpo y pie opcionales; admite clic si onClick está definido.
+ */
 import styles from './Card.module.css';
 
 const Card = ({

@@ -1,3 +1,6 @@
+/**
+ * Descripciones por defecto de productos conocidos cuando la API no envía descripción.
+ */
 const PRODUCT_DESCRIPTION_MAP = [
   { match: ['adobe creative cloud', 'adobe'], description: 'Suite creativa para diseño, foto y video.' },
   { match: ['indesign'], description: 'Maquetacion profesional para publicaciones.' },
@@ -24,6 +27,7 @@ const PRODUCT_DESCRIPTION_MAP = [
   { match: ['openai'], description: 'Herramientas de IA para productividad y automatizacion.' },
 ];
 
+/** Busca la primera coincidencia por nombre o tipo de herramienta. */
 export const getToolDescription = (tool) => {
   const normalizedName = String(tool?.name || tool?.type || '')
     .trim()

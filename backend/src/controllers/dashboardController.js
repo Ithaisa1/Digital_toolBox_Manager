@@ -1,10 +1,22 @@
+/**
+ * Controlador del panel de control: estadísticas del usuario y métricas globales de administrador.
+ * Agrega datos de herramientas, suscripciones, categorías y actividad reciente.
+ */
+
 import prisma from '../config/database.js';
 
+/**
+ * Devuelve estadísticas resumidas del dashboard del usuario autenticado.
+ * Incluye herramientas por estado, coste mensual, renovaciones próximas y agrupación por herramienta.
+ * @param {import('express').Request} req - req.user.userId del middleware de autenticación.
+ * @param {import('express').Response} res - 200 con objeto tools, subscriptions, categories y expensiveTools.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const getDashboardStats = async (req, res, next) => {
   try {
     const userId = req.user.userId;
 
-    // Get total tools count by status
+    // Conteo de herramientas agrupado por estado
     const toolsByStatus = await prisma.tool.groupBy({
       by: ['status'],
       where: { userId },
@@ -13,7 +25,7 @@ export const getDashboardStats = async (req, res, next) => {
       },
     });
 
-    // Get total subscriptions and monthly cost
+    // Suscripciones activas y cálculo de coste mensual equivalente
     const subscriptions = await prisma.subscription.findMany({
       where: { userId, status: 'ACTIVE' },
       include: { tool: true },
@@ -24,7 +36,7 @@ export const getDashboardStats = async (req, res, next) => {
       return sum + (sub.billingCycle === 'monthly' ? sub.price : sub.price / 12);
     }, 0);
 
-    // Get tools by category
+    // Distribución de herramientas por categoría
     const toolsByCategory = await prisma.tool.groupBy({
       by: ['categoryId'],
       where: { userId },
@@ -33,7 +45,7 @@ export const getDashboardStats = async (req, res, next) => {
       },
     });
 
-    // Get upcoming renewals in next 30 days
+    // Renovaciones en los próximos 30 días
     const date = new Date();
     date.setDate(date.getDate() + 30);
     const upcomingRenewals = await prisma.subscription.count({
@@ -44,7 +56,7 @@ export const getDashboardStats = async (req, res, next) => {
       },
     });
 
-    // Get most expensive tools
+    // Top 5 herramientas con mayor precio declarado
     const expensiveTools = await prisma.tool.findMany({
       where: { userId, price: { not: null } },
       orderBy: { price: 'desc' },
@@ -52,7 +64,7 @@ export const getDashboardStats = async (req, res, next) => {
       include: { category: true },
     });
 
-    // Get subscriptions grouped by tool with plan differentiation
+    // Todas las suscripciones activas para agrupar por herramienta y plan
     const allSubscriptions = await prisma.subscription.findMany({
       where: { userId, status: 'ACTIVE' },
       include: {
@@ -65,7 +77,7 @@ export const getDashboardStats = async (req, res, next) => {
       orderBy: { renewalDate: 'asc' },
     });
 
-    // Group subscriptions by tool and add plan label
+    // Agrupar suscripciones por nombre de herramienta con detalle de planes
     const subscriptionsByTool = allSubscriptions.reduce((acc, sub) => {
       const toolName = sub.tool.name;
       if (!acc[toolName]) {
@@ -88,7 +100,7 @@ export const getDashboardStats = async (req, res, next) => {
       return acc;
     }, {});
 
-    // Convert to array and sort
+    // Convertir a array y ordenar por precio de herramienta descendente
     const subscriptionsGrouped = Object.values(subscriptionsByTool).sort(
       (a, b) => b.price - a.price
     );
@@ -115,14 +127,20 @@ export const getDashboardStats = async (req, res, next) => {
   }
 };
 
+/**
+ * Devuelve estadísticas globales de la plataforma (solo rol ADMIN).
+ * @param {import('express').Request} req - req.user.role debe ser 'ADMIN'.
+ * @param {import('express').Response} res - 200 con métricas de usuarios, herramientas, suscripciones y actividad, o 403.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const getAdminStats = async (req, res, next) => {
   try {
-    // Check if user is admin
+    // Comprobar permisos de administrador
     if (req.user.role !== 'ADMIN') {
       return res.status(403).json({ error: 'Admin access required' });
     }
 
-    // Get all users
+    // Cargar usuarios con conteo de herramientas
     const users = await prisma.user.findMany({
       include: {
         _count: {
@@ -133,7 +151,6 @@ export const getAdminStats = async (req, res, next) => {
       }
     });
 
-    // Get all tools
     const tools = await prisma.tool.findMany({
       include: {
         category: true,
@@ -141,23 +158,22 @@ export const getAdminStats = async (req, res, next) => {
       }
     });
 
-    // Get all subscriptions
     const subscriptions = await prisma.subscription.findMany({
       include: {
         tool: true
       }
     });
 
-    // Get all categories
     const categories = await prisma.category.findMany();
 
-    // Calculate stats
+    // Métricas agregadas de usuarios y herramientas
     const totalUsers = users.length;
     const activeUsers = users.filter(user => {
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
       return new Date(user.createdAt) >= thirtyDaysAgo;
     }).length;
+    const blockedUsers = users.filter((user) => user.isBlocked).length;
 
     const newUsersThisMonth = users.filter(user => {
       const thirtyDaysAgo = new Date();
@@ -173,7 +189,7 @@ export const getAdminStats = async (req, res, next) => {
     const activeSubscriptions = subscriptions.filter(sub => sub.status === 'ACTIVE');
     const monthlyRevenue = activeSubscriptions.reduce((acc, sub) => acc + (sub.price || 0), 0);
 
-    // Get recent activity
+    // Últimos movimientos del sistema
     const recentActivity = await prisma.movement.findMany({
       take: 10,
       orderBy: { createdAt: 'desc' },
@@ -184,7 +200,7 @@ export const getAdminStats = async (req, res, next) => {
       }
     });
 
-    // Get top users
+    // Usuarios con más herramientas registradas
     const topUsers = users
       .sort((a, b) => (b._count?.tools || 0) - (a._count?.tools || 0))
       .slice(0, 5)
@@ -199,28 +215,29 @@ export const getAdminStats = async (req, res, next) => {
       users: {
         total: totalUsers,
         active: activeUsers,
-        newThisMonth: newUsersThisMonth
+        blocked: blockedUsers,
+        newThisMonth: newUsersThisMonth,
       },
       tools: {
         total: totalTools,
         active: activeTools,
-        inactive: inactiveTools
+        inactive: inactiveTools,
       },
       subscriptions: {
         total: totalSubscriptions,
-        monthlyRevenue
+        monthlyRevenue,
       },
       categories: {
-        total: categories.length
+        total: categories.length,
       },
       recentActivity: recentActivity.map(activity => ({
         id: activity.id,
         type: activity.type,
         description: activity.description,
         createdAt: activity.createdAt,
-        tool: activity.tool?.name || 'Unknown'
+        tool: activity.tool?.name || 'Unknown',
       })),
-      topUsers
+      topUsers,
     });
   } catch (error) {
     next(error);

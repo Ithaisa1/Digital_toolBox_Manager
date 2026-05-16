@@ -1,3 +1,6 @@
+/**
+ * Botón para alternar entre tema claro y oscuro.
+ */
 import { useTranslation } from 'react-i18next';
 import './ThemeToggle.css';
 

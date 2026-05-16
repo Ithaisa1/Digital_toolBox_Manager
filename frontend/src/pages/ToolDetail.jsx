@@ -1,3 +1,6 @@
+/**
+ * Detalle de una herramienta: edición, suscripciones asociadas e historial.
+ */
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom';
 import api from '../services/api';
@@ -39,6 +42,7 @@ const ToolDetail = () => {
     fetchCategories();
   }, [id]);
 
+  // Abre el formulario de suscripción si viene ?subscribe=1 en la URL
   useEffect(() => {
     if (searchParams.get('subscribe') === '1') {
       setShowSubscriptionForm(true);
@@ -78,6 +82,7 @@ const ToolDetail = () => {
   };
 
   const handleUpdate = async (e) => {
+    // Persiste cambios de la herramienta
     e.preventDefault();
     try {
       await api.put(`/tools/${id}`, {
@@ -92,6 +97,7 @@ const ToolDetail = () => {
   };
 
   const handleDelete = async () => {
+    // Borra la herramienta y vuelve al listado
     if (!window.confirm(t('tools.deleteConfirm'))) return;
     
     try {
@@ -103,6 +109,7 @@ const ToolDetail = () => {
   };
 
   const handleCreateSubscription = async (e) => {
+    // Crea una suscripción vinculada a esta herramienta
     e.preventDefault();
     try {
       await api.post('/subscriptions', {

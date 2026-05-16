@@ -1,3 +1,6 @@
+/**
+ * Botón reutilizable con variantes, tamaños y estado de carga.
+ */
 import styles from './Button.module.css';
 import Spinner from './Spinner';
 

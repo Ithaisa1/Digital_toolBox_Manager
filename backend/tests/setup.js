@@ -1,10 +1,11 @@
 // Configuración global para tests
 import { beforeAll, afterAll } from '@jest/globals';
 import prisma from '../src/config/database.js';
+import { connectDatabase } from '../src/config/database.js';
 
 beforeAll(async () => {
-  // Conectar a la base de datos de test si es necesario
   console.log('Setting up test environment...');
+  await connectDatabase();
 });
 
 afterAll(async () => {

@@ -1,3 +1,7 @@
+/**
+ * Resolución de logos para herramientas: favicon por dominio o SVG con iniciales.
+ * Usado al serializar herramientas y suscripciones para el frontend.
+ */
 const FAVICON_BASE_URL = 'https://www.google.com/s2/favicons?sz=128&domain=';
 
 const BRAND_DOMAIN_MAP = {
@@ -19,6 +23,7 @@ const BRAND_DOMAIN_MAP = {
   vscode: 'code.visualstudio.com',
 };
 
+/** Escapa caracteres especiales para insertar texto seguro en SVG. */
 const escapeXml = (value = '') =>
   String(value)
     .replace(/&/g, '&amp;')
@@ -27,6 +32,7 @@ const escapeXml = (value = '') =>
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;');
 
+/** Extrae el hostname de una URL (añade https:// si falta el protocolo). */
 export const getDomainFromUrl = (value) => {
   if (!value) return null;
 
@@ -41,6 +47,7 @@ export const getDomainFromUrl = (value) => {
   }
 };
 
+/** Devuelve URL de favicon o data-URI SVG con iniciales si no hay dominio conocido. */
 export const getToolLogoUrl = (tool) => {
   const normalizedName = String(tool?.name || tool?.type || '')
     .trim()
@@ -85,6 +92,7 @@ export const getToolLogoUrl = (tool) => {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 };
 
+/** Añade la propiedad logoUrl a un objeto herramienta. */
 export const attachToolLogo = (tool) => {
   if (!tool) return tool;
   return {
@@ -93,6 +101,7 @@ export const attachToolLogo = (tool) => {
   };
 };
 
+/** Propaga logoUrl a subscription.tool anidado. */
 export const attachSubscriptionLogo = (subscription) => {
   if (!subscription) return subscription;
   return {

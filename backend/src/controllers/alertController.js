@@ -1,6 +1,17 @@
+/**
+ * Controlador de alertas y renovaciones próximas.
+ * Gestiona notificaciones de suscripciones, CRUD de alertas y marcado de lectura.
+ */
+
 import prisma from '../config/database.js';
 
-// Get upcoming renewals
+/**
+ * Lista suscripciones activas con renovación en los próximos 30 días.
+ * Incluye días restantes hasta la renovación por cada suscripción.
+ * @param {import('express').Request} req - req.user.userId del middleware de autenticación.
+ * @param {import('express').Response} res - 200 con data (array formateado) y count.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const getUpcomingRenewals = async (req, res, next) => {
   try {
     const userId = req.user.userId;
@@ -34,6 +45,7 @@ export const getUpcomingRenewals = async (req, res, next) => {
       }
     });
 
+    // Formatear respuesta con metadatos útiles para la UI
     const formattedRenewals = upcomingRenewals.map(sub => ({
       id: sub.id,
       toolName: sub.tool.name,
@@ -55,7 +67,12 @@ export const getUpcomingRenewals = async (req, res, next) => {
   }
 };
 
-// Create alert notification
+/**
+ * Crea una alerta asociada a una suscripción del usuario.
+ * @param {import('express').Request} req - body: { subscriptionId, type, message, scheduledFor? }.
+ * @param {import('express').Response} res - 201 con la alerta creada.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const createAlert = async (req, res, next) => {
   try {
     const userId = req.user.userId;
@@ -81,7 +98,12 @@ export const createAlert = async (req, res, next) => {
   }
 };
 
-// Get user alerts
+/**
+ * Obtiene las alertas del usuario, opcionalmente solo las no leídas.
+ * @param {import('express').Request} req - query: { unreadOnly?: boolean }.
+ * @param {import('express').Response} res - 200 con data (alertas) y count.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const getUserAlerts = async (req, res, next) => {
   try {
     const userId = req.user.userId;
@@ -107,7 +129,12 @@ export const getUserAlerts = async (req, res, next) => {
   }
 };
 
-// Mark alert as read
+/**
+ * Marca una alerta como leída si pertenece al usuario autenticado.
+ * @param {import('express').Request} req - params: { alertId }.
+ * @param {import('express').Response} res - 200 con resultado de updateMany.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const markAlertAsRead = async (req, res, next) => {
   try {
     const userId = req.user.userId;
@@ -132,7 +159,12 @@ export const markAlertAsRead = async (req, res, next) => {
   }
 };
 
-// Delete alert
+/**
+ * Elimina una alerta del usuario por ID.
+ * @param {import('express').Request} req - params: { alertId }.
+ * @param {import('express').Response} res - 200 con mensaje de éxito.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const deleteAlert = async (req, res, next) => {
   try {
     const userId = req.user.userId;

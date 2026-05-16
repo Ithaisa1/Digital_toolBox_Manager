@@ -1,3 +1,7 @@
+/**
+ * Modelo de dominio para alertas (tipos, prioridades y fábricas de mensajes).
+ * No persiste por sí mismo; AlertService escribe en Prisma usando estos datos.
+ */
 class Alert {
   static TYPES = {
     RENEWAL_REMINDER: 'RENEWAL_REMINDER',
@@ -27,7 +31,7 @@ class Alert {
     this.updatedAt = data.updatedAt;
   }
 
-  // Static methods for creating different types of alerts
+  /** Genera payload de recordatorio según días hasta renewalDate. */
   static createRenewalAlert(subscription) {
     const daysUntilRenewal = Math.ceil((subscription.renewalDate - new Date()) / (1000 * 60 * 60 * 24));
     
@@ -39,6 +43,7 @@ class Alert {
     };
   }
 
+  /** Alerta por cambio de precio; prioridad alta si la diferencia supera 10€. */
   static createPriceChangeAlert(subscription, oldPrice, newPrice) {
     return {
       type: Alert.TYPES.PRICE_CHANGE,
@@ -47,6 +52,7 @@ class Alert {
     };
   }
 
+  /** Alerta crítica cuando un servicio dejará de estar disponible. */
   static createServiceDiscontinuationAlert(subscription) {
     return {
       type: Alert.TYPES.SERVICE_DISCONTINUATION,
@@ -55,7 +61,6 @@ class Alert {
     };
   }
 
-  // Instance methods
   markAsRead() {
     this.isRead = true;
     this.updatedAt = new Date();
@@ -66,6 +71,7 @@ class Alert {
     this.updatedAt = new Date();
   }
 
+  /** Serialización plana para respuestas API. */
   toJSON() {
     return {
       id: this.id,

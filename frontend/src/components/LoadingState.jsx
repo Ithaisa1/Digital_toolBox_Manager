@@ -1,3 +1,6 @@
+/**
+ * Bloque de carga centrado con spinner y mensaje.
+ */
 import Spinner from './Spinner';
 
 const LoadingState = ({ message = 'Cargando...', size = 'medium' }) => {

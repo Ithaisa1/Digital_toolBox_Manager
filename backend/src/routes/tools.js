@@ -1,3 +1,7 @@
+/**
+ * CRUD de herramientas del usuario autenticado.
+ * Prefijo: /api/tools
+ */
 import express from 'express';
 import { 
   getAllTools, 

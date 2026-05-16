@@ -1,3 +1,6 @@
+/**
+ * Indicador de carga circular con tamaños predefinidos.
+ */
 const Spinner = ({ size = 'medium' }) => {
   const sizeClasses = {
     small: 'w-4 h-4',

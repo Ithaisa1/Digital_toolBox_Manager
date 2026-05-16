@@ -1,8 +1,12 @@
+/**
+ * Lógica de negocio de alertas: renovaciones automáticas, CRUD y estadísticas.
+ * Persiste en Prisma; usa el modelo Alert para construir payloads.
+ */
 import prisma from '../config/database.js';
 import Alert from '../models/Alert.js';
 
 class AlertService {
-  // Check for upcoming renewals and create alerts
+  /** Busca suscripciones que renuevan en 30 días y crea alertas si no existen. */
   static async checkUpcomingRenewals() {
     try {
       const thirtyDaysFromNow = new Date();
@@ -22,11 +26,9 @@ class AlertService {
         }
       });
 
-      // Create alerts for each upcoming renewal
       for (const subscription of upcomingRenewals) {
         const daysUntilRenewal = Math.ceil((subscription.renewalDate - new Date()) / (1000 * 60 * 60 * 24));
         
-        // Check if alert already exists
         const existingAlert = await prisma.alert.findFirst({
           where: {
             userId: subscription.userId,
@@ -58,7 +60,7 @@ class AlertService {
     }
   }
 
-  // Create custom alert for user
+  /** Crea una alerta manual asociada al usuario. */
   static async createCustomAlert(userId, alertData) {
     try {
       const alert = await prisma.alert.create({
@@ -76,7 +78,7 @@ class AlertService {
     }
   }
 
-  // Get user alerts with filtering
+  /** Lista alertas con filtros opcionales por tipo, no leídas y paginación. */
   static async getUserAlerts(userId, options = {}) {
     try {
       const { type, unreadOnly, limit = 50, offset = 0 } = options;
@@ -114,7 +116,7 @@ class AlertService {
     }
   }
 
-  // Mark alert as read
+  /** Marca una alerta como leída solo si pertenece al usuario. */
   static async markAsRead(alertId, userId) {
     try {
       const alert = await prisma.alert.updateMany({
@@ -135,7 +137,7 @@ class AlertService {
     }
   }
 
-  // Delete alert
+  /** Elimina una alerta del usuario (deleteMany por seguridad de ownership). */
   static async deleteAlert(alertId, userId) {
     try {
       await prisma.alert.deleteMany({
@@ -152,7 +154,7 @@ class AlertService {
     }
   }
 
-  // Get alert statistics
+  /** Totales, no leídas y conteo agrupado por tipo de alerta. */
   static async getAlertStats(userId) {
     try {
       const [total, unread, byType] = await Promise.all([
@@ -183,7 +185,7 @@ class AlertService {
     }
   }
 
-  // Schedule automatic alert checking (could be run by cron job)
+  /** Punto de entrada para tareas programadas (cron) que revisan renovaciones. */
   static async scheduleAlertCheck() {
     console.log('Running scheduled alert check...');
     await this.checkUpcomingRenewals();

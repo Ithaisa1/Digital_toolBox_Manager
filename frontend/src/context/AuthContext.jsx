@@ -1,3 +1,6 @@
+/**
+ * Contexto de autenticación: usuario, token, login, registro y sesión persistente.
+ */
 import { createContext, useContext, useState, useEffect } from 'react';
 import api from '../services/api';
 
@@ -8,6 +11,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem('token'));
 
+  // Restaura la sesión al montar si hay token guardado
   useEffect(() => {
     const checkAuth = async () => {
       const storedToken = localStorage.getItem('token');
@@ -16,7 +20,12 @@ export const AuthProvider = ({ children }) => {
           const response = await api.get('/auth/profile');
           setUser(response.data);
           setToken(storedToken);
+          console.info('Authenticated user loaded from token');
         } catch (error) {
+          console.warn('Failed to refresh authenticated user', {
+            status: error.response?.status,
+            data: error.response?.data,
+          });
           localStorage.removeItem('token');
           setToken(null);
           setUser(null);
@@ -28,54 +37,84 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
+  /** Inicia sesión y persiste token y usuario en estado local. */
   const login = async (email, password) => {
     try {
       const response = await api.post('/auth/login', { email, password });
       const { user: userData, token: newToken } = response.data;
       localStorage.setItem('token', newToken);
+      localStorage.setItem('language', userData.language || 'es');
       setUser(userData);
       setToken(newToken);
+      console.info('Login successful for email:', email);
       return { success: true };
     } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.error || 'Login failed' 
+      const apiData = error.response?.data;
+      const details = apiData?.details
+        ? apiData.details.map((detail) => `${detail.campo}: ${detail.mensaje}`).join(', ')
+        : null;
+      const detailMessage = apiData?.detail ? apiData.detail : details;
+      const message = apiData?.error || apiData?.message || 'Login failed';
+      const fullError = detailMessage ? `${message} (${detailMessage})` : message;
+      console.error('Login failed', { email, status: error.response?.status, message: fullError });
+      return {
+        success: false,
+        error: fullError,
       };
     }
   };
 
+  /** Registra un usuario nuevo y deja la sesión iniciada. */
   const register = async (email, password, name) => {
     try {
       const response = await api.post('/auth/register', { email, password, name });
       const { user: userData, token: newToken } = response.data;
       localStorage.setItem('token', newToken);
+      localStorage.setItem('language', userData.language || 'es');
       setUser(userData);
       setToken(newToken);
+      console.info('Registration successful for email:', email);
       return { success: true };
     } catch (error) {
-      return { 
-        success: false, 
-        error: error.response?.data?.error || 'Registration failed' 
+      const apiData = error.response?.data;
+      const details = apiData?.details
+        ? apiData.details.map((detail) => `${detail.campo}: ${detail.mensaje}`).join(', ')
+        : null;
+      const detailMessage = apiData?.detail ? apiData.detail : details;
+      const message = apiData?.error || apiData?.message || 'Registration failed';
+      const fullError = detailMessage ? `${message} (${detailMessage})` : message;
+      console.error('Registration failed', { email, status: error.response?.status, message: fullError });
+      return {
+        success: false,
+        error: fullError,
       };
     }
   };
 
+  /** Cierra sesión y limpia almacenamiento local. */
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
     setToken(null);
   };
 
+  /** Vuelve a cargar el perfil desde el backend (p. ej. tras editar perfil). */
   const refreshUser = async () => {
     const storedToken = localStorage.getItem('token');
     if (!storedToken) return null;
 
     try {
       const response = await api.get('/auth/profile');
+      localStorage.setItem('language', response.data.language || 'es');
       setUser(response.data);
       setToken(storedToken);
+      console.info('User refreshed from backend');
       return response.data;
     } catch (error) {
+      console.warn('Failed to refresh user', {
+        status: error.response?.status,
+        data: error.response?.data,
+      });
       localStorage.removeItem('token');
       setToken(null);
       setUser(null);
@@ -90,6 +129,7 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
+/** Hook para consumir el contexto de autenticación. */
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {

@@ -1,13 +1,23 @@
+/**
+ * Controlador de exportación de datos y generación de informes analíticos.
+ * Permite descargar datos del usuario en CSV/JSON y resúmenes por periodo temporal.
+ */
+
 import prisma from '../config/database.js';
 import { Parser } from 'json2csv';
 
-// Export user data to CSV
+/**
+ * Exporta herramientas, suscripciones y/o movimientos del usuario en CSV o JSON.
+ * @param {import('express').Request} req - query: { format?: 'csv'|'json', include?: 'all'|'tools'|'subscriptions'|'movements' }.
+ * @param {import('express').Response} res - Archivo CSV adjunto o JSON con datos exportados.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const exportUserData = async (req, res, next) => {
   try {
     const userId = req.user.userId;
     const { format = 'csv', include = 'all' } = req.query;
 
-    // Get user's tools with subscriptions
+    // Cargar herramientas con relaciones para exportación
     const tools = await prisma.tool.findMany({
       where: { userId },
       include: {
@@ -20,7 +30,6 @@ export const exportUserData = async (req, res, next) => {
       }
     });
 
-    // Get user's subscriptions
     const subscriptions = await prisma.subscription.findMany({
       where: { userId },
       include: {
@@ -30,13 +39,12 @@ export const exportUserData = async (req, res, next) => {
       }
     });
 
-    // Get user's movements
     const movements = await prisma.movement.findMany({
       where: { userId },
       orderBy: { createdAt: 'desc' }
     });
 
-    // Prepare export data based on include parameter
+    // Construir filas según el tipo de datos solicitado
     let exportData = [];
     
     switch (include) {
@@ -74,7 +82,7 @@ export const exportUserData = async (req, res, next) => {
         }));
         break;
         
-      default: // 'all'
+      default: // 'all' — combinar las tres secciones en un único dataset
         exportData = [
           ...tools.map(tool => ({
             'Section': 'Tool',
@@ -107,17 +115,15 @@ export const exportUserData = async (req, res, next) => {
     }
 
     if (format === 'csv') {
-      // Convert to CSV
+      // Generar CSV y enviar como descarga
       const csvParser = new Parser();
       const csv = csvParser.parse(exportData);
       
-      // Set headers for CSV download
       res.setHeader('Content-Type', 'text/csv');
       res.setHeader('Content-Disposition', `attachment; filename="digital-tools-export-${new Date().toISOString().split('T')[0]}.csv"`);
       
       return res.send(csv);
     } else {
-      // Return JSON
       res.json({
         success: true,
         data: exportData,
@@ -130,13 +136,18 @@ export const exportUserData = async (req, res, next) => {
   }
 };
 
-// Generate analytics report
+/**
+ * Genera un informe analítico del usuario para un periodo dado (semanal, mensual o anual).
+ * @param {import('express').Request} req - query: { period?: 'weekly'|'monthly'|'yearly' }.
+ * @param {import('express').Response} res - 200 con resumen, desglose por tipo/estado/acción.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const generateAnalyticsReport = async (req, res, next) => {
   try {
     const userId = req.user.userId;
     const { period = 'monthly' } = req.query;
 
-    // Calculate date range
+    // Calcular fecha de inicio según el periodo solicitado
     const now = new Date();
     let startDate;
     
@@ -154,7 +165,7 @@ export const generateAnalyticsReport = async (req, res, next) => {
         startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
     }
 
-    // Get analytics data
+    // Consultas paralelas de entidades creadas en el rango
     const [tools, subscriptions, movements] = await Promise.all([
       prisma.tool.findMany({
         where: {
@@ -176,7 +187,7 @@ export const generateAnalyticsReport = async (req, res, next) => {
       })
     ]);
 
-    // Calculate analytics
+    // Agregar métricas y contadores por dimensión
     const analytics = {
       period,
       startDate: startDate.toISOString(),

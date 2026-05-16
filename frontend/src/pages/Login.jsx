@@ -1,6 +1,10 @@
+/**
+ * Formulario de inicio de sesión.
+ */
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 import './Login.css';
 
 const Login = () => {
@@ -10,7 +14,9 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
+  /** Envía credenciales y redirige al dashboard si el login es correcto. */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -22,18 +28,18 @@ const Login = () => {
     if (result.success) {
       navigate('/dashboard');
     } else {
-      setError(result.error);
+      setError(result.error || t('auth.loginFailed'));
     }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h1>Login</h1>
+        <h1>{t('auth.loginTitle')}</h1>
         {error && <div className="error">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Email:</label>
+            <label>{t('auth.email')}:</label>
             <input
               type="email"
               value={email}
@@ -43,7 +49,7 @@ const Login = () => {
             />
           </div>
           <div className="form-group">
-            <label>Password:</label>
+            <label>{t('auth.password')}:</label>
             <input
               type="password"
               value={password}
@@ -53,11 +59,11 @@ const Login = () => {
             />
           </div>
           <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? 'Loading...' : 'Login'}
+            {loading ? t('common.loading') : t('auth.login')}
           </button>
         </form>
         <p className="auth-link">
-          Don't have an account? <Link to="/register">Register</Link>
+          {t('auth.dontHaveAccount')} <Link to="/register">{t('auth.registerLink')}</Link>
         </p>
       </div>
     </div>

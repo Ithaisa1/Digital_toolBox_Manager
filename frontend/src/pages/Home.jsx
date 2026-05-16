@@ -1,42 +1,47 @@
+/**
+ * Página de inicio: presentación de la app y acciones según sesión.
+ */
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 import './Home.css';
 
 const Home = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   return (
     <div className="home-container">
       <div className="hero">
-        <h1>Digital Toolbox Manager</h1>
-        <p>Manage your digital tools efficiently</p>
+        <h1>{t('home.welcome')}</h1>
+        <p>{t('home.description')}</p>
         <div className="hero-actions">
           {!user ? (
             <>
-              <Link to="/login" className="btn btn-primary">Iniciar sesión</Link>
-              <Link to="/register" className="btn btn-secondary">Registrarse</Link>
+              <Link to="/login" className="btn btn-primary">{t('auth.login')}</Link>
+              <Link to="/register" className="btn btn-secondary">{t('auth.register')}</Link>
             </>
           ) : (
-            <Link to="/dashboard" className="btn btn-primary">Dashboard</Link>
+            <Link to="/dashboard" className="btn btn-primary">{t('nav.dashboard')}</Link>
           )}
         </div>
       </div>
       <div className="features">
         <div className="feature-card">
-          <h3>Tool Management</h3>
-          <p>Organize and track all your digital tools in one place</p>
+          <h3>{t('home.feature1.title')}</h3>
+          <p>{t('home.feature1.description')}</p>
         </div>
         <div className="feature-card">
-          <h3>Subscription Tracking</h3>
-          <p>Monitor your tool subscriptions and renewal dates</p>
+          <h3>{t('home.feature2.title')}</h3>
+          <p>{t('home.feature2.description')}</p>
         </div>
         <div className="feature-card">
-          <h3>Categories</h3>
-          <p>Group your tools by categories for better organization</p>
+          <h3>{t('home.feature3.title')}</h3>
+          <p>{t('home.feature3.description')}</p>
         </div>
         <div className="feature-card">
-          <h3>Activity Log</h3>
-          <p>Track all changes and movements in your toolbox</p>
+          <h3>{t('home.feature4.title')}</h3>
+          <p>{t('home.feature4.description')}</p>
         </div>
       </div>
     </div>

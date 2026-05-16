@@ -1,3 +1,8 @@
+/**
+ * Controlador CRUD de herramientas digitales del usuario.
+ * Gestiona listado, detalle, creación, actualización y eliminación con registro de movimientos y logos.
+ */
+
 import prisma from "../config/database.js";
 import { authenticateToken } from "../middleware/auth.js";
 import {
@@ -5,6 +10,12 @@ import {
   attachSubscriptionLogo,
 } from "../utils/productLogo.js";
 
+/**
+ * Lista todas las herramientas del usuario autenticado con filtros opcionales.
+ * @param {import('express').Request} req - query: { status?, category? }.
+ * @param {import('express').Response} res - 200 con array de herramientas (logos adjuntos).
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const getAllTools = async (req, res, next) => {
   try {
     const userId = req.user.userId;
@@ -45,6 +56,12 @@ export const getAllTools = async (req, res, next) => {
   }
 };
 
+/**
+ * Obtiene una herramienta por ID si pertenece al usuario autenticado.
+ * @param {import('express').Request} req - params: { id }.
+ * @param {import('express').Response} res - 200 con herramienta y últimos movimientos, o 404.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const getToolById = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -83,6 +100,12 @@ export const getToolById = async (req, res, next) => {
   }
 };
 
+/**
+ * Crea una nueva herramienta para el usuario y registra un movimiento de tipo CREATED.
+ * @param {import('express').Request} req - body: { name, type, url?, price?, status?, categoryId? }.
+ * @param {import('express').Response} res - 201 con la herramienta creada, o 400 si faltan campos.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const createTool = async (req, res, next) => {
   try {
     const userId = req.user.userId;
@@ -107,7 +130,7 @@ export const createTool = async (req, res, next) => {
       },
     });
 
-    // Create movement record
+    // Registrar movimiento de auditoría
     await prisma.movement.create({
       data: {
         toolId: tool.id,
@@ -124,6 +147,12 @@ export const createTool = async (req, res, next) => {
   }
 };
 
+/**
+ * Actualiza una herramienta existente y registra un movimiento de tipo UPDATED.
+ * @param {import('express').Request} req - params: { id }; body con campos a actualizar.
+ * @param {import('express').Response} res - 200 con herramienta actualizada, o 404 si no existe.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const updateTool = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -157,7 +186,7 @@ export const updateTool = async (req, res, next) => {
       },
     });
 
-    // Create movement record
+    // Registrar movimiento con datos anterior y nuevo
     await prisma.movement.create({
       data: {
         toolId: tool.id,
@@ -175,6 +204,12 @@ export const updateTool = async (req, res, next) => {
   }
 };
 
+/**
+ * Elimina una herramienta del usuario y registra un movimiento de tipo DELETED.
+ * @param {import('express').Request} req - params: { id }.
+ * @param {import('express').Response} res - 200 con mensaje de éxito, o 404 si no existe.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const deleteTool = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -192,7 +227,7 @@ export const deleteTool = async (req, res, next) => {
       where: { id },
     });
 
-    // Create movement record
+    // Registrar movimiento de eliminación (sin toolId asociado)
     await prisma.movement.create({
       data: {
         userId,

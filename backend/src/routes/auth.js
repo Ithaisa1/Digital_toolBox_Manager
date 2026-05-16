@@ -1,3 +1,7 @@
+/**
+ * Rutas de autenticación: registro, login y perfil de usuario.
+ * Prefijo montado en la app: /api/auth
+ */
 import express from 'express';
 import { register, login, getProfile, updateProfile, deleteAccount } from '../controllers/authController.js';
 import { authenticateToken } from '../middleware/auth.js';

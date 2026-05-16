@@ -1,3 +1,6 @@
+/**
+ * Selector desplegable de idioma (es/en) con persistencia en localStorage.
+ */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import './LanguageSelector.css';
@@ -7,8 +10,8 @@ const LanguageSelector = ({ className = '' }) => {
   const [open, setOpen] = useState(false);
   const rootRef = useRef(null);
 
-  const currentLanguage = i18n.language?.startsWith('es') ? 'es' : 'en';
-  const languages = useMemo(() => ([
+  const currentLanguage = i18n.resolvedLanguage?.startsWith('es') ? 'es' : 'en';
+  const languages = [
     {
       code: 'es',
       flag: String.fromCodePoint(0x1F1EA, 0x1F1F8),
@@ -19,8 +22,9 @@ const LanguageSelector = ({ className = '' }) => {
       flag: String.fromCodePoint(0x1F1EC, 0x1F1E7),
       label: t('language.english'),
     },
-  ]), [t]);
+  ];
 
+  // Cierra el menú al hacer clic fuera del componente
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (rootRef.current && !rootRef.current.contains(event.target)) {
@@ -32,8 +36,9 @@ const LanguageSelector = ({ className = '' }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
+  const changeLanguage = async (lng) => {
+    // Cambia idioma en i18n y lo guarda para la próxima visita
+    await i18n.changeLanguage(lng);
     localStorage.setItem('language', lng);
     setOpen(false);
   };

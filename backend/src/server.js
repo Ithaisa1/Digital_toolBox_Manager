@@ -1,3 +1,7 @@
+/**
+ * Punto de entrada del servidor HTTP.
+ * Configura Express, monta las rutas de la API, inicializa la base de datos y arranca el listener.
+ */
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -8,27 +12,25 @@ import subscriptionsRoutes from "./routes/subscriptions.js";
 import movementsRoutes from "./routes/movements.js";
 import dashboardRoutes from "./routes/dashboard.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
+import { bootstrapDatabase } from "./utils/bootstrapDatabase.js";
+import { checkDatabaseConnection } from "./config/database.js";
+import { corsOriginCallback } from "./config/cors.js";
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = Number(process.env.PORT) || 3001;
 
-// Middleware
+// CORS: frontend :3000, API :3001 (en dev acepta otros puertos localhost)
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "http://localhost:5173",
-      "http://127.0.0.1:3000",
-      "http://127.0.0.1:5173",
-    ],
+    origin: corsOriginCallback,
     credentials: true,
   }),
 );
 app.use(express.json());
 
-// Routes
+// Rutas de la API REST
 app.use("/api/auth", authRoutes);
 app.use("/api/tools", toolsRoutes);
 app.use("/api/categories", categoriesRoutes);
@@ -36,15 +38,53 @@ app.use("/api/subscriptions", subscriptionsRoutes);
 app.use("/api/movements", movementsRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
-// Health check
-app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", message: "Digital Toolbox Manager API is running" });
+// Comprobación de que el servicio y la BD están activos
+app.get("/api/health", async (req, res) => {
+  const dbConnected = await checkDatabaseConnection();
+
+  if (!dbConnected) {
+    return res.status(503).json({
+      status: "error",
+      database: "disconnected",
+      message: "API activa pero la base de datos no responde",
+    });
+  }
+
+  res.json({
+    status: "ok",
+    database: "connected",
+    message: "Digital Toolbox Manager API is running",
+  });
 });
 
-// Error handling
+// Manejo de rutas inexistentes y errores globales
 app.use(notFound);
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+/** Inicializa la BD (migraciones/seed) y pone el servidor a escuchar en PORT. */
+async function startServer() {
+  try {
+    await bootstrapDatabase();
+  } catch (error) {
+    console.error("No se pudo conectar o inicializar la base de datos:", error.message);
+    process.exit(1);
+  }
+
+  const server = app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log("Server environment:", process.env.NODE_ENV || "not set");
+  });
+
+  server.on("error", (error) => {
+    if (error.code === "EADDRINUSE") {
+      console.error(
+        `El puerto ${PORT} ya está en uso. Cierra la otra instancia del backend o cambia PORT en backend/.env`,
+      );
+    } else {
+      console.error("Error al iniciar el servidor:", error.message);
+    }
+    process.exit(1);
+  });
+}
+
+startServer();

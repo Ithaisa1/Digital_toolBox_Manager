@@ -1,9 +1,11 @@
+/**
+ * Perfil de usuario: datos personales, contraseña, notificaciones y zona de peligro.
+ */
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import { useTranslation } from 'react-i18next';
-import LanguageSelector from '../components/LanguageSelector';
 import { formatEuro } from '../utils/formatCurrency';
 import './Profile.css';
 
@@ -17,31 +19,30 @@ const Profile = () => {
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
-    notifications: {
-      email: true,
-      renewal: true,
-      priceChanges: false,
-      newFeatures: true
-    },
-    language: 'es'
+    profileImageUrl: '',
+    language: 'es',
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
   const [subscriptionStats, setSubscriptionStats] = useState(null);
 
+  // Rellena el formulario y carga estadísticas cuando hay usuario
   useEffect(() => {
     if (user) {
       setProfileData((prev) => ({
         ...prev,
         name: user.name || '',
-        email: user.email || ''
+        email: user.email || '',
+        profileImageUrl: user.profileImageUrl || '',
+        language: user.language || 'es',
       }));
       fetchSubscriptionStats();
     }
   }, [user]);
 
   const fetchSubscriptionStats = async () => {
+    // Reutiliza el mismo endpoint que el dashboard
     try {
       const response = await api.get('/dashboard/stats');
       setSubscriptionStats(response.data);
@@ -50,6 +51,7 @@ const Profile = () => {
     }
   };
 
+  /** Actualiza perfil y contraseña en el backend. */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -66,8 +68,10 @@ const Profile = () => {
     const updateData = {
       name: profileData.name,
       email: profileData.email,
+      profileImageUrl: profileData.profileImageUrl,
+      language: profileData.language,
       currentPassword: profileData.currentPassword || undefined,
-      ...(profileData.newPassword && { newPassword: profileData.newPassword })
+      ...(profileData.newPassword && { newPassword: profileData.newPassword }),
     };
 
     try {
@@ -75,6 +79,11 @@ const Profile = () => {
 
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
+      }
+
+      if (profileData.language) {
+        await i18n.changeLanguage(profileData.language);
+        localStorage.setItem('language', profileData.language);
       }
 
       await refreshUser();
@@ -95,16 +104,7 @@ const Profile = () => {
     }
   };
 
-  const handleNotificationChange = (key) => {
-    setProfileData((prev) => ({
-      ...prev,
-      notifications: {
-        ...prev.notifications,
-        [key]: !prev.notifications[key]
-      }
-    }));
-  };
-
+  /** Elimina la cuenta tras confirmar con la contraseña actual. */
   const handleDeleteAccount = async () => {
     if (!window.confirm(t('profile.deleteAccountConfirm'))) return;
 
@@ -141,7 +141,11 @@ const Profile = () => {
         </div>
         <div className="profile-hero">
           <div className="avatar-circle">
-            {user.name.charAt(0).toUpperCase()}
+            {user.profileImageUrl ? (
+              <img src={user.profileImageUrl} alt={user.name} className="profile-avatar-image" />
+            ) : (
+              user.name.charAt(0).toUpperCase()
+            )}
           </div>
           <div className="user-info">
             <h2>{user.name}</h2>
@@ -177,6 +181,28 @@ const Profile = () => {
                 autoComplete="email"
                 required
               />
+            </div>
+
+            <div className="form-group">
+              <label>{t('profile.profileImage')}</label>
+              <input
+                type="url"
+                value={profileData.profileImageUrl}
+                onChange={(e) => setProfileData((prev) => ({ ...prev, profileImageUrl: e.target.value }))}
+                placeholder={t('profile.profileImagePlaceholder')}
+                autoComplete="url"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>{t('profile.language')}</label>
+              <select
+                value={profileData.language}
+                onChange={(e) => setProfileData((prev) => ({ ...prev, language: e.target.value }))}
+              >
+                <option value="es">{t('language.spanish')}</option>
+                <option value="en">{t('language.english')}</option>
+              </select>
             </div>
 
             <div className="password-section">
@@ -225,56 +251,6 @@ const Profile = () => {
           </form>
         </div>
 
-        <div className="profile-section">
-          <h3>{t('profile.notifications')}</h3>
-          <div className="notification-settings">
-            <label className="notification-item">
-              <input
-                type="checkbox"
-                checked={profileData.notifications.email}
-                onChange={() => handleNotificationChange('email')}
-              />
-              <span>{t('profile.emailNotifications')}</span>
-            </label>
-
-            <label className="notification-item">
-              <input
-                type="checkbox"
-                checked={profileData.notifications.renewal}
-                onChange={() => handleNotificationChange('renewal')}
-              />
-              <span>{t('profile.renewalNotifications')}</span>
-            </label>
-
-            <label className="notification-item">
-              <input
-                type="checkbox"
-                checked={profileData.notifications.priceChanges}
-                onChange={() => handleNotificationChange('priceChanges')}
-              />
-              <span>{t('profile.priceChangeNotifications')}</span>
-            </label>
-
-            <label className="notification-item">
-              <input
-                type="checkbox"
-                checked={profileData.notifications.newFeatures}
-                onChange={() => handleNotificationChange('newFeatures')}
-              />
-              <span>{t('profile.newFeatureNotifications')}</span>
-            </label>
-          </div>
-        </div>
-
-        <div className="profile-section">
-          <h3>{t('profile.appearance')}</h3>
-          <div className="appearance-settings">
-            <div className="setting-group">
-              <label>{t('profile.language')}</label>
-              <LanguageSelector className="profile-language-selector" />
-            </div>
-          </div>
-        </div>
 
         {subscriptionStats && (
           <div className="profile-section">

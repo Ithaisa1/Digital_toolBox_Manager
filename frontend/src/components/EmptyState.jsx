@@ -1,3 +1,6 @@
+/**
+ * Placeholder cuando no hay datos: icono, mensaje y acción opcional.
+ */
 const EmptyState = ({ 
   title, 
   message, 

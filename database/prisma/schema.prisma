@@ -1,0 +1,134 @@
+// Esquema de base de datos — Digital Toolbox Manager
+// ORM: Prisma | Motor: PostgreSQL
+// Los comandos se ejecutan desde backend/ con --schema ../database/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Rol del usuario en la aplicación
+enum Role {
+  USER  // Usuario estándar: solo ve sus herramientas
+  ADMIN // Administrador: gestiona categorías y estadísticas globales
+}
+
+/// Estado operativo de una herramienta digital
+enum ToolStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+/// Estado de una suscripción de pago
+enum SubscriptionStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+  CANCELLED
+  EXPIRED
+}
+
+/// Tipo de evento registrado en el historial (auditoría)
+enum MovementType {
+  CREATED
+  UPDATED
+  DELETED
+  STATUS_CHANGE
+  PRICE_CHANGE
+}
+
+/// Usuario registrado — autenticación y propietario de recursos
+model User {
+  id              String    @id @default(uuid())
+  email           String    @unique
+  password        String    // Hash bcrypt (nunca texto plano)
+  name            String
+  role            Role      @default(USER)
+  profileImageUrl String?
+  language        String?   @default("es")
+  isBlocked       Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  tools           Tool[]
+  subscriptions   Subscription[]
+  movements       Movement[]
+
+  @@map("users")
+}
+
+/// Categoría global para clasificar herramientas (p. ej. Design, Development)
+model Category {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tools       Tool[]
+
+  @@map("categories")
+}
+
+/// Herramienta digital asociada a un usuario
+model Tool {
+  id          String      @id @default(uuid())
+  name        String
+  type        String      // Tipo libre: IDE, SaaS, etc.
+  description String?
+  url         String?
+  price       Float?      // Precio de referencia (opcional)
+  status      ToolStatus  @default(ACTIVE)
+  categoryId  String?
+  userId      String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  category      Category?      @relation(fields: [categoryId], references: [id])
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscriptions Subscription[]
+  movements     Movement[]
+
+  @@map("tools")
+}
+
+/// Suscripción de pago vinculada a una herramienta
+model Subscription {
+  id            String             @id @default(uuid())
+  toolId        String
+  renewalDate   DateTime           // Próxima fecha de renovación
+  price         Float
+  billingCycle  String             // "monthly" | "yearly"
+  plan          String?            // Plan comercial (Pro, Team, etc.)
+  status        SubscriptionStatus @default(ACTIVE)
+  userId        String
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  tool Tool @relation(fields: [toolId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("subscriptions")
+}
+
+/// Registro de auditoría: cambios en herramientas del usuario
+model Movement {
+  id           String       @id @default(uuid())
+  toolId       String?      // Nullable si la herramienta fue eliminada
+  userId       String
+  type         MovementType
+  description  String
+  previousData String?      // JSON serializado del estado anterior
+  newData      String?      // JSON serializado del estado nuevo
+  createdAt    DateTime     @default(now())
+
+  tool Tool? @relation(fields: [toolId], references: [id], onDelete: SetNull)
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("movements")
+}

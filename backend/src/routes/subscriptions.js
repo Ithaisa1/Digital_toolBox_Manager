@@ -1,3 +1,7 @@
+/**
+ * Gestión de suscripciones y renovaciones próximas del usuario.
+ * Prefijo: /api/subscriptions
+ */
 import express from 'express';
 import { getAllSubscriptions, getSubscriptionById, createSubscription, updateSubscription, deleteSubscription, getUpcomingRenewals } from '../controllers/subscriptionsController.js';
 import { authenticateToken } from '../middleware/auth.js';

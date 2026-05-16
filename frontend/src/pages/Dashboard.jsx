@@ -1,3 +1,6 @@
+/**
+ * Panel del usuario: estadísticas de herramientas, suscripciones y costes.
+ */
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
@@ -9,33 +12,31 @@ const Dashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const { t, i18n } = useTranslation();
-  const isSpanish = i18n.language?.startsWith('es');
+  const { t } = useTranslation();
 
-  const dashboardSubtitle = isSpanish
-    ? 'Centraliza y gestiona tus herramientas en un solo lugar'
-    : 'Centralize and manage your tools in one place';
-  const viewAllSubscriptionsLabel = isSpanish ? 'Ver todas' : 'View all';
-  const viewToolsLabel = isSpanish ? 'Ver herramientas' : 'View tools';
+  const dashboardSubtitle = t('dashboard.subtitle');
+  const viewAllSubscriptionsLabel = t('dashboard.viewAllSubscriptions');
+  const viewToolsLabel = t('dashboard.viewTools');
 
   useEffect(() => {
     fetchStats();
   }, []);
 
+  /** Obtiene métricas agregadas del endpoint de dashboard. */
   const fetchStats = async () => {
     try {
       const response = await api.get('/dashboard/stats');
       setStats(response.data);
     } catch (err) {
-      setError('Failed to load dashboard data');
+      setError(t('dashboard.loadFailed'));
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) return <div className="loading">Loading...</div>;
+  if (loading) return <div className="loading">{t('common.loading')}</div>;
   if (error) return <div className="error">{error}</div>;
-  if (!stats) return <div className="error">No data available</div>;
+  if (!stats) return <div className="error">{t('dashboard.noData')}</div>;
 
   return (
     <div className="dashboard-container">
@@ -70,20 +71,20 @@ const Dashboard = () => {
         <div className="stat-card dashboard-stat-card">
           <h3>{t('dashboard.upcomingRenewals')}</h3>
           <p className="stat-number">{stats.subscriptions.upcomingRenewals}</p>
-          <p className="stat-detail">Next 30 days</p>
+          <p className="stat-detail">{t('dashboard.next30Days')}</p>
         </div>
 
         <div className="stat-card dashboard-stat-card">
           <h3>{t('dashboard.categories')}</h3>
           <p className="stat-number">{stats.categories}</p>
-          <p className="stat-detail">Tool categories</p>
+          <p className="stat-detail">{t('dashboard.toolCategories')}</p>
         </div>
       </div>
 
       {/* SUSCRIPCIONES AGRUPADAS POR HERRAMIENTA */}
       {stats.subscriptions.byTool && stats.subscriptions.byTool.length > 0 && (
         <div className="dashboard-section">
-          <h2>Your Subscriptions</h2>
+          <h2>{t('dashboard.yourSubscriptions')}</h2>
           <div className="subscriptions-grid">
             {stats.subscriptions.byTool.map((toolGroup) => (
               <div key={toolGroup.toolId} className="tool-subscription-card">
@@ -97,7 +98,7 @@ const Dashboard = () => {
                     <div key={sub.id} className="plan-row">
                       <div className="plan-info">
                         <span className="plan-name">{sub.plan}</span>
-                        <span className="plan-cycle">{sub.billingCycle === 'yearly' ? 'Yearly' : 'Monthly'}</span>
+                        <span className="plan-cycle">{t(sub.billingCycle === 'yearly' ? 'toolDetail.yearly' : 'toolDetail.monthly')}</span>
                       </div>
                       <div className="plan-right">
                         <span className="plan-price">{formatEuro(sub.price)}</span>
@@ -113,7 +114,7 @@ const Dashboard = () => {
       )}
 
       <div className="dashboard-section">
-        <h2>Most Expensive Tools</h2>
+        <h2>{t('dashboard.mostExpensiveTools')}</h2>
         {stats.expensiveTools.length > 0 ? (
           <div className="tools-list">
             {stats.expensiveTools.map((tool) => (

@@ -1,3 +1,6 @@
+/**
+ * Panel de administración: métricas globales de usuarios, herramientas y actividad.
+ */
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 import { useTranslation } from 'react-i18next';
@@ -7,13 +10,16 @@ import './AdminDashboard.css';
 const AdminDashboard = () => {
   const { t } = useTranslation();
   const [stats, setStats] = useState(null);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
     fetchAdminStats();
+    fetchAdminUsers();
   }, []);
 
+  /** Carga estadísticas solo accesibles para rol ADMIN. */
   const fetchAdminStats = async () => {
     try {
       const response = await api.get('/dashboard/admin-stats');
@@ -22,6 +28,25 @@ const AdminDashboard = () => {
       setError(t('common.error'));
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchAdminUsers = async () => {
+    try {
+      const response = await api.get('/admin/users');
+      setUsers(response.data);
+    } catch (err) {
+      console.error('Failed to load admin users', err);
+    }
+  };
+
+  const handleToggleBlock = async (userId, isBlocked) => {
+    try {
+      await api.put(`/admin/users/${userId}/block`);
+      fetchAdminUsers();
+      fetchAdminStats();
+    } catch (err) {
+      console.error('Failed to update user status', err);
     }
   };
 
@@ -87,6 +112,30 @@ const AdminDashboard = () => {
               <span className="user-name">{user.name}</span>
               <span className="user-email">{user.email}</span>
               <span className="user-tools">{user._count.tools} {t('admin.dashboard.tools')}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="admin-dashboard-section">
+        <h2>User Management</h2>
+        <div className="users-list admin-user-management">
+          {users.map((user) => (
+            <div key={user.id} className="user-item">
+              <div>
+                <strong>{user.name}</strong> ({user.email})
+                <div className="user-meta">
+                  <span>{user.role}</span>
+                  <span>{user.toolsCount} tools</span>
+                  <span>{user.subscriptionsCount} subs</span>
+                </div>
+              </div>
+              <button
+                className={`btn ${user.isBlocked ? 'btn-outline' : 'btn-danger'}`}
+                onClick={() => handleToggleBlock(user.id, user.isBlocked)}
+              >
+                {user.isBlocked ? 'Unblock' : 'Block'}
+              </button>
             </div>
           ))}
         </div>

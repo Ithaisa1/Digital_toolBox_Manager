@@ -1,3 +1,6 @@
+/**
+ * Componente raíz: enrutamiento, tema claro/oscuro y layout principal.
+ */
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -16,8 +19,10 @@ import Spinner from './components/Spinner';
 import './App.css';
 
 function App() {
+  // Tema persistido en localStorage
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
 
+  // Sincroniza clases del body y guarda la preferencia
   useEffect(() => {
     document.body.classList.toggle('dark', theme === 'dark');
     document.body.classList.toggle('light', theme !== 'dark');
@@ -25,6 +30,7 @@ function App() {
   }, [theme]);
 
   const toggleTheme = () => {
+    // Alterna entre tema claro y oscuro
     setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
   };
 

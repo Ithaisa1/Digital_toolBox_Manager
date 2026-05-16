@@ -1,0 +1,53 @@
+# Render Blueprint - Digital Toolbox Manager
+# https://render.com/docs/blueprint-spec
+
+# PostgreSQL Database
+database:
+  type: pg
+  plan: free
+
+# Backend API Service
+backend:
+  type: web
+  name: digital-toolbox-api
+  runtime: node
+  region: oregon
+  plan: free
+  buildCommand: cd backend && npm install && npx prisma generate --schema ../database/prisma/schema.prisma
+  startCommand: cd backend && npm start
+  healthCheckPath: /api/health
+  envVars:
+    - key: NODE_ENV
+      value: production
+    - key: PORT
+      value: 3001
+    - key: DATABASE_URL
+      fromDatabase:
+        name: digital-toolbox-db
+        property: connectionString
+    - key: JWT_SECRET
+      generateValue: true
+    - key: FRONTEND_URL
+      # Replace with your frontend Render URL after deployment
+      value: https://digital-toolbox-manager.onrender.com
+
+# Frontend Static Site
+frontend:
+  type: web
+  name: digital-toolbox-manager
+  runtime: static
+  region: oregon
+  plan: free
+  buildCommand: cd frontend && npm install && npm run build
+  staticPublishPath: dist
+  headers:
+    - path: /*
+      name: Cache-Control
+      value: no-cache
+  envVars:
+    - key: VITE_API_URL
+      # Replace with your backend Render URL after deployment
+      value: https://digital-toolbox-api.onrender.com
+  routes:
+    - path: /*
+      destination: /

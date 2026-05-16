@@ -1,6 +1,10 @@
+/**
+ * Formulario de registro de nuevo usuario.
+ */
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 import './Register.css';
 
 const Register = () => {
@@ -12,18 +16,20 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
+  /** Valida contraseñas y registra al usuario en el backend. */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('auth.passwordMismatch'));
       return;
     }
 
     if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError(t('auth.passwordTooShort'));
       return;
     }
 
@@ -35,18 +41,18 @@ const Register = () => {
     if (result.success) {
       navigate('/dashboard');
     } else {
-      setError(result.error);
+      setError(result.error || t('auth.registerFailed'));
     }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h1>Register</h1>
+        <h1>{t('auth.registerTitle')}</h1>
         {error && <div className="error">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Name:</label>
+            <label>{t('auth.name')}:</label>
             <input
               type="text"
               value={name}
@@ -56,7 +62,7 @@ const Register = () => {
             />
           </div>
           <div className="form-group">
-            <label>Email:</label>
+            <label>{t('auth.email')}:</label>
             <input
               type="email"
               value={email}
@@ -66,7 +72,7 @@ const Register = () => {
             />
           </div>
           <div className="form-group">
-            <label>Password:</label>
+            <label>{t('auth.password')}:</label>
             <input
               type="password"
               value={password}
@@ -76,7 +82,7 @@ const Register = () => {
             />
           </div>
           <div className="form-group">
-            <label>Confirm Password:</label>
+            <label>{t('auth.confirmPassword')}:</label>
             <input
               type="password"
               value={confirmPassword}
@@ -86,11 +92,11 @@ const Register = () => {
             />
           </div>
           <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? 'Loading...' : 'Register'}
+            {loading ? t('common.loading') : t('auth.register')}
           </button>
         </form>
         <p className="auth-link">
-          Already have an account? <Link to="/login">Login</Link>
+          {t('auth.alreadyHaveAccount')} <Link to="/login">{t('auth.loginLink')}</Link>
         </p>
       </div>
     </div>

@@ -1,5 +1,16 @@
+/**
+ * Controlador CRUD de categorías de herramientas.
+ * Las categorías son compartidas globalmente y agrupan herramientas por tipo o ámbito.
+ */
+
 import prisma from '../config/database.js';
 
+/**
+ * Obtiene todas las categorías ordenadas por nombre con conteo de herramientas.
+ * @param {import('express').Request} req - Sin parámetros específicos.
+ * @param {import('express').Response} res - 200 con array de categorías.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const getAllCategories = async (req, res, next) => {
   try {
     const categories = await prisma.category.findMany({
@@ -17,6 +28,12 @@ export const getAllCategories = async (req, res, next) => {
   }
 };
 
+/**
+ * Obtiene una categoría por ID incluyendo sus herramientas asociadas.
+ * @param {import('express').Request} req - params: { id }.
+ * @param {import('express').Response} res - 200 con la categoría, o 404 si no existe.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const getCategoryById = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -38,6 +55,12 @@ export const getCategoryById = async (req, res, next) => {
   }
 };
 
+/**
+ * Crea una nueva categoría.
+ * @param {import('express').Request} req - body: { name, description? }.
+ * @param {import('express').Response} res - 201 con la categoría creada, o 400 si falta el nombre.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const createCategory = async (req, res, next) => {
   try {
     const { name, description } = req.body;
@@ -59,6 +82,12 @@ export const createCategory = async (req, res, next) => {
   }
 };
 
+/**
+ * Actualiza nombre y/o descripción de una categoría existente.
+ * @param {import('express').Request} req - params: { id }; body: { name?, description? }.
+ * @param {import('express').Response} res - 200 con la categoría actualizada.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const updateCategory = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -78,6 +107,12 @@ export const updateCategory = async (req, res, next) => {
   }
 };
 
+/**
+ * Elimina una categoría por ID.
+ * @param {import('express').Request} req - params: { id }.
+ * @param {import('express').Response} res - 200 con mensaje de éxito.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const deleteCategory = async (req, res, next) => {
   try {
     const { id } = req.params;

@@ -1,6 +1,17 @@
+/**
+ * Controlador de suscripciones asociadas a herramientas del usuario.
+ * Incluye CRUD, renovaciones próximas y enriquecimiento con logos de producto.
+ */
+
 import prisma from '../config/database.js';
 import { attachSubscriptionLogo, attachToolLogo } from '../utils/productLogo.js';
 
+/**
+ * Lista todas las suscripciones del usuario con filtro opcional por estado.
+ * @param {import('express').Request} req - query: { status? }.
+ * @param {import('express').Response} res - 200 con array de suscripciones (con logo).
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const getAllSubscriptions = async (req, res, next) => {
   try {
     const userId = req.user.userId;
@@ -27,6 +38,12 @@ export const getAllSubscriptions = async (req, res, next) => {
   }
 };
 
+/**
+ * Obtiene una suscripción por ID si pertenece al usuario autenticado.
+ * @param {import('express').Request} req - params: { id }.
+ * @param {import('express').Response} res - 200 con la suscripción, o 404.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const getSubscriptionById = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -53,6 +70,12 @@ export const getSubscriptionById = async (req, res, next) => {
   }
 };
 
+/**
+ * Crea una suscripción vinculada a una herramienta del usuario.
+ * @param {import('express').Request} req - body: { toolId, renewalDate, price, billingCycle, plan?, status? }.
+ * @param {import('express').Response} res - 201 con la suscripción creada, o 400/404.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const createSubscription = async (req, res, next) => {
   try {
     const userId = req.user.userId;
@@ -62,7 +85,7 @@ export const createSubscription = async (req, res, next) => {
       return res.status(400).json({ error: 'Tool ID, renewal date, price, and billing cycle are required' });
     }
 
-    // Verify tool belongs to user
+    // Verificar que la herramienta pertenece al usuario
     const tool = await prisma.tool.findFirst({
       where: { id: toolId, userId },
     });
@@ -96,6 +119,12 @@ export const createSubscription = async (req, res, next) => {
   }
 };
 
+/**
+ * Actualiza campos de una suscripción existente del usuario.
+ * @param {import('express').Request} req - params: { id }; body con campos opcionales.
+ * @param {import('express').Response} res - 200 con suscripción actualizada, o 404.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const updateSubscription = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -134,6 +163,12 @@ export const updateSubscription = async (req, res, next) => {
   }
 };
 
+/**
+ * Elimina una suscripción del usuario por ID.
+ * @param {import('express').Request} req - params: { id }.
+ * @param {import('express').Response} res - 200 con mensaje de éxito, o 404.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const deleteSubscription = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -157,6 +192,12 @@ export const deleteSubscription = async (req, res, next) => {
   }
 };
 
+/**
+ * Obtiene suscripciones activas con renovación dentro del rango de días indicado.
+ * @param {import('express').Request} req - query: { days? } (por defecto 30).
+ * @param {import('express').Response} res - 200 con suscripciones próximas a renovar.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
 export const getUpcomingRenewals = async (req, res, next) => {
   try {
     const userId = req.user.userId;

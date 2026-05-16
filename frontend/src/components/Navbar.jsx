@@ -1,3 +1,6 @@
+/**
+ * Barra de navegación: enlaces según rol, tema, idioma y perfil.
+ */
 import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import ThemeToggle from './ThemeToggle';
@@ -10,6 +13,7 @@ const Navbar = ({ theme, onToggleTheme }) => {
   const { t } = useTranslation();
   const userInitial = user?.name?.charAt(0)?.toUpperCase() || 'U';
 
+  // Añade clase active a la ruta actual
   const navLinkClass = ({ isActive }) => `navbar-link${isActive ? ' active' : ''}`;
 
   return (

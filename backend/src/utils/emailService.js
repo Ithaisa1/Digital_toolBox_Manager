@@ -1,3 +1,7 @@
+/**
+ * Envío de correos transaccionales (bienvenida, renovación, restablecimiento de contraseña).
+ * Usa nodemailer con credenciales SMTP definidas en variables de entorno.
+ */
 import nodemailer from "nodemailer";
 
 class EmailService {
@@ -13,7 +17,7 @@ class EmailService {
     });
   }
 
-  // Send renewal reminder email
+  /** Envía recordatorio de renovación de suscripción al usuario. */
   async sendRenewalReminder(user, subscription, daysUntilRenewal) {
     try {
       const mailOptions = {
@@ -36,7 +40,7 @@ class EmailService {
     }
   }
 
-  // Send welcome email
+  /** Envía correo de bienvenida tras el registro. */
   async sendWelcomeEmail(user) {
     try {
       const mailOptions = {
@@ -53,7 +57,7 @@ class EmailService {
     }
   }
 
-  // Send password reset email
+  /** Envía enlace de restablecimiento de contraseña con token temporal. */
   async sendPasswordResetEmail(user, resetToken) {
     try {
       const mailOptions = {
@@ -70,7 +74,7 @@ class EmailService {
     }
   }
 
-  // Generate renewal reminder email template
+  /** Plantilla HTML del recordatorio; urgencia visual si faltan ≤7 días. */
   generateRenewalTemplate(user, subscription, daysUntilRenewal) {
     const urgency = daysUntilRenewal <= 7 ? "high" : "normal";
     const urgencyColor = urgency === "high" ? "#ef4444" : "#3b82f6";
@@ -117,7 +121,7 @@ class EmailService {
     `;
   }
 
-  // Generate welcome email template
+  /** Plantilla HTML de bienvenida con enlaces al frontend. */
   generateWelcomeTemplate(user) {
     return `
       <!DOCTYPE html>
@@ -168,7 +172,7 @@ class EmailService {
     `;
   }
 
-  // Generate password reset email template
+  /** Plantilla HTML con URL de reset que incluye el token en query string. */
   generatePasswordResetTemplate(user, resetToken) {
     const resetUrl = `${process.env.FRONTEND_URL || "http://localhost:3000"}/reset-password?token=${resetToken}`;
 
@@ -212,7 +216,7 @@ class EmailService {
     `;
   }
 
-  // Test email configuration
+  /** Verifica que el transporte SMTP esté configurado correctamente. */
   async testConnection() {
     try {
       await this.transporter.verify();

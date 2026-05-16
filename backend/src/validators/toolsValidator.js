@@ -1,3 +1,6 @@
+/**
+ * Validación Zod para creación y actualización de herramientas digitales.
+ */
 import { z } from 'zod';
 
 // Esquemas de validación para herramientas
@@ -48,7 +51,7 @@ export const updateToolSchema = z.object({
     .or(z.literal(''))
 });
 
-// Middleware de validación
+/** Valida POST /tools con createToolSchema. */
 export const validateCreateTool = (req, res, next) => {
   try {
     createToolSchema.parse(req.body);
@@ -64,6 +67,7 @@ export const validateCreateTool = (req, res, next) => {
   }
 };
 
+/** Valida PUT /tools/:id con updateToolSchema. */
 export const validateUpdateTool = (req, res, next) => {
   try {
     updateToolSchema.parse(req.body);
