@@ -69,7 +69,6 @@ export const register = async (req, res, next) => {
         email: normalizedEmail,
         password: hashedPassword,
         name,
-        profileImageUrl: req.body.profileImageUrl || null,
         language: req.body.language || 'es',
       },
       select: {
@@ -77,7 +76,6 @@ export const register = async (req, res, next) => {
         email: true,
         name: true,
         role: true,
-        profileImageUrl: true,
         language: true,
         createdAt: true,
       },
@@ -146,7 +144,6 @@ export const login = async (req, res, next) => {
         email: user.email,
         name: user.name,
         role: user.role,
-        profileImageUrl: user.profileImageUrl || null,
         language: user.language || 'es',
       },
       token,
@@ -170,7 +167,6 @@ export const getProfile = async (req, res, next) => {
         id: true,
         email: true,
         name: true,
-        profileImageUrl: true,
         language: true,
         role: true,
         createdAt: true,
@@ -269,10 +265,6 @@ export const updateProfile = async (req, res, next) => {
       data.password = await bcrypt.hash(newPassword, 10);
     }
 
-    if (typeof req.body.profileImageUrl === "string") {
-      data.profileImageUrl = req.body.profileImageUrl || null;
-    }
-
     if (typeof req.body.language === "string") {
       data.language = req.body.language;
     }
@@ -289,7 +281,6 @@ export const updateProfile = async (req, res, next) => {
         email: true,
         name: true,
         role: true,
-        profileImageUrl: true,
         language: true,
         createdAt: true,
         _count: {

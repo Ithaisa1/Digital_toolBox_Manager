@@ -11,7 +11,6 @@ import categoriesRoutes from "./routes/categories.js";
 import subscriptionsRoutes from "./routes/subscriptions.js";
 import movementsRoutes from "./routes/movements.js";
 import dashboardRoutes from "./routes/dashboard.js";
-import alertsRoutes from "./routes/alerts.js";
 import exportRoutes from "./routes/export.js";
 import adminRoutes from "./routes/admin.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";

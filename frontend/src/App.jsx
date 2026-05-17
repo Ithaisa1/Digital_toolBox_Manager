@@ -1,9 +1,8 @@
 /**
  * Componente raíz: enrutamiento, tema claro/oscuro y layout principal.
- * Con persistencia de ruta actual al recargar.
  */
 import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
@@ -20,43 +19,25 @@ import Spinner from './components/Spinner';
 import './App.css';
 
 function AppContent() {
-  // Tema persistido en localStorage
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
-  const [initialPath, setInitialPath] = useState(null);
   const { user, loading } = useAuth();
-  const location = useLocation();
 
-  // Sincroniza clases del body y guarda la preferencia
   useEffect(() => {
     document.body.classList.toggle('dark', theme === 'dark');
     document.body.classList.toggle('light', theme !== 'dark');
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  // Guarda la ruta actual cuando el usuario está autenticado
-  useEffect(() => {
-    if (user && location.pathname !== '/') {
-      localStorage.setItem('lastRoute', location.pathname);
-    }
-  }, [location.pathname, user]);
-
-  // Restaura la ruta guardada cuando carga la app
-  useEffect(() => {
-    if (!loading && !initialPath) {
-      const savedRoute = localStorage.getItem('lastRoute');
-      if (savedRoute && user) {
-        setInitialPath(savedRoute);
-      }
-    }
-  }, [loading, user, initialPath]);
-
   const toggleTheme = () => {
-    // Alterna entre tema claro y oscuro
     setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
   };
 
   if (loading) {
-    return <Spinner />;
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <Spinner />
+      </div>
+    );
   }
 
   return (
@@ -96,6 +77,9 @@ function AppContent() {
             <ProtectedRoute>
               <Profile />
             </ProtectedRoute>
+          } />
+          <Route path="*" element={
+            user ? <Home /> : <Login />
           } />
         </Routes>
       </main>

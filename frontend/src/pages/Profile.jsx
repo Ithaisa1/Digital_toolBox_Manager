@@ -19,7 +19,6 @@ const Profile = () => {
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
-    profileImageUrl: '',
     language: 'es',
   });
   const [loading, setLoading] = useState(false);
@@ -34,7 +33,6 @@ const Profile = () => {
         ...prev,
         name: user.name || '',
         email: user.email || '',
-        profileImageUrl: user.profileImageUrl || '',
         language: user.language || 'es',
       }));
       fetchSubscriptionStats();
@@ -68,7 +66,6 @@ const Profile = () => {
     const updateData = {
       name: profileData.name,
       email: profileData.email,
-      profileImageUrl: profileData.profileImageUrl,
       language: profileData.language,
       currentPassword: profileData.currentPassword || undefined,
       ...(profileData.newPassword && { newPassword: profileData.newPassword }),
@@ -141,11 +138,7 @@ const Profile = () => {
         </div>
         <div className="profile-hero">
           <div className="avatar-circle">
-            {user.profileImageUrl ? (
-              <img src={user.profileImageUrl} alt={user.name} className="profile-avatar-image" />
-            ) : (
-              user.name.charAt(0).toUpperCase()
-            )}
+            {user.name.charAt(0).toUpperCase()}
           </div>
           <div className="user-info">
             <h2>{user.name}</h2>
@@ -180,17 +173,6 @@ const Profile = () => {
                 onChange={(e) => setProfileData((prev) => ({ ...prev, email: e.target.value }))}
                 autoComplete="email"
                 required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>{t('profile.profileImage')}</label>
-              <input
-                type="url"
-                value={profileData.profileImageUrl}
-                onChange={(e) => setProfileData((prev) => ({ ...prev, profileImageUrl: e.target.value }))}
-                placeholder={t('profile.profileImagePlaceholder')}
-                autoComplete="url"
               />
             </div>
 
