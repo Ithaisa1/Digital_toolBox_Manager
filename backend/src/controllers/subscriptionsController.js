@@ -17,8 +17,17 @@ export const getAllSubscriptions = async (req, res, next) => {
     const userId = req.user.userId;
     const { status } = req.query;
 
-    const where = { userId };
-    if (status) where.status = status;
+    const where = {
+      userId,
+      status: {
+        notIn: ['EXPIRED', 'CANCELLED'], // Excluye EXPIRED y CANCELLED
+      },
+    };
+
+    // Si se especifica un estado adicional, reemplaza el filtro
+    if (status) {
+      where.status = status;
+    }
 
     const subscriptions = await prisma.subscription.findMany({
       where,
