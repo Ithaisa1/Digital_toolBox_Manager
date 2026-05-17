@@ -126,7 +126,6 @@ const TOOLS_CATALOG = [
   { name: 'Teams', type: 'Communication', url: 'https://teams.microsoft.com', price: 6, description: 'Colaboración empresarial', category: 'Communication' },
   { name: 'Dropbox', type: 'Productivity', url: 'https://dropbox.com', price: 12, description: 'Almacenamiento en la nube', category: 'Productivity' },
   { name: 'Google Drive', type: 'Productivity', url: 'https://drive.google.com', price: 2, description: 'Almacenamiento y documentos', category: 'Productivity' },
-  { name: 'Notion', type: 'Productivity', url: 'https://notion.so', price: 10, description: 'Espacio de trabajo todo-en-uno', category: 'Productivity' },
   { name: 'Todoist', type: 'Productivity', url: 'https://todoist.com', price: 4, description: 'Gestión de tareas', category: 'Productivity' },
   { name: 'ClickUp', type: 'Project Management', url: 'https://clickup.com', price: 7, description: 'Gestión de proyectos todo-en-uno', category: 'Productivity' },
   { name: 'Cursor', type: 'IDE', url: 'https://cursor.com', price: 0, description: 'Editor de código con IA', category: 'Development' },
@@ -626,7 +625,7 @@ const ToolsList = () => {
     }
 
     return result;
-  }, [uniqueTools, debouncedSearch, activeFilter]);
+  }, [uniqueTools, debouncedSearch, activeFilter, selectedCategory]);
 
   const handleToolAdded = (newTool) => {
     if (newTool) {
@@ -749,32 +748,38 @@ const ToolsList = () => {
           />
         </div>
 
-        <div className="filter-tabs">
-          {Object.keys(copy.filters).map((filter) => (
-            <button
-              key={filter}
-              className={`filter-tab ${activeFilter === filter ? 'active' : ''}`}
-              onClick={() => setActiveFilter(filter)}
-            >
-              {copy.filters[filter]}
-            </button>
-          ))}
-        </div>
-
-        <div className="category-filter">
-          <label htmlFor="category-filter-select">{copy.category}</label>
-          <select
-            id="category-filter-select"
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-          >
-            <option value="all">{copy.allCategories}</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
+        <div className="filters-row">
+          <div className="filter-tabs">
+            {Object.keys(copy.filters).map((filter) => (
+              <button
+                key={filter}
+                className={`filter-tab ${activeFilter === filter ? 'active' : ''}`}
+                onClick={() => setActiveFilter(filter)}
+              >
+                {copy.filters[filter]}
+              </button>
             ))}
-          </select>
+          </div>
+
+          <div className="category-filter">
+            <div className="category-buttons">
+              <button
+                className={`category-tab ${selectedCategory === 'all' ? 'active' : ''}`}
+                onClick={() => setSelectedCategory('all')}
+              >
+                {copy.allCategories}
+              </button>
+              {categories.map((category) => (
+                <button
+                  key={category.id}
+                  className={`category-tab ${selectedCategory === category.id ? 'active' : ''}`}
+                  onClick={() => setSelectedCategory(category.id)}
+                >
+                  {category.name}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
