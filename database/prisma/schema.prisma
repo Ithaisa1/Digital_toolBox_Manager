@@ -29,8 +29,7 @@ enum SubscriptionStatus {
   ACTIVE
   INACTIVE
   ARCHIVED
-  CANCELLED
-  EXPIRED
+  
 }
 
 /// Tipo de evento registrado en el historial (auditoría)
@@ -49,7 +48,7 @@ model User {
   password        String    // Hash bcrypt (nunca texto plano)
   name            String
   role            Role      @default(USER)
-  profileImageUrl String?
+  // profileImageUrl String?
   language        String?   @default("es")
   isBlocked       Boolean   @default(false)
   createdAt       DateTime  @default(now())
