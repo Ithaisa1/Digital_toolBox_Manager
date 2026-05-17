@@ -66,6 +66,14 @@ export const AuthProvider = ({ children }) => {
       console.info('Login successful for email:', email);
       return { success: true };
     } catch (error) {
+      
+      // Solo desloguea si es 401 (token inválido/expirado)
+      if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('language');
+      setToken(null);
+      setUser(null);
+    }
       const apiData = error.response?.data;
       const details = apiData?.details
         ? apiData.details.map((detail) => `${detail.campo}: ${detail.mensaje}`).join(', ')

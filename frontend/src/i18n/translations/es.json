@@ -135,7 +135,7 @@
     "type": "Tipo"
   },
   "subscriptions": {
-    "title": "Mis Suscripciones",
+    "title": " Suscripciones",
     "subtitle": "Gestiona todas tus suscripciones en un solo lugar",
     "searchPlaceholder": "Buscar suscripciones...",
     "filters": {
