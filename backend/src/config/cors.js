@@ -47,39 +47,3 @@ export function corsOriginCallback(origin, callback) {
 
   callback(new Error(`CORS bloqueado para origen: ${origin}`));
 }
-
-/**
- * Callback para CORS que valida el origen.
- * En desarrollo acepta cualquier localhost/127.0.0.1 (Vite puede cambiar de puerto).
- * En producción solo acepta orígenes específicos.
- */
-export function corsOriginCallback(origin, callback) {
-  // Si no hay origin (peticiones desde el mismo servidor), permite
-  if (!origin) {
-    return callback(null, true);
-  }
-
-  const allowed = getCorsOrigins();
-
-  // Verifica contra lista de orígenes permitidos
-  for (const pattern of allowed) {
-    if (pattern instanceof RegExp) {
-      if (pattern.test(origin)) {
-        return callback(null, true);
-      }
-    } else if (pattern === origin) {
-      return callback(null, true);
-    }
-  }
-
-  // En desarrollo, permite cualquier localhost
-  if (process.env.NODE_ENV === "development") {
-    const isLocalDev = /^https?:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin);
-    if (isLocalDev) {
-      return callback(null, true);
-    }
-  }
-
-  // Si llegamos aquí, no es un origen permitido
-  callback(new Error(`CORS bloqueado para origen: ${origin}`));
-}
