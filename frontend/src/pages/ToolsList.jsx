@@ -688,7 +688,7 @@ const ToolsList = () => {
     if (window.confirm(copy.subscription.confirmCancel)) {
       try {
         await api.put(`/subscriptions/${subscriptionPanel.existingSub.id}`, {
-          status: 'CANCELLED',
+          status: 'INACTIVE',
         });
         fetchTools();
         setSubscriptionPanel(null);

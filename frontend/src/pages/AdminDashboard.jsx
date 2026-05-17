@@ -40,7 +40,7 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleToggleBlock = async (userId, isBlocked) => {
+  const handleToggleBlock = async (userId) => {
     try {
       await api.put(`/admin/users/${userId}/block`);
       fetchAdminUsers();
@@ -132,7 +132,7 @@ const AdminDashboard = () => {
               </div>
               <button
                 className={`btn ${user.isBlocked ? 'btn-outline' : 'btn-danger'}`}
-                onClick={() => handleToggleBlock(user.id, user.isBlocked)}
+                onClick={() => handleToggleBlock(user.id)}
               >
                 {user.isBlocked ? 'Unblock' : 'Block'}
               </button>

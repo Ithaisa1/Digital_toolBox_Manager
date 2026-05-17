@@ -62,6 +62,9 @@ app.get("/api/health", async (req, res) => {
 
 // Endpoint para popular la BD (solo en desarrollo)
 app.get('/api/seed', async (req, res, next) => {
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(403).json({ error: 'Seed endpoint disabled in production' });
+  }
   try {
     await seedDatabase();
     res.json({ message: 'Database seeded successfully' });

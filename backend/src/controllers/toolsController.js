@@ -4,7 +4,6 @@
  */
 
 import prisma from "../config/database.js";
-import { authenticateToken } from "../middleware/auth.js";
 import {
   attachToolLogo,
   attachSubscriptionLogo,
@@ -167,11 +166,14 @@ export const updateTool = async (req, res, next) => {
       return res.status(404).json({ error: "Tool not found" });
     }
 
+    const resolvedName = name || existingTool.name;
+    const resolvedType = type || existingTool.type;
+
     const tool = await prisma.tool.update({
       where: { id },
       data: {
-        name: name || existingTool.name,
-        type: type || existingTool.type,
+        name: resolvedName,
+        type: resolvedType,
         url: url !== undefined ? url : existingTool.url,
         price:
           price !== undefined && price !== null
@@ -192,7 +194,7 @@ export const updateTool = async (req, res, next) => {
         toolId: tool.id,
         userId,
         type: "UPDATED",
-        description: `Tool "${name}" was updated`,
+        description: `Tool "${resolvedName}" was updated`,
         previousData: JSON.stringify(existingTool),
         newData: JSON.stringify(tool),
       },

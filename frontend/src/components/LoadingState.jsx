@@ -5,9 +5,9 @@ import Spinner from './Spinner';
 
 const LoadingState = ({ message = 'Cargando...', size = 'medium' }) => {
   return (
-    <div className="flex flex-col items-center justify-center p-8">
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
       <Spinner size={size} />
-      <p className="mt-4 text-gray-600 text-center">{message}</p>
+      <p style={{ marginTop: '1rem', color: 'var(--color-text-secondary, #6b7280)', textAlign: 'center' }}>{message}</p>
     </div>
   );
 };

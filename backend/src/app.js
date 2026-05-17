@@ -15,12 +15,13 @@ import alertsRoutes from "./routes/alerts.js";
 import exportRoutes from "./routes/export.js";
 import adminRoutes from "./routes/admin.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
+import { corsOriginCallback } from "./config/cors.js";
 
 dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: corsOriginCallback, credentials: true }));
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);

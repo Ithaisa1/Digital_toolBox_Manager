@@ -41,6 +41,7 @@ export const exportUserData = async (req, res, next) => {
 
     const movements = await prisma.movement.findMany({
       where: { userId },
+      include: { tool: { select: { name: true } } },
       orderBy: { createdAt: 'desc' }
     });
 
@@ -74,11 +75,10 @@ export const exportUserData = async (req, res, next) => {
         
       case 'movements':
         exportData = movements.map(movement => ({
-          'Action': movement.action,
-          'Tool Name': movement.toolName || 'N/A',
+          'Type': movement.type,
+          'Tool Name': movement.tool?.name || 'N/A',
           'Description': movement.description,
-          'Date': movement.createdAt.toLocaleDateString(),
-          'IP Address': movement.ipAddress || 'N/A'
+          'Date': movement.createdAt.toLocaleDateString()
         }));
         break;
         
@@ -105,11 +105,10 @@ export const exportUserData = async (req, res, next) => {
           })),
           ...movements.map(movement => ({
             'Section': 'Movement',
-            'Action': movement.action,
-            'Tool Name': movement.toolName || 'N/A',
+            'Type': movement.type,
+            'Tool Name': movement.tool?.name || 'N/A',
             'Description': movement.description,
-            'Date': movement.createdAt.toLocaleDateString(),
-            'IP Address': movement.ipAddress || 'N/A'
+            'Date': movement.createdAt.toLocaleDateString()
           }))
         ];
     }
@@ -209,7 +208,7 @@ export const generateAnalyticsReport = async (req, res, next) => {
         return acc;
       }, {}),
       movementsByAction: movements.reduce((acc, movement) => {
-        acc[movement.action] = (acc[movement.action] || 0) + 1;
+        acc[movement.type] = (acc[movement.type] || 0) + 1;
         return acc;
       }, {})
     };

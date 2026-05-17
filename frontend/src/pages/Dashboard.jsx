@@ -12,7 +12,8 @@ const Dashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isSpanish = i18n.language?.startsWith('es');
 
   const dashboardSubtitle = t('dashboard.subtitle');
   const viewAllSubscriptionsLabel = t('dashboard.viewAllSubscriptions');

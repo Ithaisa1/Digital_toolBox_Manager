@@ -5,7 +5,7 @@ import { formatEuro } from '../utils/formatCurrency';
 import { getToolDescription } from '../utils/productDescriptions';
 import './Subscriptions.css';
 
-const FILTERS = ['all', 'active', 'inactive', 'cancelled', 'expired', 'archived'];
+const FILTERS = ['all', 'active', 'inactive', 'archived'];
 
 const getFallbackLogo = (name = 'TB') => {
   const initials = (name || 'TB')
@@ -50,8 +50,6 @@ const Subscriptions = () => {
           all: 'Todas',
           active: 'Activas',
           inactive: 'Inactivas',
-          cancelled: 'Canceladas',
-          expired: 'Expiradas',
           archived: 'Archivadas',
         },
         status: {
@@ -74,8 +72,6 @@ const Subscriptions = () => {
           monthly: 'Mensual',
           yearly: 'Anual',
           active: 'Activa',
-          cancelled: 'Cancelada',
-          expired: 'Expirada',
           archived: 'Archivada',
           inactive: 'Inactiva',
           save: 'Guardar',
@@ -98,8 +94,6 @@ const Subscriptions = () => {
           all: 'All',
           active: 'Active',
           inactive: 'Inactive',
-          cancelled: 'Cancelled',
-          expired: 'Expired',
           archived: 'Archived',
         },
         status: {
@@ -122,8 +116,6 @@ const Subscriptions = () => {
           monthly: 'Monthly',
           yearly: 'Yearly',
           active: 'Active',
-          cancelled: 'Cancelled',
-          expired: 'Expired',
           archived: 'Archived',
           inactive: 'Inactive',
           save: 'Save',
@@ -166,14 +158,12 @@ const Subscriptions = () => {
     if (key === 'active') return copy.subscription.active;
     if (key === 'inactive') return copy.status.inactive;
     if (key === 'archived') return copy.status.archived;
-    if (key === 'cancelled') return copy.subscription.cancelled;
-    if (key === 'expired') return copy.subscription.expired;
     return status || '';
   };
 
   const getSubscriptionStatus = (subscription) => {
     const subscriptionStatus = subscription.status?.toLowerCase();
-    if (['active', 'inactive', 'archived', 'cancelled', 'expired'].includes(subscriptionStatus)) {
+    if (['active', 'inactive', 'archived'].includes(subscriptionStatus)) {
       return subscriptionStatus;
     }
 
@@ -224,10 +214,6 @@ const Subscriptions = () => {
           return status === 'active';
         case 'inactive':
           return status === 'inactive';
-        case 'cancelled':
-          return status === 'cancelled';
-        case 'expired':
-          return status === 'expired';
         case 'archived':
           return status === 'archived';
         default:

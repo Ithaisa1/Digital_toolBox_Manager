@@ -83,8 +83,8 @@ App: `http://localhost:3000`
 | Arquitectura | [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) |
 | API REST | [docs/API.md](./docs/API.md) |
 | Base de datos | [docs/DATABASE.md](./docs/DATABASE.md) |
-| Backend | [docs/BACKEND.md](./docs/BACKEND.md) |
-| Frontend | [docs/FRONTEND.md](./docs/FRONTEND.md) |
+| Backend | [backend/BACKEND.md](./backend/BACKEND.md) |
+| Frontend | [frontend/FRONTEND.md](./frontend/FRONTEND.md) |
 | Desarrollo y troubleshooting | [docs/DEVELOPMENT.md](./docs/DEVELOPMENT.md) |
 | PostgreSQL | [docs/setup-postgres.md](./docs/setup-postgres.md) |
 | Despliegue | [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md) |

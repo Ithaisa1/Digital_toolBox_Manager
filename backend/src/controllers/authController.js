@@ -240,13 +240,16 @@ export const updateProfile = async (req, res, next) => {
 
     // Evitar email duplicado en otro usuario
     if (isEmailChanging) {
+      const normalizedEmail = email.trim().toLowerCase();
       const existingEmail = await prisma.user.findUnique({
-        where: { email: email.trim() },
+        where: { email: normalizedEmail },
       });
 
       if (existingEmail && existingEmail.id !== userId) {
         return res.status(409).json({ error: "Email already in use" });
       }
+
+      data.email = normalizedEmail;
     }
 
     // Construir objeto de actualización solo con campos enviados
@@ -254,10 +257,6 @@ export const updateProfile = async (req, res, next) => {
 
     if (typeof name === "string" && name.trim()) {
       data.name = name.trim();
-    }
-
-    if (isEmailChanging) {
-      data.email = email.trim();
     }
 
     if (isPasswordChanging) {

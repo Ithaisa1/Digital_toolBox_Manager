@@ -8,10 +8,9 @@ import Spinner from './Spinner';
 const ProtectedRoute = ({ children, requiredRole = null }) => {
   const { user, loading } = useAuth();
 
-  // Espera a resolver la sesión antes de redirigir
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
         <Spinner />
       </div>
     );
@@ -21,19 +20,18 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
     return <Navigate to="/login" replace />;
   }
 
-  // Comprueba rol cuando la ruta lo exige (p. ej. ADMIN)
   if (requiredRole && user.role !== requiredRole) {
     return (
-      <div className="flex flex-col justify-center items-center min-h-screen">
-        <h2 className="text-2xl font-bold text-red-600 mb-4">
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--color-error, #dc2626)', marginBottom: '1rem' }}>
           Acceso Denegado
         </h2>
-        <p className="text-gray-600 mb-4">
+        <p style={{ color: 'var(--color-text-secondary, #6b7280)', marginBottom: '1rem' }}>
           No tienes permisos para acceder a esta página.
         </p>
         <button
           onClick={() => window.history.back()}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          style={{ padding: '0.5rem 1rem', backgroundColor: 'var(--color-primary, #3b82f6)', color: '#fff', borderRadius: '0.375rem', border: 'none', cursor: 'pointer' }}
         >
           Volver
         </button>

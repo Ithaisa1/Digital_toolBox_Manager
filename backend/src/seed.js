@@ -1,6 +1,9 @@
 /**
  * Datos de demostración: usuarios, categorías, herramientas y suscripciones.
  * Ejecutable con `node src/seed.js` o invocado desde bootstrapDatabase.
+ *
+ * ⚠️ ADVERTENCIA: Las contraseñas de demo están hardcodeadas (admin123, user123).
+ * Solo para desarrollo. No usar en producción.
  */
 import prisma from "./config/database.js";
 import bcrypt from "bcryptjs";
@@ -375,6 +378,9 @@ const isDirectRun =
 
 if (isDirectRun) {
   seedDatabase()
-    .catch(() => process.exit(1))
-    .finally(() => prisma.$disconnect());
+    .finally(() => prisma.$disconnect())
+    .catch((error) => {
+      console.error("Seed failed:", error);
+      process.exit(1);
+    });
 }

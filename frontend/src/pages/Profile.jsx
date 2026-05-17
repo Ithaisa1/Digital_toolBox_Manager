@@ -12,7 +12,7 @@ import './Profile.css';
 const Profile = () => {
   const navigate = useNavigate();
   const { user, logout, refreshUser } = useAuth();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [profileData, setProfileData] = useState({
     name: '',
     email: '',

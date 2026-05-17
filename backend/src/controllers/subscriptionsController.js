@@ -17,14 +17,8 @@ export const getAllSubscriptions = async (req, res, next) => {
     const userId = req.user.userId;
     const { status } = req.query;
 
-    const where = {
-      userId,
-      status: {
-        not: ['EXPIRED', 'CANCELLED'], // Excluye EXPIRED y CANCELLED
-      },
-    };
+    const where = { userId };
 
-    // Si se especifica un estado adicional, reemplaza el filtro
     if (status) {
       where.status = status;
     }
@@ -212,15 +206,17 @@ export const getUpcomingRenewals = async (req, res, next) => {
     const userId = req.user.userId;
     const days = parseInt(req.query.days) || 30;
 
-    const date = new Date();
-    date.setDate(date.getDate() + days);
+    const now = new Date();
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + days);
 
     const subscriptions = await prisma.subscription.findMany({
       where: {
         userId,
         status: 'ACTIVE',
         renewalDate: {
-          lte: date,
+          gte: now,
+          lte: futureDate,
         },
       },
       include: {
