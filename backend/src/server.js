@@ -15,6 +15,7 @@ import { errorHandler, notFound } from "./middleware/errorHandler.js";
 import { bootstrapDatabase } from "./utils/bootstrapDatabase.js";
 import { checkDatabaseConnection } from "./config/database.js";
 import { corsOriginCallback } from "./config/cors.js";
+import { seedDatabase } from "./seed.js";
 
 dotenv.config();
 
@@ -57,6 +58,16 @@ app.get("/api/health", async (req, res) => {
     database: "connected",
     message: "Digital Toolbox Manager API is running",
   });
+});
+
+// Endpoint para popular la BD (solo en desarrollo)
+app.post('/api/seed', async (req, res, next) => {
+  try {
+    await seedDatabase();
+    res.json({ message: 'Database seeded successfully' });
+  } catch (error) {
+    next(error);
+  }
 });
 
 // Manejo de rutas inexistentes y errores globales
