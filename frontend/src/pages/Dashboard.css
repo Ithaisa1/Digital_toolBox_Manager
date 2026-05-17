@@ -413,3 +413,64 @@
     max-width: 1400px;
   }
 }
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 0.75rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .dashboard-header p {
+    font-size: 0.9rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .dashboard-stat-card {
+    padding: 1.25rem;
+  }
+
+  .dashboard-stat-card .stat-number {
+    font-size: 2rem;
+  }
+
+  .dashboard-stat-card h3 {
+    font-size: 0.75rem;
+  }
+
+  .dashboard-section {
+    padding: 1rem;
+  }
+
+  .dashboard-section h2 {
+    font-size: 1.1rem;
+  }
+
+  .tool-subscription-card {
+    padding: 1rem;
+  }
+
+  .plan-row {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .plan-right {
+    justify-content: flex-start;
+  }
+
+  .tool-item {
+    padding: 0.75rem;
+  }
+
+  .tool-price {
+    font-size: 0.9rem;
+  }
+}

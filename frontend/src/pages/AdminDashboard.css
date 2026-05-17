@@ -173,3 +173,59 @@
     text-align: left;
   }
 }
+
+@media (max-width: 480px) {
+  .admin-dashboard-container {
+    padding: 0.75rem;
+  }
+
+  .admin-dashboard-container h1 {
+    font-size: 1.5rem;
+  }
+
+  .admin-dashboard-container h2 {
+    font-size: 1.1rem;
+  }
+
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+  }
+
+  .stat-detail {
+    font-size: 0.75rem;
+  }
+
+  .activity-item,
+  .user-item {
+    padding: 0.75rem;
+  }
+
+  .activity-type {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .activity-description {
+    font-size: 0.8rem;
+  }
+
+  .user-meta {
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  .admin-user-management .user-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .admin-user-management .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

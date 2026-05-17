@@ -33,3 +33,15 @@
 .auth-link a:hover {
   text-decoration: underline;
 }
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 24px 20px;
+    margin: 16px;
+    max-width: calc(100% - 32px);
+  }
+
+  .auth-card h1 {
+    font-size: 1.5rem;
+  }
+}

@@ -367,3 +367,51 @@
     max-width: 1400px;
   }
 }
+
+/* Small mobile */
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 0.75rem;
+  }
+
+  .profile-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .profile-hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .avatar-circle {
+    width: 4rem;
+    height: 4rem;
+    font-size: 1.5rem;
+  }
+
+  .user-info h2 {
+    font-size: 1.2rem;
+  }
+
+  .profile-section {
+    padding: 1rem;
+  }
+
+  .profile-section h3 {
+    font-size: 1rem;
+  }
+
+  .stats-card {
+    grid-template-columns: 1fr;
+  }
+
+  .danger-actions {
+    flex-direction: column;
+  }
+
+  .danger-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
