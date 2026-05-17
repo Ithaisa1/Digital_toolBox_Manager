@@ -61,7 +61,7 @@ app.get("/api/health", async (req, res) => {
 });
 
 // Endpoint para popular la BD (solo en desarrollo)
-app.post('/api/seed', async (req, res, next) => {
+app.get('/api/seed', async (req, res, next) => {
   try {
     await seedDatabase();
     res.json({ message: 'Database seeded successfully' });
