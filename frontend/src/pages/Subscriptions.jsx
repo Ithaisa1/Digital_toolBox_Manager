@@ -7,6 +7,8 @@ import './Subscriptions.css';
 
 const FILTERS = ['all', 'active', 'inactive', 'archived'];
 
+const STATUS_OPTIONS = ['ACTIVE', 'INACTIVE', 'ARCHIVED'];
+
 const getFallbackLogo = (name = 'TB') => {
   const initials = (name || 'TB')
     .trim()
@@ -38,6 +40,9 @@ const Subscriptions = () => {
   const [error, setError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
+  const [manageModal, setManageModal] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState('');
+  const [saving, setSaving] = useState(false);
   const { t, i18n } = useTranslation();
   const isSpanish = i18n.language?.startsWith('es');
 
@@ -230,6 +235,32 @@ const Subscriptions = () => {
     }
   };
 
+  const openManageModal = (subscription) => {
+    setManageModal(subscription);
+    setSelectedStatus(subscription.status || 'ACTIVE');
+  };
+
+  const closeManageModal = () => {
+    setManageModal(null);
+    setSelectedStatus('');
+  };
+
+  const handleSaveStatus = async () => {
+    if (!manageModal) return;
+    setSaving(true);
+    try {
+      await api.put(`/subscriptions/${manageModal.id}`, {
+        status: selectedStatus,
+      });
+      await fetchSubscriptions();
+      closeManageModal();
+    } catch (err) {
+      console.error('Failed to update subscription status:', err);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   if (loading) return <div className="loading">{t('common.loading')}</div>;
   if (error) return <div className="error">{error}</div>;
 
@@ -335,13 +366,54 @@ const Subscriptions = () => {
                       {copy.actions.openTool}
                     </button>
                   )}
-                  <button className="btn btn-outline">
+                  <button className="btn btn-outline" onClick={() => openManageModal(subscription)}>
                     {copy.actions.manageSubscription}
                   </button>
                 </div>
               </article>
             );
           })}
+        </div>
+      )}
+
+      {manageModal && (
+        <div className="modal-overlay" onClick={closeManageModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>{copy.subscription.title}</h2>
+              <button className="modal-close" onClick={closeManageModal}>&times;</button>
+            </div>
+
+            <div className="modal-body">
+              <div className="manage-sub-info">
+                <strong>{manageModal.tool?.name}</strong>
+                <span>{formatEuro(manageModal.price)} / {getBillingCycleLabel(manageModal.billingCycle)}</span>
+              </div>
+
+              <div className="form-group">
+                <label>{copy.subscription.status}</label>
+                <select
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                >
+                  {STATUS_OPTIONS.map((status) => (
+                    <option key={status} value={status}>
+                      {copy.subscription[status.toLowerCase()]}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="modal-actions">
+                <button className="btn btn-outline" onClick={closeManageModal} disabled={saving}>
+                  {copy.subscription.cancel}
+                </button>
+                <button className="btn btn-primary" onClick={handleSaveStatus} disabled={saving}>
+                  {saving ? t('common.loading') : copy.subscription.save}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
