@@ -20,7 +20,7 @@ export const getAllSubscriptions = async (req, res, next) => {
     const where = {
       userId,
       status: {
-        notIn: ['EXPIRED', 'CANCELLED'], // Excluye EXPIRED y CANCELLED
+        not: ['EXPIRED', 'CANCELLED'], // Excluye EXPIRED y CANCELLED
       },
     };
 
