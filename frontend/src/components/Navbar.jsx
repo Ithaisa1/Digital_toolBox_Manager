@@ -95,14 +95,7 @@ const Navbar = ({ theme, onToggleTheme }) => {
               <button onClick={handleLogout} className="btn btn-secondary">{t('profile.logout')}</button>
             </>
           ) : (
-            <>
-              <NavLink to="/login" className={navLinkClass} onClick={closeMenu}>
-                {t('nav.login')}
-              </NavLink>
-              <NavLink to="/register" className={navLinkClass} onClick={closeMenu}>
-                {t('nav.register')}
-              </NavLink>
-            </>
+            <></>
           )}
           <ThemeToggle theme={theme} onToggle={onToggleTheme} />
           <LanguageSelector />
