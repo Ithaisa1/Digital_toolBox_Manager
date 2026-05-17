@@ -61,12 +61,12 @@
       "description": "Mantén un control de todas tus suscripciones y fechas de renovación."
     },
     "feature3": {
-      "title": "📊 Analíticas",
-      "description": "Visualiza estadísticas e información sobre el uso y costos de tus herramientas."
+      "title": "📊 Panel de Control",
+      "description": "Visualiza el coste mensual, renovaciones próximas y herramientas más costosas."
     },
     "feature4": {
-      "title": "🔔 Alertas",
-      "description": "Recibe notificaciones sobre renovaciones próximas y herramientas inactivas."
+      "title": "📜 Historial de Actividad",
+      "description": "Registro completo de cambios, creaciones y eliminaciones de tus herramientas."
     }
   },
   "dashboard": {

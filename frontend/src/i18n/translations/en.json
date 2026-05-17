@@ -61,12 +61,12 @@
       "description": "Keep track of all your subscriptions and renewal dates."
     },
     "feature3": {
-      "title": "📊 Analytics",
-      "description": "View statistics and insights about your tool usage and costs."
+      "title": "📊 Dashboard",
+      "description": "View monthly costs, upcoming renewals, and your most expensive tools."
     },
     "feature4": {
-      "title": "🔔 Alerts",
-      "description": "Get notified about upcoming renewals and inactive tools."
+      "title": "📜 Activity History",
+      "description": "Complete log of changes, creations, and deletions of your tools."
     }
   },
   "dashboard": {
