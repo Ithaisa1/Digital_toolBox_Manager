@@ -14,7 +14,8 @@
     "prisma:migrate": "prisma migrate dev --schema ../database/prisma/schema.prisma",
     "prisma:studio": "prisma studio --schema ../database/prisma/schema.prisma",
     "prisma:seed": "node src/seed.js",
-    "users:demo": "node scripts/ensure-demo-users.js"
+    "users:demo": "node scripts/ensure-demo-users.js",
+    "build": "prisma generate --schema ../database/prisma/schema.prisma && prisma migrate deploy --schema ../database/prisma/schema.prisma"
   },
   "keywords": [],
   "author": "",
