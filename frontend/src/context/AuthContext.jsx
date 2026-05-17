@@ -1,5 +1,6 @@
 /**
  * Contexto de autenticación: usuario, token, login, registro y sesión persistente.
+ * Corregido: mejor manejo de promesas y evita memory leaks con listeners.
  */
 import { createContext, useContext, useState, useEffect } from 'react';
 import api from '../services/api';
@@ -13,28 +14,42 @@ export const AuthProvider = ({ children }) => {
 
   // Restaura la sesión al montar si hay token guardado
   useEffect(() => {
+    let isMounted = true;
+
     const checkAuth = async () => {
       const storedToken = localStorage.getItem('token');
       if (storedToken) {
         try {
           const response = await api.get('/auth/profile');
-          setUser(response.data);
-          setToken(storedToken);
-          console.info('Authenticated user loaded from token');
+          if (isMounted) {
+            setUser(response.data);
+            setToken(storedToken);
+            console.info('Authenticated user loaded from token');
+          }
         } catch (error) {
           console.warn('Failed to refresh authenticated user', {
             status: error.response?.status,
             data: error.response?.data,
           });
-          localStorage.removeItem('token');
-          setToken(null);
-          setUser(null);
+          if (isMounted) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('language');
+            setToken(null);
+            setUser(null);
+          }
         }
       }
-      setLoading(false);
+      if (isMounted) {
+        setLoading(false);
+      }
     };
 
     checkAuth();
+
+    // Cleanup: evita actualizar estado si el componente se desmonta
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   /** Inicia sesión y persiste token y usuario en estado local. */
@@ -42,10 +57,12 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await api.post('/auth/login', { email, password });
       const { user: userData, token: newToken } = response.data;
+      
       localStorage.setItem('token', newToken);
       localStorage.setItem('language', userData.language || 'es');
       setUser(userData);
       setToken(newToken);
+      
       console.info('Login successful for email:', email);
       return { success: true };
     } catch (error) {
@@ -56,7 +73,13 @@ export const AuthProvider = ({ children }) => {
       const detailMessage = apiData?.detail ? apiData.detail : details;
       const message = apiData?.error || apiData?.message || 'Login failed';
       const fullError = detailMessage ? `${message} (${detailMessage})` : message;
-      console.error('Login failed', { email, status: error.response?.status, message: fullError });
+      
+      console.error('Login failed', { 
+        email, 
+        status: error.response?.status, 
+        message: fullError 
+      });
+      
       return {
         success: false,
         error: fullError,
@@ -69,10 +92,12 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await api.post('/auth/register', { email, password, name });
       const { user: userData, token: newToken } = response.data;
+      
       localStorage.setItem('token', newToken);
       localStorage.setItem('language', userData.language || 'es');
       setUser(userData);
       setToken(newToken);
+      
       console.info('Registration successful for email:', email);
       return { success: true };
     } catch (error) {
@@ -83,7 +108,13 @@ export const AuthProvider = ({ children }) => {
       const detailMessage = apiData?.detail ? apiData.detail : details;
       const message = apiData?.error || apiData?.message || 'Registration failed';
       const fullError = detailMessage ? `${message} (${detailMessage})` : message;
-      console.error('Registration failed', { email, status: error.response?.status, message: fullError });
+      
+      console.error('Registration failed', { 
+        email, 
+        status: error.response?.status, 
+        message: fullError 
+      });
+      
       return {
         success: false,
         error: fullError,
@@ -94,6 +125,7 @@ export const AuthProvider = ({ children }) => {
   /** Cierra sesión y limpia almacenamiento local. */
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('language');
     setUser(null);
     setToken(null);
   };
@@ -116,6 +148,7 @@ export const AuthProvider = ({ children }) => {
         data: error.response?.data,
       });
       localStorage.removeItem('token');
+      localStorage.removeItem('language');
       setToken(null);
       setUser(null);
       return null;

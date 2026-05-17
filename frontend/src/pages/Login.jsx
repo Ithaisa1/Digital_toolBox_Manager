@@ -1,7 +1,8 @@
 /**
  * Formulario de inicio de sesión.
+ * Corregido: mejor manejo de estado y prevención de race conditions.
  */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
@@ -16,19 +17,43 @@ const Login = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  // Cleanup: evita memory leaks
+  useEffect(() => {
+    return () => {
+      setError('');
+      setLoading(false);
+    };
+  }, []);
+
   /** Envía credenciales y redirige al dashboard si el login es correcto. */
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validación básica
+    if (!email.trim() || !password.trim()) {
+      setError(t('auth.emailPasswordRequired') || 'Email and password are required');
+      return;
+    }
+
     setError('');
     setLoading(true);
 
-    const result = await login(email, password);
-    setLoading(false);
-
-    if (result.success) {
-      navigate('/dashboard');
-    } else {
-      setError(result.error || t('auth.loginFailed'));
+    try {
+      const result = await login(email, password);
+      
+      if (result.success) {
+        // Pequeño delay para asegurar que el estado se actualiza
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 100);
+      } else {
+        setError(result.error || t('auth.loginFailed'));
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error('Unexpected login error:', err);
+      setError(t('auth.unexpectedError') || 'An unexpected error occurred');
+      setLoading(false);
     }
   };
 
@@ -36,29 +61,37 @@ const Login = () => {
     <div className="auth-container">
       <div className="auth-card">
         <h1>{t('auth.loginTitle')}</h1>
-        {error && <div className="error">{error}</div>}
+        {error && <div className="error" role="alert">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>{t('auth.email')}:</label>
+            <label htmlFor="email">{t('auth.email')}:</label>
             <input
+              id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
+              disabled={loading}
               required
             />
           </div>
           <div className="form-group">
-            <label>{t('auth.password')}:</label>
+            <label htmlFor="password">{t('auth.password')}:</label>
             <input
+              id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"
+              disabled={loading}
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary" disabled={loading}>
+          <button 
+            type="submit" 
+            className="btn btn-primary" 
+            disabled={loading}
+          >
             {loading ? t('common.loading') : t('auth.login')}
           </button>
         </form>
