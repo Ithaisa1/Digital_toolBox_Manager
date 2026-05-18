@@ -95,9 +95,6 @@ const Login = () => {
             {loading ? t('common.loading') : t('auth.login')}
           </button>
         </form>
-        <p className="auth-link forgot-password-link">
-          <Link to="/forgot-password">{t('auth.forgotPassword')}</Link>
-        </p>
         <p className="auth-link">
           {t('auth.dontHaveAccount')} <Link to="/register">{t('auth.registerLink')}</Link>
         </p>

@@ -322,7 +322,7 @@ const Subscriptions = () => {
                   />
                   <div className="tool-badges">
                     <span className={`badge-status ${toolStatus}`}>
-                      {getToolStatusLabel(subscription.tool?.status || subscription.status)}
+                      {copy.status[toolStatus] || toolStatus}
                     </span>
                     {isFree && <span className="badge-free">FREE</span>}
                   </div>

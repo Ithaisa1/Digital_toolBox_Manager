@@ -45,20 +45,7 @@
     "alreadyHaveAccount": "Already have an account?",
     "dontHaveAccount": "Don't have an account?",
     "loginLink": "Login",
-    "registerLink": "Register",
-    "forgotPassword": "Forgot your password?",
-    "forgotPasswordTitle": "Reset Password",
-    "sendResetLink": "Send reset link",
-    "resetEmailSent": "If an account exists with that email, we've sent a password reset link.",
-    "checkInbox": "Check your inbox (and spam) to continue.",
-    "backToLogin": "Back to login",
-    "passwordResetTitle": "New Password",
-    "resetPassword": "Reset password",
-    "passwordResetSuccess": "Your password has been reset successfully. You can now log in.",
-    "resetFailed": "Failed to reset password",
-    "invalidResetToken": "Invalid or expired reset link",
-    "requestNewResetLink": "Request a new link",
-    "unexpectedError": "An unexpected error occurred"
+    "registerLink": "Register"
   },
   "home": {
     "welcome": "Welcome to ToolBox Manager",

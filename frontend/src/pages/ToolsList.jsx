@@ -809,9 +809,24 @@ const ToolsList = () => {
             const isFree = !tool.price || tool.price === 0;
             const subscribed = hasActiveSubscription(tool);
             const activeSub = getActiveSubscription(tool);
+            const toolStatus = tool.status?.toLowerCase() || 'active';
+
+            const getStatusBadgeClass = () => {
+              if (isFree) return 'free';
+              if (toolStatus === 'inactive') return 'inactive';
+              if (toolStatus === 'archived') return 'archived';
+              return subscribed ? 'subscribed' : 'notSubscribed';
+            };
+
+            const getStatusLabel = () => {
+              if (isFree) return copy.status.free;
+              if (toolStatus === 'inactive') return isSpanish ? 'Inactiva' : 'Inactive';
+              if (toolStatus === 'archived') return isSpanish ? 'Archivada' : 'Archived';
+              return subscribed ? copy.status.subscribed : copy.status.notSubscribed;
+            };
 
             return (
-              <article key={tool.id} className="tool-card">
+              <article key={tool.id} className={`tool-card status-${toolStatus}`}>
                 <div className="tool-card-header">
                   <img
                     src={tool.logoUrl || getFallbackLogo(tool.name)}
@@ -822,8 +837,8 @@ const ToolsList = () => {
                     }}
                   />
                   <div className="tool-badges">
-                    <span className={`badge-status ${isFree ? 'free' : (subscribed ? 'subscribed' : 'notSubscribed')}`}>
-                      {isFree ? copy.status.free : (subscribed ? copy.status.subscribed : copy.status.notSubscribed)}
+                    <span className={`badge-status ${getStatusBadgeClass()}`}>
+                      {getStatusLabel()}
                     </span>
                     {isFree && <span className="badge-free">FREE</span>}
                   </div>
