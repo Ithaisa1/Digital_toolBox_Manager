@@ -12,6 +12,9 @@
 | [DEVELOPMENT.md](./DEVELOPMENT.md) | Guía de desarrollo, variables de entorno y troubleshooting |
 | [DEPLOYMENT.md](./DEPLOYMENT.md) | Despliegue (Railway, Vercel, etc.) |
 | [setup-postgres.md](./setup-postgres.md) | Instalación y configuración de PostgreSQL |
+| [AUDIT.md](./AUDIT.md) | Auditoría completa del proyecto |
+| [PROBLEMAS_Y_SOLUCIONES.md](./PROBLEMAS_Y_SOLUCIONES.md) | Retrospectiva técnica — problemas encontrados y soluciones |
+| [ISSUES.md](./ISSUES.md) | Registro de bugs, fixes y mejoras |
 
 ## Inicio rápido
 

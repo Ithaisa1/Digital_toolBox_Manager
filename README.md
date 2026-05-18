@@ -601,4 +601,3 @@ Proyecto desarrollado como parte del programa de Ironhack.
 
 ---
 
-> 💡 **¿Tienes preguntas o sugerencias?** Abre un issue en el repositorio o contacta directamente con el autor.
