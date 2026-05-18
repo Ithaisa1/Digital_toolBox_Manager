@@ -49,6 +49,8 @@ model User {
   role            Role      @default(USER)
   language        String?   @default("es")
   isBlocked       Boolean   @default(false)
+  resetToken      String?
+  resetTokenExpires DateTime?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 

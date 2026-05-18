@@ -25,6 +25,11 @@
   text-align: center;
 }
 
+.forgot-password-link {
+  margin-top: 12px;
+  font-size: 0.875rem;
+}
+
 .auth-link a {
   color: var(--primary-color);
   text-decoration: none;
@@ -32,6 +37,32 @@
 
 .auth-link a:hover {
   text-decoration: underline;
+}
+
+.success-message {
+  background-color: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: var(--border-radius);
+  padding: 16px;
+  margin-bottom: 20px;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.success-hint {
+  font-size: 0.875rem;
+  opacity: 0.8;
+  margin-top: 8px;
+}
+
+.error {
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: var(--border-radius);
+  padding: 12px;
+  margin-bottom: 16px;
+  color: var(--error-color, #ef4444);
+  font-size: 0.875rem;
 }
 
 @media (max-width: 480px) {

@@ -45,7 +45,20 @@
     "alreadyHaveAccount": "¿Ya tienes una cuenta?",
     "dontHaveAccount": "¿No tienes una cuenta?",
     "loginLink": "Inicia sesión",
-    "registerLink": "Regístrate"
+    "registerLink": "Regístrate",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "forgotPasswordTitle": "Restablecer Contraseña",
+    "sendResetLink": "Enviar enlace de restablecimiento",
+    "resetEmailSent": "Si existe una cuenta con ese correo, hemos enviado un enlace para restablecer tu contraseña.",
+    "checkInbox": "Revisa tu bandeja de entrada (y spam) para continuar.",
+    "backToLogin": "Volver al inicio de sesión",
+    "passwordResetTitle": "Nueva Contraseña",
+    "resetPassword": "Restablecer contraseña",
+    "passwordResetSuccess": "Tu contraseña ha sido restablecida correctamente. Ya puedes iniciar sesión.",
+    "resetFailed": "Error al restablecer la contraseña",
+    "invalidResetToken": "Enlace de restablecimiento inválido o expirado",
+    "requestNewResetLink": "Solicitar un nuevo enlace",
+    "unexpectedError": "Ha ocurrido un error inesperado"
   },
   "home": {
     "welcome": "Bienvenido a ToolBox Manager",
@@ -261,5 +274,20 @@
     "spanish": "Español",
     "english": "Inglés",
     "switchTo": "Cambiar a"
+  },
+  "export": {
+    "title": "Exportar datos",
+    "description": "Descarga tus herramientas, suscripciones e historial de cambios en el formato que prefieras.",
+    "format": "Formato",
+    "include": "Incluir",
+    "csvDesc": "Hoja de cálculo",
+    "jsonDesc": "Datos estructurados",
+    "pdfDesc": "Informe visual",
+    "all": "Todo",
+    "toolsOnly": "Solo herramientas",
+    "subscriptionsOnly": "Solo suscripciones",
+    "movementsOnly": "Solo historial",
+    "download": "Descargar",
+    "error": "Error al exportar los datos"
   }
 }

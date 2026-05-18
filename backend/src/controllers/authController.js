@@ -6,7 +6,9 @@
 
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import prisma from "../config/database.js";
+import EmailService from "../utils/emailService.js";
 
 /**
  * Genera un token JWT con los datos esenciales del usuario.
@@ -234,6 +236,13 @@ export const updateProfile = async (req, res, next) => {
       }
     }
 
+    // Construir objeto de actualización solo con campos enviados
+    const data = {};
+
+    if (typeof name === "string" && name.trim()) {
+      data.name = name.trim();
+    }
+
     // Evitar email duplicado en otro usuario
     if (isEmailChanging) {
       const normalizedEmail = email.trim().toLowerCase();
@@ -246,13 +255,6 @@ export const updateProfile = async (req, res, next) => {
       }
 
       data.email = normalizedEmail;
-    }
-
-    // Construir objeto de actualización solo con campos enviados
-    const data = {};
-
-    if (typeof name === "string" && name.trim()) {
-      data.name = name.trim();
     }
 
     if (isPasswordChanging) {
@@ -342,6 +344,93 @@ export const deleteAccount = async (req, res, next) => {
     });
 
     res.json({ message: "Account deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Solicita restablecimiento de contraseña: genera token, lo guarda y envía email.
+ * @param {import('express').Request} req - body: { email }.
+ * @param {import('express').Response} res - 200 con mensaje de éxito (siempre 200 para no exponer existencia de usuarios).
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
+export const forgotPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const normalizedEmail = email.trim().toLowerCase();
+
+    const user = await prisma.user.findUnique({
+      where: { email: normalizedEmail },
+    });
+
+    if (!user) {
+      return res.json({
+        message: "If an account with that email exists, a reset link has been sent.",
+      });
+    }
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const resetTokenExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        resetToken,
+        resetTokenExpires,
+      },
+    });
+
+    const emailService = new EmailService();
+    await emailService.sendPasswordResetEmail(user, resetToken);
+
+    res.json({
+      message: "If an account with that email exists, a reset link has been sent.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Restablece la contraseña usando el token recibido por email.
+ * @param {import('express').Request} req - body: { token, password }.
+ * @param {import('express').Response} res - 200 con mensaje de éxito o 400/401 si token inválido/expirado.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
+export const resetPassword = async (req, res, next) => {
+  try {
+    const { token, password } = req.body;
+
+    const user = await prisma.user.findFirst({
+      where: {
+        resetToken: token,
+        resetTokenExpires: {
+          gte: new Date(),
+        },
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        error: "Invalid or expired reset token",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        password: hashedPassword,
+        resetToken: null,
+        resetTokenExpires: null,
+      },
+    });
+
+    res.json({
+      message: "Password reset successfully. You can now log in with your new password.",
+    });
   } catch (error) {
     next(error);
   }

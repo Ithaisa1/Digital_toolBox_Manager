@@ -12,6 +12,8 @@ const Dashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const { t, i18n } = useTranslation();
   const isSpanish = i18n.language?.startsWith('es');
 
@@ -35,6 +37,47 @@ const Dashboard = () => {
     }
   };
 
+  const handleExport = async (format, include) => {
+    setExporting(true);
+    try {
+      const token = localStorage.getItem('token');
+      const params = new URLSearchParams({ format, include });
+      const url = `${import.meta.env.VITE_API_URL}/api/export/data?${params}`;
+
+      const response = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const blob = await response.blob();
+      const contentType = response.headers.get('content-type') || '';
+      const ext = contentType.includes('pdf') ? 'pdf' : contentType.includes('json') ? 'json' : 'csv';
+      downloadBlob(blob, `toolbox-${getToday()}.${ext}`);
+      setShowExportModal(false);
+    } catch (err) {
+      console.error('Export failed:', err);
+      alert(t('export.error') || 'Error al exportar');
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const downloadBlob = (blob, filename) => {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  };
+
+  const getToday = () => new Date().toISOString().split('T')[0];
+
   if (loading) return <div className="loading">{t('common.loading')}</div>;
   if (error) return <div className="error">{error}</div>;
   if (!stats) return <div className="error">{t('dashboard.noData')}</div>;
@@ -47,6 +90,18 @@ const Dashboard = () => {
             <h1>{t('dashboard.title')}</h1>
             <p className="dashboard-subtitle">{dashboardSubtitle}</p>
           </div>
+          <button
+            className="btn-export"
+            onClick={() => setShowExportModal(true)}
+            aria-label={t('export.title')}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            {t('export.title')}
+          </button>
         </div>
       </div>
 
@@ -130,6 +185,82 @@ const Dashboard = () => {
           <p className="empty-state">No pricing information available</p>
         )}
       </div>
+
+      {showExportModal && (
+        <div className="modal-overlay" onClick={() => !exporting && setShowExportModal(false)}>
+          <div className="export-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="export-modal-header">
+              <h2>{t('export.title')}</h2>
+              <button className="modal-close" onClick={() => setShowExportModal(false)} disabled={exporting} aria-label="Cerrar"></button>
+            </div>
+
+            <p className="export-modal-desc">{t('export.description')}</p>
+
+            <div className="export-format-section">
+              <label className="export-label">{t('export.format')}</label>
+              <div className="export-format-options">
+                <label className="format-option">
+                  <input type="radio" name="format" value="csv" defaultChecked />
+                  <span className="format-icon">📄</span>
+                  <span className="format-name">CSV</span>
+                  <span className="format-desc">{t('export.csvDesc')}</span>
+                </label>
+                <label className="format-option">
+                  <input type="radio" name="format" value="json" />
+                  <span className="format-icon">📋</span>
+                  <span className="format-name">JSON</span>
+                  <span className="format-desc">{t('export.jsonDesc')}</span>
+                </label>
+                <label className="format-option">
+                  <input type="radio" name="format" value="pdf" />
+                  <span className="format-icon">📕</span>
+                  <span className="format-name">PDF</span>
+                  <span className="format-desc">{t('export.pdfDesc')}</span>
+                </label>
+              </div>
+            </div>
+
+            <div className="export-include-section">
+              <label className="export-label">{t('export.include')}</label>
+              <div className="export-include-options">
+                <label className="include-option">
+                  <input type="radio" name="include" value="all" defaultChecked />
+                  <span>{t('export.all')}</span>
+                </label>
+                <label className="include-option">
+                  <input type="radio" name="include" value="tools" />
+                  <span>{t('export.toolsOnly')}</span>
+                </label>
+                <label className="include-option">
+                  <input type="radio" name="include" value="subscriptions" />
+                  <span>{t('export.subscriptionsOnly')}</span>
+                </label>
+                <label className="include-option">
+                  <input type="radio" name="include" value="movements" />
+                  <span>{t('export.movementsOnly')}</span>
+                </label>
+              </div>
+            </div>
+
+            <div className="export-modal-actions">
+              <button className="btn btn-secondary" onClick={() => setShowExportModal(false)} disabled={exporting}>
+                {t('common.cancel')}
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  const format = document.querySelector('input[name="format"]:checked')?.value || 'csv';
+                  const include = document.querySelector('input[name="include"]:checked')?.value || 'all';
+                  handleExport(format, include);
+                }}
+                disabled={exporting}
+              >
+                {exporting ? t('common.loading') : t('export.download')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -11,6 +11,8 @@ import categoriesRoutes from "./routes/categories.js";
 import subscriptionsRoutes from "./routes/subscriptions.js";
 import movementsRoutes from "./routes/movements.js";
 import dashboardRoutes from "./routes/dashboard.js";
+import exportRoutes from "./routes/export.js";
+import adminRoutes from "./routes/admin.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
 import { bootstrapDatabase } from "./utils/bootstrapDatabase.js";
 import { checkDatabaseConnection } from "./config/database.js";
@@ -40,6 +42,8 @@ app.use("/api/categories", categoriesRoutes);
 app.use("/api/subscriptions", subscriptionsRoutes);
 app.use("/api/movements", movementsRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/export", exportRoutes);
+app.use("/api/admin", adminRoutes);
 
 // Comprobación de que el servicio y la BD están activos
 app.get("/api/health", async (req, res) => {

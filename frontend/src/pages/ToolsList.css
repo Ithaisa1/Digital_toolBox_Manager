@@ -2,6 +2,7 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
+  overflow-x: hidden;
 }
 
 .tools-header {
@@ -10,6 +11,7 @@
   align-items: center;
   gap: 1.5rem;
   margin-bottom: 2rem;
+  overflow-x: hidden;
 }
 
 .tools-header-copy {
@@ -34,11 +36,13 @@
   flex-direction: column;
   gap: 1rem;
   margin-bottom: 2rem;
+  overflow-x: hidden;
 }
 
 .search-box {
   position: relative;
   max-width: 400px;
+  overflow-x: hidden;
 }
 
 .search-icon {
@@ -77,12 +81,14 @@
   gap: 2rem;
   flex-wrap: wrap;
   align-items: flex-start;
+  overflow-x: hidden;
 }
 
 .filter-tabs {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  overflow-x: hidden;
 }
 
 .filter-tab {
@@ -110,12 +116,14 @@
 .category-filter {
   flex: 1;
   min-width: 300px;
+  overflow-x: hidden;
 }
 
 .category-buttons {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  overflow-x: hidden;
 }
 
 .category-tab {
@@ -140,6 +148,47 @@
   background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
   color: white;
   border-color: #6d28d9;
+}
+
+.recently-added-section {
+  margin-bottom: 1.5rem;
+  overflow-x: hidden;
+}
+
+.recently-added-section h2 {
+  margin: 0 0 0.75rem;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+.recently-added-list {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  overflow-x: hidden;
+}
+
+.recently-added-card {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  border-radius: var(--border-radius-sm);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.recently-added-card small {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .recently-added-banner {
@@ -167,6 +216,8 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1rem;
+  overflow-x: hidden;
+  padding-bottom: 4px;
 }
 
 .tool-card {
@@ -178,7 +229,10 @@
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   box-shadow: var(--shadow-sm);
-  transition: var(--transition);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+  min-width: 0;
+  position: relative;
 }
 
 .tool-card:hover {
@@ -205,6 +259,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.5rem;
+  overflow: hidden;
 }
 
 .tool-icon {
@@ -222,6 +277,7 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   justify-content: flex-end;
+  overflow: hidden;
 }
 
 .badge-status {
@@ -270,6 +326,8 @@
 
 .tool-card-body {
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .tool-card-body h3 {
@@ -299,6 +357,7 @@
   background: var(--bg-tertiary);
   border-radius: var(--border-radius-sm);
   border: 1px solid var(--border-color);
+  overflow: hidden;
 }
 
 .sub-info-row {
@@ -307,6 +366,7 @@
   align-items: center;
   padding: 0.25rem 0;
   font-size: 0.8rem;
+  overflow: hidden;
 }
 
 .sub-info-row:not(:last-child) {
@@ -334,6 +394,7 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-top: auto;
+  overflow: hidden;
 }
 
 .tool-actions .btn {
@@ -405,6 +466,30 @@
   background: #dc2626;
 }
 
+.btn-delete-tool {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 6px;
+  color: rgba(239, 68, 68, 0.6);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.btn-delete-tool:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.6);
+  color: #ef4444;
+}
+
 /* Modal styles */
 .modal-overlay {
   position: fixed;
@@ -417,6 +502,7 @@
   z-index: 1000;
   padding: 1rem;
   animation: fadeIn 0.2s ease-out;
+  overflow-x: hidden;
 }
 
 @keyframes fadeIn {
@@ -429,6 +515,7 @@
   max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
+  overflow-x: hidden;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-lg);
@@ -492,12 +579,14 @@
 /* Add tool modal */
 .add-tool-modal {
   min-height: 300px;
+  overflow-x: hidden;
 }
 
 .search-suggestions {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  overflow-x: hidden;
 }
 
 .suggestions-list {
@@ -506,6 +595,7 @@
   gap: 0.5rem;
   max-height: 300px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .suggestion-item {
@@ -519,6 +609,8 @@
   cursor: pointer;
   transition: var(--transition);
   text-align: left;
+  overflow: hidden;
+  min-width: 0;
 }
 
 .suggestion-item:hover {
@@ -540,17 +632,24 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .suggestion-name {
   color: var(--text-primary);
   font-weight: 600;
   font-size: 0.95rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .suggestion-type {
   color: var(--text-muted);
   font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .tool-type-badge {
@@ -583,6 +682,7 @@
 
 .all-suggestions {
   padding: 1rem 0;
+  overflow-x: hidden;
 }
 
 .suggestions-hint {
@@ -600,14 +700,16 @@
 .suggestion-chip {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem;
+  gap: 0.4rem;
+  padding: 0.5rem 0.4rem;
   background: var(--bg-tertiary);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   cursor: pointer;
   transition: var(--transition);
+  min-width: 0;
+  overflow: hidden;
 }
 
 .suggestion-chip:hover {
@@ -620,6 +722,15 @@
   height: 1.25rem;
   border-radius: 0.25rem;
   background: var(--bg-secondary);
+  flex-shrink: 0;
+}
+
+.suggestion-chip span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  font-weight: 500;
 }
 
 /* Tool form */
@@ -627,6 +738,33 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  overflow-x: hidden;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-x: hidden;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: var(--transition);
+  overflow-x: hidden;
 }
 
 .form-group {
@@ -665,11 +803,13 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
+  overflow-x: hidden;
 }
 
 .tool-type-selector {
   display: flex;
   gap: 0.5rem;
+  overflow-x: hidden;
 }
 
 .type-option {
@@ -716,6 +856,7 @@
   gap: 0.75rem;
   justify-content: flex-end;
   margin-top: 0.5rem;
+  overflow-x: hidden;
 }
 
 /* Subscription panel */
@@ -730,6 +871,7 @@
   z-index: 1000;
   padding: 1rem;
   animation: fadeIn 0.2s ease-out;
+  overflow-x: hidden;
 }
 
 .subscription-panel {
@@ -737,6 +879,7 @@
   max-width: 450px;
   max-height: 90vh;
   overflow-y: auto;
+  overflow-x: hidden;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-lg);
@@ -750,6 +893,7 @@
   justify-content: space-between;
   padding: 1.25rem 1.5rem;
   border-bottom: 1px solid var(--border-color);
+  overflow-x: hidden;
 }
 
 .panel-header h2 {
@@ -788,6 +932,7 @@
   gap: 1rem;
   padding: 1rem 1.5rem;
   background: var(--bg-tertiary);
+  overflow-x: hidden;
 }
 
 .panel-tool-icon {
@@ -810,6 +955,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  overflow-x: hidden;
 }
 
 .panel-form .form-group {
@@ -846,6 +992,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  overflow-x: hidden;
 }
 
 .empty-state {
@@ -856,6 +1003,7 @@
   background: var(--bg-tertiary);
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);
+  overflow-x: hidden;
 }
 
 .empty-state p {
@@ -868,6 +1016,7 @@
   justify-content: center;
   min-height: 50vh;
   font-size: 1.1rem;
+  overflow-x: hidden;
 }
 
 .error {
@@ -1006,5 +1155,271 @@
     width: 95vw;
     margin: 1rem;
     max-height: 90vh;
+  }
+
+  .suggestions-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .suggestion-chip {
+    padding: 0.4rem;
+    font-size: 0.75rem;
+  }
+
+  .chip-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .modal-header {
+    padding: 1rem 1.25rem;
+  }
+
+  .modal-body {
+    padding: 1.25rem;
+  }
+
+  .search-input {
+    font-size: 0.85rem;
+    padding: 0.6rem 0.75rem 0.6rem 2.5rem;
+  }
+
+  .search-icon {
+    width: 1rem;
+    height: 1rem;
+    left: 0.75rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .tools-container {
+    padding: 0.5rem;
+  }
+
+  .tools-header {
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .tools-header h1 {
+    font-size: 1.3rem;
+  }
+
+  .tools-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .tools-header .btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .search-box {
+    max-width: 100%;
+  }
+
+  .search-input {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+  }
+
+  .search-icon {
+    width: 0.9rem;
+    height: 0.9rem;
+    left: 0.6rem;
+  }
+
+  .filter-tab {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.75rem;
+  }
+
+  .category-tab {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.75rem;
+  }
+
+  .tools-grid {
+    gap: 0.5rem;
+  }
+
+  .tool-card {
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .tool-icon {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+  }
+
+  .tool-card-body h3 {
+    font-size: 0.9rem;
+  }
+
+  .tool-description {
+    font-size: 0.75rem;
+    -webkit-line-clamp: 1;
+  }
+
+  .tool-category {
+    font-size: 0.7rem;
+  }
+
+  .tool-price {
+    font-size: 0.85rem;
+  }
+
+  .tool-actions {
+    gap: 0.4rem;
+  }
+
+  .tool-actions .btn {
+    padding: 0.4rem;
+    font-size: 0.75rem;
+    min-width: 0;
+  }
+
+  .badge-status {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .badge-free {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.35rem;
+  }
+
+  .sub-info-row {
+    font-size: 0.7rem;
+  }
+
+  .sub-label,
+  .sub-value {
+    font-size: 0.7rem;
+  }
+
+  .modal-content {
+    width: 100%;
+    margin: 0.5rem;
+    max-height: 95vh;
+    border-radius: 12px;
+  }
+
+  .modal-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .modal-header h2 {
+    font-size: 1rem;
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .modal-close {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .suggestions-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.4rem;
+  }
+
+  .suggestion-chip {
+    padding: 0.35rem;
+    font-size: 0.7rem;
+    gap: 0.3rem;
+  }
+
+  .chip-icon {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  .search-input {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.6rem 0.5rem 2rem;
+  }
+
+  .search-icon {
+    width: 0.85rem;
+    height: 0.85rem;
+    left: 0.5rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .form-group label {
+    font-size: 0.8rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions .btn {
+    width: 100%;
+  }
+
+  .subscription-panel {
+    max-width: 100%;
+    margin: 0.5rem;
+    border-radius: 12px;
+  }
+
+  .panel-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .panel-form {
+    padding: 1rem;
+  }
+
+  .panel-actions {
+    padding: 1rem;
+  }
+
+  .panel-tool-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .panel-tool-info h3 {
+    font-size: 0.95rem;
+  }
+
+  .recently-added-section {
+    margin-bottom: 1rem;
+  }
+
+  .recently-added-section h2 {
+    font-size: 1rem;
+  }
+
+  .recently-added-card {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  .empty-state {
+    padding: 2rem 1rem;
+    margin: 2rem 0;
+  }
+
+  .filters-row {
+    gap: 0.75rem;
+  }
+
+  .category-filter {
+    min-width: 0;
   }
 }
