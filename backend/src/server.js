@@ -24,6 +24,9 @@ dotenv.config();
 const app = express();
 const PORT = Number(process.env.PORT) || 3001;
 
+// Render usa proxy, necesario para rate-limit y seguridad
+app.set('trust proxy', 1);
+
 // ✅ CORS CONFIGURADO CORRECTAMENTE
 app.use(
   cors({

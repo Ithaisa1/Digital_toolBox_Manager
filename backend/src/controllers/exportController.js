@@ -126,6 +126,17 @@ function generatePDF(res, user, toolsRows, subsRows, movRows, include) {
 
   doc.pipe(res);
 
+  doc.on('error', (err) => {
+    console.error('PDF generation error:', err.message);
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'Error generating PDF' });
+    }
+  });
+
+  res.on('close', () => {
+    doc.destroy();
+  });
+
   const primaryColor = '#3B82F6';
   const darkColor = '#1E293B';
   const lightGray = '#F1F5F9';
@@ -218,13 +229,15 @@ function generatePDF(res, user, toolsRows, subsRows, movRows, include) {
   if (include === 'all' || include === 'movements') addSection('Historial de cambios', movRows, '');
 
   // Footer
-  const pageCount = doc.bufferedPageRange().count;
-  for (let i = 0; i < pageCount; i++) {
+  const range = doc.bufferedPageRange();
+  const pageCount = range.count;
+  for (let i = range.start; i < range.start + pageCount; i++) {
     doc.switchToPage(i);
+    const pageHeight = doc.page.height;
     doc.fontSize(8).fillColor(mutedColor).text(
-      `Digital Toolbox Manager — Página ${i + 1} de ${pageCount}`,
+      `Digital Toolbox Manager — Página ${i - range.start + 1} de ${pageCount}`,
       40,
-      doc.page.height - 30,
+      pageHeight - 30,
       { align: 'center' },
     );
   }
