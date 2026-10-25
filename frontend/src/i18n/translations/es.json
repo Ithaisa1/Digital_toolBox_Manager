@@ -263,7 +263,13 @@
       "totalCategories": "Total de Categorías",
       "recentActivity": "Actividad Reciente",
       "topUsers": "Usuarios Más Activos",
-      "tools": "herramientas"
+      "tools": "herramientas",
+      "userManagement": "Gestión de usuarios",
+      "searchUsers": "Buscar por nombre o email…",
+      "noUsersFound": "No se encontraron usuarios",
+      "subs": "suscripciones",
+      "block": "Bloquear",
+      "unblock": "Desbloquear"
     }
   },
   "language": {
@@ -285,5 +291,12 @@
     "movementsOnly": "Solo historial",
     "download": "Descargar",
     "error": "Error al exportar los datos"
+  },
+  "pagination": {
+    "label": "Paginación",
+    "showing": "Mostrando {{from}}–{{to}} de {{total}}",
+    "previous": "Página anterior",
+    "next": "Página siguiente",
+    "page": "Página {{page}}"
   }
 }
