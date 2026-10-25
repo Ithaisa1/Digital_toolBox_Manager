@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import api from '../services/api';
 import { useTranslation } from 'react-i18next';
 import { formatEuro } from '../utils/formatCurrency';
+import { CostByCategoryChart, UpcomingPaymentsChart } from '../components/DashboardCharts';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -136,6 +137,18 @@ const Dashboard = () => {
           <p className="stat-detail">{t('dashboard.toolCategories')}</p>
         </div>
       </div>
+
+      {/* GRÁFICOS */}
+      {stats.charts && stats.subscriptions.total > 0 && (
+        <div className="charts-grid">
+          <div className="dashboard-section">
+            <CostByCategoryChart data={stats.charts.costByCategory} />
+          </div>
+          <div className="dashboard-section">
+            <UpcomingPaymentsChart data={stats.charts.upcomingPayments} />
+          </div>
+        </div>
+      )}
 
       {/* SUSCRIPCIONES AGRUPADAS POR HERRAMIENTA */}
       {stats.subscriptions.byTool && stats.subscriptions.byTool.length > 0 && (

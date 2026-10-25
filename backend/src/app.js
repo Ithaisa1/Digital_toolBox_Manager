@@ -29,6 +29,7 @@ app.use("/api/categories", categoriesRoutes);
 app.use("/api/subscriptions", subscriptionsRoutes);
 app.use("/api/movements", movementsRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/export", exportRoutes);
 app.use("/api/admin", adminRoutes);
 
 app.get("/api/health", (req, res) => {

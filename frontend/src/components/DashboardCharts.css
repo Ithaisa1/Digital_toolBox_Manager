@@ -1,0 +1,268 @@
+/* Gráficos del dashboard */
+:root {
+  --chart-bar: #2563eb;
+  --chart-grid: rgba(15, 23, 42, 0.08);
+}
+
+body.dark {
+  --chart-bar: #3b82f6;
+  --chart-grid: rgba(148, 163, 184, 0.16);
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.chart {
+  margin: 0;
+  min-width: 0;
+}
+
+.chart-header h2 {
+  margin: 0;
+}
+
+.chart .hbar-list {
+  text-align: left;
+}
+
+.chart-subtitle {
+  margin: 4px 0 20px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.chart-subtitle strong {
+  color: var(--text-primary);
+}
+
+/* ---------- Barras horizontales ---------- */
+.hbar-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hbar-row {
+  display: grid;
+  grid-template-columns: minmax(80px, 30%) 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.hbar-label {
+  color: var(--text-secondary);
+  text-align: left;
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hbar-track {
+  height: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.hbar-bar {
+  display: block;
+  height: 100%;
+  min-width: 2px;
+  background: var(--chart-bar);
+  border-radius: 0 4px 4px 0;
+  transition: width 0.4s ease;
+}
+
+.hbar-value {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* ---------- Columnas por mes ---------- */
+.cols {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+}
+
+.cols-axis {
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.cols-tick {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  transform: translateY(-50%);
+}
+
+.cols-tick:first-child {
+  transform: none;
+}
+
+.cols-tick:last-child {
+  transform: translateY(0);
+}
+
+.cols-plot {
+  position: relative;
+  display: flex;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cols-grid-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 180px;
+  pointer-events: none;
+}
+
+.cols-grid {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--chart-grid);
+  pointer-events: none;
+}
+
+.cols-baseline {
+  background: var(--border-color);
+}
+
+.cols-slot {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  outline: none;
+  cursor: default;
+  min-width: 0;
+}
+
+.cols-bar-area {
+  height: 180px;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background 0.15s ease;
+}
+
+.cols-slot.is-active .cols-bar-area,
+.cols-slot:focus-visible .cols-bar-area {
+  background: var(--bg-hover);
+}
+
+.cols-slot:focus-visible .cols-bar-area {
+  box-shadow: 0 0 0 2px var(--chart-bar);
+}
+
+.cols-bar {
+  display: block;
+  width: 70%;
+  max-width: 24px;
+  background: var(--chart-bar);
+  border-radius: 4px 4px 0 0;
+  transition: height 0.4s ease;
+}
+
+.cols-label {
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-align: center;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.cols-year {
+  display: block;
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.chart-tooltip {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.cols-grid-layer + .cols-slot .chart-tooltip {
+  left: 0;
+  transform: none;
+}
+
+.cols-slot:last-child .chart-tooltip {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
+.chart-tooltip-title {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+.chart-tooltip-value {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 600px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cols-label {
+    font-size: 0.65rem;
+  }
+
+  .cols-year {
+    display: none;
+  }
+}

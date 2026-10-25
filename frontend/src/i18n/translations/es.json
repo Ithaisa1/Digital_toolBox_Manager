@@ -87,7 +87,14 @@
     "mostExpensiveTools": "Herramientas Más Costosas",
     "noPricingInfo": "Sin información de precios",
     "noData": "Sin datos disponibles",
-    "loadFailed": "Error al cargar datos del dashboard"
+    "loadFailed": "Error al cargar datos del dashboard",
+    "charts": {
+      "costByCategory": "Coste mensual por categoría",
+      "costByCategoryHint": "Suscripciones activas (las anuales repartidas en 12 meses)",
+      "upcomingPayments": "Pagos previstos",
+      "next12Months": "Próximos 12 meses",
+      "other": "Otras"
+    }
   },
   "tools": {
     "title": "Mis Herramientas",
