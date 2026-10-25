@@ -4,7 +4,7 @@
  */
 
 import prisma from '../config/database.js';
-import { attachSubscriptionLogo, attachToolLogo } from '../utils/productLogo.js';
+import { attachSubscriptionLogo } from '../utils/productLogo.js';
 
 /**
  * Lista todas las suscripciones del usuario con filtro opcional por estado.

@@ -153,7 +153,7 @@ const AddToolModal = ({ isOpen, onClose, onToolAdded, categories }) => {
   });
   
   const debouncedSearch = useDebounce(searchQuery, 300);
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const isSpanish = i18n.language?.startsWith('es');
   
   const copy = {

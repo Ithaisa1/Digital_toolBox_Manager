@@ -4,7 +4,7 @@
  */
 
 /** Middleware de cuatro argumentos: último en la cadena de Express. */
-export const errorHandler = (err, req, res, next) => {
+export const errorHandler = (err, req, res, _next) => {
   console.error('Error details:', {
     message: err.message,
     stack: err.stack,

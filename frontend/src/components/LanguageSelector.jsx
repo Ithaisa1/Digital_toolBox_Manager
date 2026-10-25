@@ -1,7 +1,7 @@
 /**
  * Selector desplegable de idioma (es/en) con persistencia en localStorage.
  */
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import './LanguageSelector.css';
 

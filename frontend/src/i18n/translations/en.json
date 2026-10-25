@@ -87,7 +87,14 @@
     "mostExpensiveTools": "Most Expensive Tools",
     "noPricingInfo": "No pricing information available",
     "noData": "No data available",
-    "loadFailed": "Failed to load dashboard data"
+    "loadFailed": "Failed to load dashboard data",
+    "charts": {
+      "costByCategory": "Monthly cost by category",
+      "costByCategoryHint": "Active subscriptions (yearly plans spread over 12 months)",
+      "upcomingPayments": "Upcoming payments",
+      "next12Months": "Next 12 months",
+      "other": "Other"
+    }
   },
   "tools": {
     "title": "My Tools",

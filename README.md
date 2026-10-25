@@ -537,12 +537,10 @@ Estas son las siguientes iteraciones previstas para el proyecto, ordenadas por i
 ### Técnica
 - **TypeScript** — Migrar backend y frontend a TypeScript para type safety completa
 - **Tests E2E** — Añadir Cypress o Playwright para tests de flujo completo
-- **CI/CD** — GitHub Actions para ejecutar tests y lint en cada PR
 - **Docker** — Docker Compose con PostgreSQL + backend + frontend para desarrollo local en un comando
 - **GraphQL** — Explorar Apollo/Prisma como alternativa a REST para queries complejas
 
 ### UX
-- **Gráficos** — Añadir charts de coste mensual y distribución por categorías
 - **Búsqueda global** — Buscador que filtre herramientas, suscripciones y movimientos a la vez
 - **Drag & drop** — Reordenar herramientas en el dashboard
 - **PWA** — Convertir en Progressive Web App para instalación en móvil

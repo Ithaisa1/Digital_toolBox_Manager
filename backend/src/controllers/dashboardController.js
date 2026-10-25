@@ -4,6 +4,7 @@
  */
 
 import prisma from '../config/database.js';
+import { getCostByCategory, getUpcomingPayments } from '../utils/dashboardCharts.js';
 
 /**
  * Devuelve estadísticas resumidas del dashboard del usuario autenticado.
@@ -121,6 +122,10 @@ export const getDashboardStats = async (req, res, next) => {
       },
       categories: toolsByCategory.length,
       expensiveTools,
+      charts: {
+        costByCategory: getCostByCategory(allSubscriptions),
+        upcomingPayments: getUpcomingPayments(allSubscriptions),
+      },
     });
   } catch (error) {
     next(error);
