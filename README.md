@@ -56,7 +56,8 @@ Está pensada como proyecto educativo para estudiantes de desarrollo web, pero e
 | 🔐 **Autenticación** | Registro, login JWT con persistencia de sesión, restablecimiento de contraseña por email, rate limiting anti fuerza bruta |
 | 🛠️ **Herramientas** | CRUD completo con catálogo integrado, búsqueda, categorías y logo automático del producto |
 | 💳 **Suscripciones** | Gestión con estados (Activa / Inactiva / Archivada), fecha de renovación, ciclo de facturación y plan |
-| 📊 **Dashboard** | Coste mensual total, renovaciones próximas (30 días), herramientas más costosas, distribución por categorías |
+| 📊 **Dashboard** | Coste mensual total, renovaciones próximas (30 días), herramientas más costosas, gráficos de coste por categoría y pagos previstos a 12 meses |
+| 🔔 **Avisos de renovación** | Email diario con las suscripciones que se renuevan en los próximos días (activable desde el perfil) |
 | 📜 **Historial** | Auditoría automática de cada cambio: creaciones, actualizaciones, eliminaciones y cambios de precio |
 | 👤 **Perfiles** | Edición de nombre, email, contraseña, idioma preferido y eliminación de cuenta |
 | 🛡️ **Admin panel** | Panel de administración con estadísticas globales y gestión de usuarios |
@@ -438,6 +439,9 @@ curl http://localhost:3001/api/dashboard/stats \
 | `EMAIL_PORT` | — | `587` | Puerto SMTP |
 | `EMAIL_USER` | — | — | Email para envío de notificaciones |
 | `EMAIL_PASSWORD` | — | — | Contraseña de aplicación del email |
+| `EMAIL_FROM` | — | `EMAIL_USER` | Remitente de los emails |
+| `CRON_SECRET` | Para avisos | — | Secreto que protege `POST /api/jobs/renewal-reminders` |
+| `REMINDER_DAYS` | — | `7` | Días de antelación de los avisos de renovación |
 | `AUTO_DB_SETUP` | — | `true` | Aplicar migraciones al arrancar |
 | `AUTO_SEED` | — | — | Seed automático si no hay usuarios |
 | `DB_CONNECT_RETRIES` | — | `5` | Reintentos de conexión a BD |
@@ -476,6 +480,18 @@ El `render.yaml` configura automáticamente:
 2. Configura la variable de entorno:
    - `VITE_API_URL` — la URL de tu backend en Render (ej. `https://digital-toolbox-api.onrender.com`)
 3. El archivo `vercel.json` ya incluido configura el fallback SPA para que las rutas del cliente funcionen al refrescar
+
+### Avisos de renovación (cron diario)
+
+Los avisos se envían desde un workflow de GitHub Actions (`.github/workflows/renewal-reminders.yml`) que cada día a las 07:00 UTC llama a `POST /api/jobs/renewal-reminders`. Así funciona aunque Render (plan gratuito) duerma el servidor.
+
+1. En Render, añade `CRON_SECRET` (una cadena larga aleatoria) y las variables `EMAIL_*`. Con Gmail necesitas una [contraseña de aplicación](https://myaccount.google.com/apppasswords).
+2. En GitHub → **Settings → Secrets and variables → Actions**, crea:
+   - `API_URL` — la URL del backend en Render
+   - `CRON_SECRET` — el mismo valor que en Render
+3. Pruébalo en **Actions → Renewal reminders → Run workflow**.
+
+Cada usuario recibe un solo email con todas sus renovaciones próximas, y nunca dos avisos para la misma renovación. Cualquiera puede desactivarlos desde su perfil.
 
 ### Orden de despliegue
 
@@ -529,7 +545,6 @@ Estas son las siguientes iteraciones previstas para el proyecto, ordenadas por i
 
 ### Funcionalidad
 - **Paginación** — Añadir `skip`/`take` a los endpoints de lista para manejar grandes volúmenes de datos
-- **Notificaciones push** — Alertas de renovación por email programadas (usando `nodemailer` + cron jobs)
 - **Importación** — Subir un CSV para importar herramientas en lote
 - **Etiquetas** — Sistema de tags libre además de categorías
 - **Compartir** — Permitir compartir herramientas entre usuarios

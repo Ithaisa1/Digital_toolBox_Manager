@@ -21,3 +21,15 @@ services:
         sync: false
       - key: AUTO_DB_SETUP
         value: "false"
+      - key: CRON_SECRET
+        sync: false
+      - key: REMINDER_DAYS
+        value: "7"
+      - key: EMAIL_HOST
+        sync: false
+      - key: EMAIL_PORT
+        sync: false
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASSWORD
+        sync: false

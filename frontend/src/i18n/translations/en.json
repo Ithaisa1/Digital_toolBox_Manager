@@ -245,7 +245,9 @@
     "deleteAccount": "Delete account",
     "deleteAccountConfirm": "Are you sure you want to delete your account? This cannot be undone.",
     "profileImage": "Profile image URL",
-    "profileImagePlaceholder": "Paste a direct image URL"
+    "profileImagePlaceholder": "Paste a direct image URL",
+    "renewalReminders": "Renewal reminders by email",
+    "renewalRemindersHint": "We email you a few days before a subscription renews."
   },
   "admin": {
     "dashboard": {

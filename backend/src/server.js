@@ -13,6 +13,7 @@ import movementsRoutes from "./routes/movements.js";
 import dashboardRoutes from "./routes/dashboard.js";
 import exportRoutes from "./routes/export.js";
 import adminRoutes from "./routes/admin.js";
+import jobsRoutes from "./routes/jobs.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
 import { bootstrapDatabase } from "./utils/bootstrapDatabase.js";
 import { checkDatabaseConnection } from "./config/database.js";
@@ -47,6 +48,7 @@ app.use("/api/movements", movementsRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/export", exportRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/jobs", jobsRoutes);
 
 // Comprobación de que el servicio y la BD están activos
 app.get("/api/health", async (req, res) => {
