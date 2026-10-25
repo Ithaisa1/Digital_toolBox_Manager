@@ -41,6 +41,9 @@ jobs:
           cache: npm
           cache-dependency-path: backend/package-lock.json
       - run: npm ci
+      - name: Install root Prisma packages (schema lives in database/prisma)
+        run: npm ci
+        working-directory: .
       - run: npm run lint
       - run: npm run prisma:generate
       - run: npx prisma migrate deploy --schema ../database/prisma/schema.prisma

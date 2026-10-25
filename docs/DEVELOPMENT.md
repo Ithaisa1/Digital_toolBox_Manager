@@ -150,8 +150,10 @@ En la consola del navegador: `localStorage.removeItem('token')` y vuelve a inici
 
 ## Estructura de dependencias
 
-- **No instalar npm en la raíz** del proyecto: solo `backend/` y `frontend/`.
-- Prisma CLI y cliente viven en `backend/package.json`.
+- `backend/` y `frontend/` tienen sus propias dependencias.
+- La raíz solo tiene `prisma` y `@prisma/client`: Prisma busca sus paquetes junto al schema (`database/prisma/`) y, si no los encuentra, los instala solo en la raíz. `npm run setup` los instala de forma ordenada.
+- El cliente de Prisma se genera siempre en `backend/node_modules/.prisma/client` (opción `output` del schema).
+- Arranque diario: `npm run setup` (una vez) y `npm run dev` desde la raíz.
 
 ## Comentarios en el código
 
