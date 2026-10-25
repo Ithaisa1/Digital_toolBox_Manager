@@ -1,0 +1,261 @@
+/* Ventana de importación CSV (usa la base .modal-* de ToolsList.css) */
+.modal-content.import-modal {
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+}
+
+.import-intro {
+  margin: 0 0 16px;
+  color: var(--text-secondary);
+}
+
+.import-drop {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 32px 16px;
+  border: 2px dashed var(--border-color);
+  border-radius: 14px;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.import-drop:hover,
+.import-drop.is-dragging,
+.import-drop:focus-within {
+  border-color: var(--primary-color);
+  background: var(--bg-hover);
+}
+
+.import-drop.is-busy {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+.import-drop input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.import-drop-icon {
+  font-size: 2rem;
+}
+
+.import-drop-hint {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.import-help {
+  margin-top: 16px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.import-help p {
+  margin: 0 0 6px;
+}
+
+.import-link {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--text-accent);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.import-file {
+  margin: 0 0 12px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  word-break: break-all;
+}
+
+.import-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.import-summary li {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.import-summary strong {
+  color: var(--text-primary);
+}
+
+.import-table-wrap {
+  max-height: 45vh;
+  overflow: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+
+.import-table {
+  width: 100%;
+  min-width: 520px;
+  word-break: normal;
+  overflow-wrap: normal;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.import-table th {
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 10px 12px;
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.import-table td {
+  padding: 10px 12px;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-primary);
+  vertical-align: top;
+}
+
+.import-table tr.is-duplicate td,
+.import-table tr.is-invalid td {
+  color: var(--text-secondary);
+}
+
+.import-line,
+.import-price {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.import-line {
+  color: var(--text-muted) !important;
+}
+
+.import-name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.import-sub {
+  display: block;
+  margin-top: 2px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+/* Estado de cada fila: icono + texto, nunca solo color */
+.import-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.import-badge.is-new {
+  background: rgba(22, 163, 74, 0.12);
+  color: #15803d;
+}
+
+.import-badge.is-new::before {
+  content: '✓';
+}
+
+.import-badge.is-duplicate {
+  background: rgba(100, 116, 139, 0.14);
+  color: var(--text-secondary);
+}
+
+.import-badge.is-duplicate::before {
+  content: '↺';
+}
+
+.import-badge.is-invalid {
+  background: rgba(220, 38, 38, 0.12);
+  color: #b91c1c;
+}
+
+.import-badge.is-invalid::before {
+  content: '✕';
+}
+
+body.dark .import-badge.is-new {
+  color: #4ade80;
+}
+
+body.dark .import-badge.is-invalid {
+  color: #f87171;
+}
+
+.import-done {
+  padding: 24px 0;
+  text-align: center;
+}
+
+.import-done-icon {
+  font-size: 2.5rem;
+}
+
+.import-done p {
+  margin: 8px 0 0;
+  color: var(--text-primary);
+  font-size: 1.05rem;
+}
+
+.import-error {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(220, 38, 38, 0.1);
+  color: var(--danger-color);
+}
+
+.import-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 0 1.5rem 1.5rem;
+}
+
+.import-actions:empty {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .import-actions {
+    flex-direction: column-reverse;
+  }
+
+  .import-actions .btn {
+    width: 100%;
+  }
+}

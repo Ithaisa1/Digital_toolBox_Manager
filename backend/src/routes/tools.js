@@ -8,7 +8,8 @@ import {
   getToolById, 
   createTool, 
   updateTool, 
-  deleteTool 
+  deleteTool,
+  importTools,
 } from '../controllers/toolsController.js';
 import { authenticateToken } from '../middleware/auth.js';
 import { validateCreateTool, validateUpdateTool } from '../validators/toolsValidator.js';
@@ -19,6 +20,7 @@ const router = express.Router();
 router.use(authenticateToken);
 
 router.get('/', getAllTools);
+router.post('/import', importTools);
 router.get('/:id', getToolById);
 router.post('/', validateCreateTool, createTool);
 router.put('/:id', validateUpdateTool, updateTool);
