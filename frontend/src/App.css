@@ -1,81 +1,115 @@
+/*
+ * Dexa Manager — diseño "Aurora"
+ * Tokens de color, tipografía y forma. Oscuro por defecto (body.dark), con modo claro.
+ * Los componentes usan estas variables; el estilo de cada componente vive en styles/aurora.css.
+ */
 :root {
-  --font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  --border-radius: 18px;
+  --font-family: "Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Inter Variable", "Inter", system-ui, sans-serif;
+  --border-radius: 20px;
   --border-radius-sm: 12px;
-  --transition: all 0.22s ease;
+  --border-radius-lg: 28px;
+  --transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Paleta de marca (igual en claro y oscuro) */
+  --violet: #8b5cf6;
+  --indigo: #6366f1;
+  --cyan: #22d3ee;
+  --pink: #f472b6;
+  --aurora-gradient: linear-gradient(120deg, #8b5cf6 0%, #6366f1 40%, #22d3ee 100%);
+  --aurora-text: linear-gradient(100deg, #c4b5fd 0%, #a5b4fc 35%, #67e8f9 70%, #f9a8d4 100%);
 }
 
+/* ---------- Modo claro ---------- */
 body {
-  --primary-color: #2563eb;
-  --secondary-color: #0f172a;
-  --accent-color: #38bdf8;
-  --success-color: #0ea5e9;
-  --warning-color: #f59e0b;
+  --primary-color: #7c3aed;
+  --secondary-color: #18181f;
+  --accent-color: #0891b2;
+  --success-color: #059669;
+  --warning-color: #d97706;
   --danger-color: #dc2626;
-  --info-color: #3b82f6;
+  --info-color: #6366f1;
   --text-inverse: #ffffff;
 
-  --primary-gradient: linear-gradient(135deg, #2563eb 0%, #0f172a 100%);
-  --secondary-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  --success-gradient: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
-  --warning-gradient: linear-gradient(135deg, #60a5fa 0%, #1d4ed8 100%);
-  --danger-gradient: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+  --primary-gradient: var(--aurora-gradient);
+  --secondary-gradient: linear-gradient(135deg, #18181f 0%, #2a2a36 100%);
+  --success-gradient: linear-gradient(135deg, #10b981 0%, #0891b2 100%);
+  --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #f472b6 100%);
+  --danger-gradient: linear-gradient(135deg, #f43f5e 0%, #be123c 100%);
 
-  --bg-primary: #f7fbff;
+  --bg-primary: #f5f4fa;
   --bg-secondary: #ffffff;
-  --bg-tertiary: #eef4ff;
-  --bg-card: rgba(255, 255, 255, 0.96);
-  --bg-hover: rgba(37, 99, 235, 0.08);
+  --bg-tertiary: #efedf7;
+  --bg-card: rgba(255, 255, 255, 0.72);
+  --bg-elevated: #ffffff;
+  --bg-hover: rgba(124, 58, 237, 0.07);
 
-  --text-primary: #0f172a;
-  --text-secondary: #334155;
-  --text-muted: #64748b;
-  --text-accent: #2563eb;
+  --text-primary: #0c0b14;
+  --text-secondary: #3f3d4f;
+  --text-muted: #6e6b80;
+  --text-accent: #6d28d9;
 
-  --border-color: rgba(15, 23, 42, 0.1);
-  --border-glow: rgba(37, 99, 235, 0.22);
+  --border-color: rgba(24, 20, 50, 0.09);
+  --border-strong: rgba(24, 20, 50, 0.16);
+  --border-glow: rgba(124, 58, 237, 0.35);
 
-  --shadow-sm: 0 6px 18px rgba(15, 23, 42, 0.08);
-  --shadow-md: 0 14px 32px rgba(15, 23, 42, 0.12);
-  --shadow-lg: 0 20px 48px rgba(15, 23, 42, 0.16);
-  --shadow-glow: 0 0 0 1px rgba(37, 99, 235, 0.1), 0 18px 48px rgba(37, 99, 235, 0.12);
+  --shadow-sm: 0 1px 2px rgba(20, 16, 40, 0.06), 0 4px 14px rgba(20, 16, 40, 0.05);
+  --shadow-md: 0 2px 6px rgba(20, 16, 40, 0.05), 0 14px 34px rgba(20, 16, 40, 0.08);
+  --shadow-lg: 0 24px 60px rgba(20, 16, 40, 0.14);
+  --shadow-glow: 0 0 0 1px rgba(124, 58, 237, 0.18), 0 18px 50px rgba(124, 58, 237, 0.16);
   --box-shadow: var(--shadow-md);
+
+  --aurora-opacity: 0.38;
+  --glass-blur: 18px;
+  --chart-bar: #7c3aed;
+  --chart-grid: rgba(24, 20, 50, 0.07);
 
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(37, 99, 235, 0.08), transparent 28%),
-    radial-gradient(circle at top right, rgba(14, 165, 233, 0.06), transparent 24%),
-    linear-gradient(180deg, #f7fbff 0%, #eef4ff 100%);
+  background: var(--bg-primary);
   color: var(--text-primary);
-  transition: var(--transition);
 }
 
+/* ---------- Modo oscuro (por defecto) ---------- */
 body.dark {
-  --bg-primary: #0b1220;
-  --bg-secondary: #101a2c;
-  --bg-tertiary: #162238;
-  --bg-card: rgba(16, 26, 44, 0.92);
-  --bg-hover: rgba(37, 99, 235, 0.14);
+  --primary-color: #8b5cf6;
+  --secondary-color: #f4f4f7;
+  --accent-color: #22d3ee;
+  --success-color: #34d399;
+  --warning-color: #fbbf24;
+  --danger-color: #fb7185;
+  --info-color: #818cf8;
+  --text-inverse: #ffffff;
 
-  --text-primary: #f8fafc;
-  --text-secondary: #cbd5e1;
-  --text-muted: #94a3b8;
-  --text-accent: #93c5fd;
+  --secondary-gradient: linear-gradient(135deg, #1c1c27 0%, #12121b 100%);
 
-  --border-color: rgba(148, 163, 184, 0.18);
-  --border-glow: rgba(59, 130, 246, 0.45);
+  --bg-primary: #07070c;
+  --bg-secondary: #0f0f17;
+  --bg-tertiary: #161621;
+  --bg-card: rgba(255, 255, 255, 0.035);
+  --bg-elevated: #12121b;
+  --bg-hover: rgba(255, 255, 255, 0.06);
 
-  --shadow-sm: 0 6px 18px rgba(2, 6, 23, 0.18);
-  --shadow-md: 0 14px 32px rgba(2, 6, 23, 0.24);
-  --shadow-lg: 0 20px 48px rgba(2, 6, 23, 0.3);
-  --shadow-glow: 0 0 0 1px rgba(59, 130, 246, 0.2), 0 18px 48px rgba(37, 99, 235, 0.22);
+  --text-primary: #f4f4f7;
+  --text-secondary: #b8b8c7;
+  --text-muted: #7d7d92;
+  --text-accent: #c4b5fd;
+
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --border-glow: rgba(167, 139, 250, 0.45);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 30px 80px rgba(0, 0, 0, 0.55);
+  --shadow-glow: 0 0 0 1px rgba(167, 139, 250, 0.25), 0 20px 60px rgba(139, 92, 246, 0.25);
   --box-shadow: var(--shadow-md);
 
-  background:
-    radial-gradient(circle at top left, rgba(37, 99, 235, 0.16), transparent 28%),
-    radial-gradient(circle at top right, rgba(14, 165, 233, 0.1), transparent 24%),
-    linear-gradient(180deg, #0b1220 0%, #0f172a 100%);
+  --aurora-opacity: 0.55;
+  --chart-bar: #8b5cf6;
+  --chart-grid: rgba(255, 255, 255, 0.07);
+
+  background: var(--bg-primary);
 }
 
 .App {

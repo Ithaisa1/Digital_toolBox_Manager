@@ -8,6 +8,7 @@ import { useAuth } from '../context/AuthContext';
 import ThemeToggle from './ThemeToggle';
 import LanguageSelector from './LanguageSelector';
 import InstallAppButton from './InstallAppButton';
+import Logo from './Logo';
 import { useTranslation } from 'react-i18next';
 import './Navbar.css';
 
@@ -47,8 +48,8 @@ const Navbar = ({ theme, onToggleTheme }) => {
       <nav className={`navbar navbar-${theme}${scrolled ? ' navbar-scrolled' : ''}`}>
         <div className="navbar-brand">
           <Link to="/" className="brand-link" onClick={closeMenu}>
-            <span className="brand-mark">DM</span>
-            <span className="brand-text">{t('common.appName')}</span>
+            <Logo size={32} />
+            <span className="sr-only">{t('common.appName')}</span>
           </Link>
         </div>
 

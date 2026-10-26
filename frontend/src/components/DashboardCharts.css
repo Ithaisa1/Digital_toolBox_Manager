@@ -1,13 +1,4 @@
-/* Gráficos del dashboard */
-:root {
-  --chart-bar: #2563eb;
-  --chart-grid: rgba(15, 23, 42, 0.08);
-}
-
-body.dark {
-  --chart-bar: #3b82f6;
-  --chart-grid: rgba(148, 163, 184, 0.16);
-}
+/* Gráficos (los colores --chart-bar y --chart-grid se definen en App.css) */
 
 .charts-grid {
   display: grid;
