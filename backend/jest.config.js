@@ -9,6 +9,8 @@ export default {
   collectCoverageFrom: ["src/**/*.js", "!src/server.js", "!src/seed.js"],
   coverageDirectory: "coverage",
   coverageReporters: ["text", "lcov", "html"],
+  // Los tests comparten la misma base de datos: se ejecutan de uno en uno
+  maxWorkers: 1,
   detectOpenHandles: true,
   forceExit: true,
 };

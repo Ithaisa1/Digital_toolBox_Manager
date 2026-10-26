@@ -20,6 +20,7 @@ const Profile = () => {
     newPassword: '',
     confirmPassword: '',
     language: 'es',
+    renewalReminders: true,
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -34,6 +35,7 @@ const Profile = () => {
         name: user.name || '',
         email: user.email || '',
         language: user.language || 'es',
+        renewalReminders: user.renewalReminders ?? true,
       }));
       fetchSubscriptionStats();
     }
@@ -67,6 +69,7 @@ const Profile = () => {
       name: profileData.name,
       email: profileData.email,
       language: profileData.language,
+      renewalReminders: profileData.renewalReminders,
       currentPassword: profileData.currentPassword || undefined,
       ...(profileData.newPassword && { newPassword: profileData.newPassword }),
     };
@@ -185,6 +188,20 @@ const Profile = () => {
                 <option value="es">{t('language.spanish')}</option>
                 <option value="en">{t('language.english')}</option>
               </select>
+            </div>
+
+            <div className="form-group form-group-toggle">
+              <label className="toggle-label">
+                <input
+                  type="checkbox"
+                  checked={profileData.renewalReminders}
+                  onChange={(e) => setProfileData((prev) => ({ ...prev, renewalReminders: e.target.checked }))}
+                />
+                <span>
+                  <strong>{t('profile.renewalReminders')}</strong>
+                  <span className="section-hint">{t('profile.renewalRemindersHint')}</span>
+                </span>
+              </label>
             </div>
 
             <div className="password-section">

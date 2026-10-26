@@ -245,7 +245,9 @@
     "deleteAccount": "Eliminar cuenta",
     "deleteAccountConfirm": "¿Seguro que quieres eliminar tu cuenta? Esta acción no se puede deshacer.",
     "profileImage": "URL de foto de perfil",
-    "profileImagePlaceholder": "Pega la URL de una imagen directa"
+    "profileImagePlaceholder": "Pega la URL de una imagen directa",
+    "renewalReminders": "Avisos de renovación por email",
+    "renewalRemindersHint": "Te escribimos unos días antes de que se renueve una suscripción."
   },
   "admin": {
     "dashboard": {

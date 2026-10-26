@@ -79,6 +79,7 @@ export const register = async (req, res, next) => {
         name: true,
         role: true,
         language: true,
+        renewalReminders: true,
         createdAt: true,
       },
     });
@@ -170,6 +171,7 @@ export const getProfile = async (req, res, next) => {
         email: true,
         name: true,
         language: true,
+        renewalReminders: true,
         role: true,
         createdAt: true,
         _count: {
@@ -194,7 +196,7 @@ export const getProfile = async (req, res, next) => {
 /**
  * Actualiza nombre, email y/o contraseña del perfil autenticado.
  * Exige contraseña actual si se cambia email o contraseña; devuelve nuevo token si hay cambios sensibles.
- * @param {import('express').Request} req - body: { name?, email?, currentPassword?, newPassword? }.
+ * @param {import('express').Request} req - body: { name?, email?, currentPassword?, newPassword?, language?, renewalReminders? }.
  * @param {import('express').Response} res - 200 con user actualizado y token, o errores 400/401/409.
  * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
  */
@@ -271,6 +273,10 @@ export const updateProfile = async (req, res, next) => {
       data.language = req.body.language;
     }
 
+    if (typeof req.body.renewalReminders === "boolean") {
+      data.renewalReminders = req.body.renewalReminders;
+    }
+
     if (Object.keys(data).length === 0) {
       return res.status(400).json({ error: "No changes provided" });
     }
@@ -284,6 +290,7 @@ export const updateProfile = async (req, res, next) => {
         name: true,
         role: true,
         language: true,
+        renewalReminders: true,
         createdAt: true,
         _count: {
           select: {

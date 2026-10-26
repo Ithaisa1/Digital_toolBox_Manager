@@ -13,6 +13,7 @@ import movementsRoutes from "./routes/movements.js";
 import dashboardRoutes from "./routes/dashboard.js";
 import exportRoutes from "./routes/export.js";
 import adminRoutes from "./routes/admin.js";
+import jobsRoutes from "./routes/jobs.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
 import { corsOriginCallback } from "./config/cors.js";
 
@@ -31,6 +32,7 @@ app.use("/api/movements", movementsRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/export", exportRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/jobs", jobsRoutes);
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok", message: "ToolBox Manager API is running" });
