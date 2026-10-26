@@ -371,5 +371,15 @@
     "Entertainment & Streaming": "Ocio y streaming",
     "Other": "Otros",
     "Uncategorized": "Sin categoría"
+  },
+  "pwa": {
+    "install": "Instalar app",
+    "iosTitle": "Instala Dexa Manager",
+    "iosStep1": "Pulsa el botón Compartir",
+    "iosStep2": "Elige «Añadir a pantalla de inicio»",
+    "iosStep3": "Pulsa «Añadir»: tendrás Dexa como una app más",
+    "share": "Compartir",
+    "gotIt": "Entendido",
+    "offline": "Sin conexión: los datos se actualizarán al volver a conectarte"
   }
 }

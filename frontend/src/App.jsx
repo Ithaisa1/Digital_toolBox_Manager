@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
+import OfflineBanner from './components/OfflineBanner';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
@@ -26,6 +27,10 @@ function AppContent() {
     document.body.classList.toggle('dark', theme === 'dark');
     document.body.classList.toggle('light', theme !== 'dark');
     localStorage.setItem('theme', theme);
+    // Color de la barra del sistema (móvil y app instalada) acorde al tema
+    document
+      .querySelectorAll('meta[name="theme-color"]')
+      .forEach((meta) => meta.setAttribute('content', theme === 'dark' ? '#0b1220' : '#f7fbff'));
   }, [theme]);
 
   const toggleTheme = () => {
@@ -43,6 +48,7 @@ function AppContent() {
   return (
     <div className="App">
       <Navbar theme={theme} onToggleTheme={toggleTheme} />
+      <OfflineBanner />
       <main className="main-content">
         <Routes>
           <Route path="/" element={<Home />} />

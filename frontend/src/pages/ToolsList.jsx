@@ -923,7 +923,7 @@ const ToolsList = () => {
                     {tool.description || getToolDescription(tool) || tool.type || '-'}
                   </p>
                   <p className="tool-category">
-                    {copy.category}: {tool.category?.name || copy.uncategorized}
+                    {copy.category}: {tool.category ? categoryLabel(t, tool.category.name) : copy.uncategorized}
                   </p>
                 </div>
 
@@ -950,10 +950,11 @@ const ToolsList = () => {
                   </div>
                 )}
 
-                {tool.price && !isFree && (
+                {!isFree && tool.price > 0 && (
                   <p className="tool-price">{formatEuro(tool.price)}/mo</p>
                 )}
 
+                <div className="tool-card-footer">
                 <div className="tool-actions">
                   {isFree && (
                     <button
@@ -1004,6 +1005,7 @@ const ToolsList = () => {
                     <line x1="14" y1="11" x2="14" y2="17"/>
                   </svg>
                 </button>
+                </div>
               </article>
             );
           })}

@@ -77,7 +77,7 @@ const Subscriptions = () => {
           title: 'Gestionar Suscripcion',
           price: 'Precio',
           billingCycle: 'Ciclo',
-          renewalDate: 'Renovacion',
+          renewalDate: 'Renovación',
           status: 'Estado',
           monthly: 'Mensual',
           yearly: 'Anual',
@@ -91,9 +91,9 @@ const Subscriptions = () => {
         },
         noTools: 'No hay suscripciones en tu inventario',
         noResults: 'No se encontraron suscripciones',
-        category: 'Categoria',
+        category: 'Categoría',
         uncategorized: 'Sin categoria',
-        renewal: 'Renovacion',
+        renewal: 'Renovación',
         loadFailed: 'Error al cargar suscripciones',
       }
     : {

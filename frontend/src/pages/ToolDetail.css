@@ -107,13 +107,22 @@
 
 .section-header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   margin-bottom: 20px;
 }
 
 .section-header h2 {
   margin: 0;
+  /* No partir palabras ("Suscripcio-nes"): si no cabe, el botón baja de línea */
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.section-header .btn {
+  flex-shrink: 0;
 }
 
 .subscription-form {

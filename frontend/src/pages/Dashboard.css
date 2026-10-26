@@ -866,3 +866,13 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
+/* Móviles pequeños: que la lista de herramientas no se salga de la tarjeta */
+.tools-list {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (max-width: 400px) {
+  .dashboard-section {
+    padding: 1.25rem;
+  }
+}

@@ -63,7 +63,8 @@ Está pensada como proyecto educativo para estudiantes de desarrollo web, pero e
 | 🛡️ **Admin panel** | Panel de administración con estadísticas globales y gestión de usuarios |
 | 🌐 **i18n** | Español e inglés con cambio dinámico sin recargar |
 | 🌙 **Temas** | Claro y oscuro con persistencia en localStorage |
-| 📱 **Responsive** | Menú hamburguesa animado (≤600px), layout adaptativo para móvil, tablet y desktop |
+| 📱 **Responsive** | Revisado de 320 px a 1440 px: menú desplegable hasta 900 px, tarjetas en 1–2–3 columnas y botones cómodos para el dedo en pantallas táctiles |
+| 📲 **App instalable (PWA)** | Se instala en móvil y PC desde el navegador (botón «Instalar app»; en iPhone, instrucciones para «Añadir a pantalla de inicio»), abre sin la barra del navegador, carga rápido y avisa si no hay conexión |
 | 📤 **Exportación** | Descarga tus datos en CSV, JSON o PDF con informe visual |
 | 📥 **Importación** | Sube un CSV (el exportado por la app o uno hecho en Excel) con vista previa antes de guardar; omite repetidas y filas con errores |
 | 🔄 **Seed automático** | La base de datos se inicializa con datos de ejemplo al primer arranque |
@@ -479,6 +480,24 @@ Todo vive en **un solo proyecto de Vercel**: la web (archivos estáticos), la AP
 `vercel.json` registra un **Vercel Cron** que cada día a las 07:00 UTC llama a `/api/jobs/renewal-reminders` con `Authorization: Bearer <CRON_SECRET>`. Solo necesitas definir `CRON_SECRET` y las variables `EMAIL_*`. Puedes lanzarlo a mano desde **Settings → Cron Jobs → Run**.
 
 Cada usuario recibe un solo email con todas sus renovaciones próximas, y nunca dos avisos para la misma renovación. Cualquiera puede desactivarlos desde su perfil.
+
+---
+
+## 📲 App instalable (PWA)
+
+Dexa Manager es una **Progressive Web App**: se instala desde el navegador, sin tiendas de aplicaciones.
+
+| Dispositivo | Cómo se instala |
+|-------------|-----------------|
+| Android (Chrome) | Botón **Instalar app** del menú, o menú ⋮ → *Instalar aplicación* |
+| iPhone / iPad (Safari) | Botón **Instalar app** → muestra los pasos: *Compartir* → *Añadir a pantalla de inicio* |
+| PC / Mac (Chrome, Edge) | Botón **Instalar app** de la barra, o el icono de instalar en la barra de direcciones |
+
+Detalles técnicos (`vite-plugin-pwa`, configurado en `frontend/vite.config.js`):
+- `manifest.webmanifest` con nombre, iconos (normales y *maskable*), colores y accesos directos a Dashboard, Herramientas y Suscripciones.
+- Service worker que guarda la aplicación (HTML, JS, CSS e iconos) para abrir rápido y sin conexión, y se actualiza solo al publicar una versión nueva.
+- **Los datos del usuario nunca se guardan en caché**: las llamadas a `/api` van siempre a la red. Sin conexión, la app abre y muestra un aviso.
+- Iconos en `frontend/public/` (`favicon.svg`, `apple-touch-icon.png`, `icons/`).
 
 ---
 
