@@ -9,7 +9,7 @@ describe('GET /api/health', () => {
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       status: 'ok',
-      message: 'ToolBox Manager API is running',
+      message: 'Dexa Manager API is running',
     });
   });
 });

@@ -59,7 +59,7 @@ export const getToolLogoUrl = (tool) => {
     return `${FAVICON_BASE_URL}${domain}`;
   }
 
-  const initials = (tool?.name || 'TB')
+  const initials = (tool?.name || 'DM')
     .trim()
     .split(/\s+/)
     .slice(0, 2)

@@ -1,4 +1,4 @@
-# Digital Toolbox Manager - Auditoría Completa del Proyecto
+# Dexa Manager - Auditoría Completa del Proyecto
 
 > **Fecha:** 17 Mayo 2026
 > **Auditor:** Senior Full Stack Developer

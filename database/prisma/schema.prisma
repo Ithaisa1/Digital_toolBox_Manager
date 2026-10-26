@@ -1,4 +1,4 @@
-// Esquema de base de datos — Digital Toolbox Manager
+// Esquema de base de datos — Dexa Manager
 // ORM: Prisma | Motor: PostgreSQL
 // Los comandos se ejecutan desde backend/ con --schema ../database/prisma/schema.prisma
 

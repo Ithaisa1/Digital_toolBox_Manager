@@ -10,7 +10,7 @@
 
 ### 1. Base de datos
 
-Crea la base `digital_toolbox_manager` (o el nombre que uses en `DATABASE_URL`).  
+Crea la base `dexa_manager` (o el nombre que uses en `DATABASE_URL`).  
 Guía detallada: [setup-postgres.md](./setup-postgres.md).
 
 ### 2. Backend
@@ -24,7 +24,7 @@ cp .env.example .env
 Edita `backend/.env`:
 
 ```env
-DATABASE_URL="postgresql://postgres:TU_PASSWORD@localhost:5432/digital_toolbox_manager?schema=public"
+DATABASE_URL="postgresql://postgres:TU_PASSWORD@localhost:5432/dexa_manager?schema=public"
 JWT_SECRET="una-clave-larga-y-aleatoria"
 PORT=3001
 AUTO_DB_SETUP=true

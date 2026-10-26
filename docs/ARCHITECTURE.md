@@ -2,7 +2,7 @@
 
 ## Visión general
 
-Digital Toolbox Manager es una aplicación **full-stack** con arquitectura cliente-servidor:
+Dexa Manager es una aplicación **full-stack** con arquitectura cliente-servidor:
 
 ```
 ┌─────────────────┐     HTTP/JSON      ┌─────────────────┐     Prisma      ┌──────────────┐
@@ -18,7 +18,7 @@ Digital Toolbox Manager es una aplicación **full-stack** con arquitectura clien
 ## Estructura del repositorio
 
 ```
-Digital_Toolbox_Manager/
+dexa-manager/
 ├── backend/              # API REST (Node.js + Express)
 │   ├── src/
 │   │   ├── config/       # Prisma / variables

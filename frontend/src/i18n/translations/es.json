@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "ToolBox Manager",
+    "appName": "Dexa Manager",
     "loading": "Cargando...",
     "error": "Error",
     "success": "Éxito",
@@ -48,7 +48,7 @@
     "registerLink": "Regístrate"
   },
   "home": {
-    "welcome": "Bienvenido a ToolBox Manager",
+    "welcome": "Bienvenido a Dexa Manager",
     "description": "Organiza y gestiona todas tus herramientas digitales, suscripciones y licencias en un solo lugar.",
     "goToDashboard": "Ir al Dashboard",
     "viewTools": "Ver Herramientas",

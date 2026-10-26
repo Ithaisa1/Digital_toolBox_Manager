@@ -1,5 +1,5 @@
 {
-  "name": "digital-toolbox-manager",
+  "name": "dexa-manager",
   "private": true,
   "description": "Comandos para trabajar con backend y frontend desde la raíz. Prisma necesita sus paquetes aquí porque el schema está en database/prisma.",
   "scripts": {

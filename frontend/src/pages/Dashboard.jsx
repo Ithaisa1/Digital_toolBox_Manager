@@ -56,7 +56,7 @@ const Dashboard = () => {
       const blob = await response.blob();
       const contentType = response.headers.get('content-type') || '';
       const ext = contentType.includes('pdf') ? 'pdf' : contentType.includes('json') ? 'json' : 'csv';
-      downloadBlob(blob, `toolbox-${getToday()}.${ext}`);
+      downloadBlob(blob, `dexa-${getToday()}.${ext}`);
       setShowExportModal(false);
     } catch (err) {
       console.error('Export failed:', err);
