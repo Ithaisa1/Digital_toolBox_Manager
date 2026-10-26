@@ -8,6 +8,8 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14+-336791.svg)](https://www.postgresql.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](#licencia)
 
+**🧪 Pruébala:** [dexa-manager-demo.vercel.app](https://dexa-manager-demo.vercel.app) — entra con un clic como admin o como usuaria (los datos se reinician cada noche) · **Ficha en mi portfolio:** [ithaisasg.twincore.es/proyectos/dexa-manager](https://ithaisasg.twincore.es/proyectos/dexa-manager/)
+
 ---
 
 ## 📋 Índice
@@ -486,7 +488,7 @@ Cada usuario recibe un solo email con todas sus renovaciones próximas, y nunca 
 
 ## 🧪 Web de demo (portfolio)
 
-Una segunda instalación con `DEMO_MODE=true` y **su propia base de datos** sirve como demo pública:
+Una segunda instalación con `DEMO_MODE=true` y **su propia base de datos** sirve como demo pública: **https://dexa-manager-demo.vercel.app** (proyecto de Vercel `dexa-manager-demo`, base de datos Neon `dexa-manager-demo-db`).
 
 - La pantalla de inicio de sesión muestra **«Entrar como administradora / usuaria»** (cuentas `admin.demo@example.com` y `usuario.demo@example.com`, contraseña `demo1234`).
 - Datos de ejemplo realistas: ~24 usuarios, ~170 herramientas, ~110 suscripciones y actividad de los últimos meses (`backend/src/demo/demoData.js`).
