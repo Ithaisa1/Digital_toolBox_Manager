@@ -9,6 +9,8 @@ import App from './App.jsx'
 import './index.css'
 import './styles/responsive.css'
 import i18n from './i18n/i18n.js'
+// Escuchar desde el principio el aviso de "app instalable" del navegador
+import './hooks/useInstallPrompt'
 
 // Suspense evita parpadeos mientras cargan las traducciones
 ReactDOM.createRoot(document.getElementById('root')).render(

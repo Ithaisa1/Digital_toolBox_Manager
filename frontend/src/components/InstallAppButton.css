@@ -1,0 +1,107 @@
+.install-app-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--primary-color);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-accent);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.install-app-btn:hover {
+  background: var(--bg-hover);
+}
+
+.install-app-btn:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.install-help-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 16px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.install-help {
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
+  border-radius: 20px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.install-help-icon {
+  border-radius: 14px;
+}
+
+.install-help h2 {
+  margin: 12px 0 16px;
+  font-size: 1.2rem;
+}
+
+.install-help ol {
+  margin: 0 0 20px;
+  padding-left: 1.25rem;
+  text-align: left;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.install-help-share {
+  display: inline-block;
+  vertical-align: -3px;
+  margin-right: 6px;
+  color: var(--primary-color);
+}
+
+.install-help .btn {
+  width: 100%;
+}
+
+@media (min-width: 601px) {
+  .install-help-overlay {
+    align-items: center;
+  }
+}
+
+/* Tablet y portátil pequeño: solo el icono, para que la barra quepa en una fila */
+@media (min-width: 901px) and (max-width: 1279px) {
+  .install-app-btn {
+    padding: 0.5rem;
+    width: 38px;
+    height: 38px;
+    justify-content: center;
+  }
+
+  .install-app-label {
+    display: none;
+  }
+}
+
+/* Menú desplegable (móvil y tablet vertical): mismo tamaño que el resto de opciones */
+@media (max-width: 900px) {
+  .navbar-links .install-app-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-size: 15px;
+  }
+}

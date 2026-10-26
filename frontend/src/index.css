@@ -6,6 +6,8 @@
 }
 
 html {
+  /* Fondo también debajo del contenido en páginas cortas (las variables viven en body) */
+  background-color: #f7fbff;
   scroll-behavior: smooth;
   font-size: clamp(14px, 1vw, 18px);
 }
@@ -179,4 +181,47 @@ textarea {
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+/* Pantallas táctiles: botones y filtros con altura cómoda para el dedo */
+@media (pointer: coarse) {
+  .btn,
+  .filter-tab,
+  .category-tab,
+  .pagination-btn,
+  .btn-export {
+    min-height: 40px;
+  }
+}
+
+html:has(body.dark) {
+  background-color: #0b1220;
+}
+
+/* Aviso sin conexión */
+.offline-banner {
+  position: fixed;
+  left: 50%;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: 1500;
+  transform: translateX(-50%);
+  max-width: calc(100% - 32px);
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: #0f172a;
+  color: #f8fafc;
+  font-size: 0.9rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+
+/* App instalada (sin barra del navegador): respetar la muesca y la barra de inicio */
+@media (display-mode: standalone) {
+  .navbar {
+    padding-top: max(12px, env(safe-area-inset-top));
+  }
+
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }

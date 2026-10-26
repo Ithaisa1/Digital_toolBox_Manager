@@ -371,5 +371,15 @@
     "Entertainment & Streaming": "Entertainment & Streaming",
     "Other": "Other",
     "Uncategorized": "Uncategorized"
+  },
+  "pwa": {
+    "install": "Install app",
+    "iosTitle": "Install Dexa Manager",
+    "iosStep1": "Tap the Share button",
+    "iosStep2": "Choose “Add to Home Screen”",
+    "iosStep3": "Tap “Add”: Dexa will be on your home screen like any app",
+    "share": "Share",
+    "gotIt": "Got it",
+    "offline": "You're offline: data will update when you reconnect"
   }
 }

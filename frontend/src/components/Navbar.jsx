@@ -7,6 +7,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import ThemeToggle from './ThemeToggle';
 import LanguageSelector from './LanguageSelector';
+import InstallAppButton from './InstallAppButton';
 import { useTranslation } from 'react-i18next';
 import './Navbar.css';
 
@@ -97,6 +98,7 @@ const Navbar = ({ theme, onToggleTheme }) => {
           ) : (
             <></>
           )}
+          <InstallAppButton onDone={closeMenu} />
           <ThemeToggle theme={theme} onToggle={onToggleTheme} />
           <LanguageSelector />
         </div>

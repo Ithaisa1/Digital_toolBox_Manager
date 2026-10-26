@@ -590,6 +590,7 @@
   }
 
   .tool-actions .btn {
+    flex: 0 0 auto;
     width: 100%;
     justify-content: center;
   }
@@ -615,5 +616,11 @@
   .manage-sub-info {
     flex-direction: column;
     gap: 0.25rem;
+  }
+}
+/* Tarjetas: varias columnas en tablet, una sola solo en móvil */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .tools-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   }
 }
