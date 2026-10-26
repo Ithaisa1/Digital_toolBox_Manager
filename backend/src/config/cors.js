@@ -47,3 +47,35 @@ export function corsOriginCallback(origin, callback) {
 
   callback(new Error(`CORS bloqueado para origen: ${origin}`));
 }
+
+/** true si el Origin es el mismo dominio que atiende la petición (web y API juntas). */
+export function isSameOrigin(origin, host) {
+  if (!origin || !host) return false;
+  try {
+    return new URL(origin).host === host;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Opciones de CORS por petición: el mismo dominio siempre se acepta
+ * (en Vercel la web y la API comparten dominio, también con dominio propio).
+ */
+export function corsOptionsDelegate(req, callback) {
+  const base = {
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  };
+  const origin = req.headers.origin;
+  const host = req.headers["x-forwarded-host"] || req.headers.host;
+
+  if (isSameOrigin(origin, host)) {
+    return callback(null, { ...base, origin: true });
+  }
+  corsOriginCallback(origin, (error, allowed) => {
+    if (error) return callback(error);
+    callback(null, { ...base, origin: allowed });
+  });
+}

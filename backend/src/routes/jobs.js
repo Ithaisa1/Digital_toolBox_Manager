@@ -1,5 +1,5 @@
 /**
- * Tareas programadas que se lanzan desde fuera (GitHub Actions u otro cron).
+ * Tareas programadas (cron de Vercel u otro servicio externo).
  * Prefijo montado en la app: /api/jobs
  * Protegidas con la cabecera `Authorization: Bearer <CRON_SECRET>`.
  */
@@ -28,7 +28,7 @@ const requireCronSecret = (req, res, next) => {
   next();
 };
 
-router.post('/renewal-reminders', requireCronSecret, async (req, res, next) => {
+const runRenewalReminders = async (req, res, next) => {
   try {
     if (!EmailService.isConfigured()) {
       return res.status(503).json({ error: 'Email is not configured (EMAIL_USER / EMAIL_PASSWORD)' });
@@ -38,6 +38,10 @@ router.post('/renewal-reminders', requireCronSecret, async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
+
+// GET lo usa el cron de Vercel (envía Authorization: Bearer <CRON_SECRET>); POST, cualquier otro cron
+router.get('/renewal-reminders', requireCronSecret, runRenewalReminders);
+router.post('/renewal-reminders', requireCronSecret, runRenewalReminders);
 
 export default router;
