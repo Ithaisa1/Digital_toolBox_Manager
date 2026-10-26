@@ -5,9 +5,12 @@
 import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
 import { I18nextProvider } from 'react-i18next'
+import '@fontsource-variable/inter'
 import App from './App.jsx'
 import './index.css'
 import './styles/responsive.css'
+// Diseño Aurora: va el último para dar el estilo común a toda la app
+import './styles/aurora.css'
 import i18n from './i18n/i18n.js'
 // Escuchar desde el principio el aviso de "app instalable" del navegador
 import './hooks/useInstallPrompt'

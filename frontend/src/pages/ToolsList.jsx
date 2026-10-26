@@ -913,7 +913,6 @@ const ToolsList = () => {
                     <span className={`badge-status ${getStatusBadgeClass()}`}>
                       {getStatusLabel()}
                     </span>
-                    {isFree && <span className="badge-free">FREE</span>}
                   </div>
                 </div>
 

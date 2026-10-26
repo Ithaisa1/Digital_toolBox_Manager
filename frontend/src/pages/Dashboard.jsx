@@ -7,6 +7,7 @@ import api from '../services/api';
 import API_URL from '../config/api';
 import { categoryLabel } from '../utils/categories';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../context/AuthContext';
 import { formatEuro } from '../utils/formatCurrency';
 import { CostByCategoryChart, UpcomingPaymentsChart } from '../components/DashboardCharts';
 import './Dashboard.css';
@@ -18,6 +19,7 @@ const Dashboard = () => {
   const [showExportModal, setShowExportModal] = useState(false);
   const [exporting, setExporting] = useState(false);
   const { t } = useTranslation();
+  const { user } = useAuth();
 
   const dashboardSubtitle = t('dashboard.subtitle');
   const viewAllSubscriptionsLabel = t('dashboard.viewAllSubscriptions');
@@ -84,20 +86,37 @@ const Dashboard = () => {
   if (error) return <div className="error">{error}</div>;
   if (!stats) return <div className="error">{t('dashboard.noData')}</div>;
 
+  // Próximas renovaciones (todas las suscripciones activas, ordenadas por fecha)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const daysUntil = (date) => Math.round((new Date(date).setHours(0, 0, 0, 0) - today) / 86400000);
+  const upcoming = (stats.subscriptions.byTool || [])
+    .flatMap((group) => group.subscriptions.map((sub) => ({ ...sub, toolName: group.toolName, toolId: group.toolId })))
+    .filter((sub) => daysUntil(sub.renewalDate) >= 0)
+    .sort((a, b) => new Date(a.renewalDate) - new Date(b.renewalDate))
+    .slice(0, 4);
+  const whenLabel = (date) => {
+    const days = daysUntil(date);
+    if (days === 0) return t('dashboard.bento.today');
+    if (days === 1) return t('dashboard.bento.tomorrow');
+    return t('dashboard.bento.inDays', { count: days });
+  };
+  const sparkline = (stats.charts?.upcomingPayments || []).map((m) => m.amount);
+  const sparkMax = Math.max(...sparkline, 1);
+  const firstName = (user?.name || '').split(' ')[0];
+
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-header">
-        <div className="header-content">
-          <div className="dashboard-heading">
-            <h1>{t('dashboard.title')}</h1>
-            <p className="dashboard-subtitle">{dashboardSubtitle}</p>
-          </div>
-          <button
-            className="btn-export"
-            onClick={() => setShowExportModal(true)}
-            aria-label={t('export.title')}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <div className="dashboard-container dash">
+      <header className="dash-header">
+        <div>
+          <p className="dash-eyebrow">{firstName ? t('dashboard.bento.hello', { name: firstName }) : t('dashboard.title')}</p>
+          <h1 className="dash-title">{t('dashboard.bento.title')}</h1>
+          <p className="dash-subtitle">{dashboardSubtitle}</p>
+        </div>
+        <div className="dash-actions">
+          <Link to="/tools" className="btn btn-secondary">{viewToolsLabel}</Link>
+          <button className="btn btn-primary btn-export" onClick={() => setShowExportModal(true)} aria-label={t('export.title')}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
               <polyline points="7 10 12 15 17 10"/>
               <line x1="12" y1="15" x2="12" y2="3"/>
@@ -105,41 +124,92 @@ const Dashboard = () => {
             {t('export.title')}
           </button>
         </div>
-      </div>
+      </header>
 
-      <div className="stats-grid">
-        <Link to="/tools" className="stat-card dashboard-stat-card stat-card-link" aria-label={t('dashboard.totalTools')}>
-          <h3>{t('dashboard.totalTools')}</h3>
-          <p className="stat-number">{stats.tools.total}</p>
-          <p className="stat-detail">
-            {t('dashboard.active')}: {stats.tools.byStatus?.ACTIVE || 0} | {t('dashboard.inactive')}: {stats.tools.byStatus?.INACTIVE || 0}
-          </p>
-          <span className="stat-card-link-text">{viewToolsLabel}</span>
+      <section className="bento" aria-label={t('dashboard.title')}>
+        <Link to="/subscriptions" className="bento-card bento-hero">
+          <span className="bento-label">{t('dashboard.bento.monthlySpend')}</span>
+          <span className="bento-big">{formatEuro(stats.subscriptions.monthlyCost)}</span>
+          <span className="bento-meta">
+            {t('dashboard.bento.yearly', { amount: formatEuro(stats.subscriptions.monthlyCost * 12) })}
+            {' · '}
+            {t('dashboard.bento.activeSubs', { count: stats.subscriptions.total })}
+          </span>
+          {sparkline.length > 0 && (
+            <span className="bento-spark" aria-hidden="true">
+              {sparkline.map((value, i) => (
+                <span key={i} style={{ height: `${Math.max(6, (value / sparkMax) * 100)}%` }} />
+              ))}
+            </span>
+          )}
+          <span className="bento-link">{viewAllSubscriptionsLabel} →</span>
         </Link>
 
-        <Link to="/subscriptions" className="stat-card dashboard-stat-card stat-card-link" aria-label={t('dashboard.subscriptions')}>
-          <h3>{t('dashboard.subscriptions')}</h3>
-          <p className="stat-number">{stats.subscriptions.total}</p>
-          <p className="stat-detail">
-            {t('dashboard.monthlyCost')}: {formatEuro(stats.subscriptions.monthlyCost)}
-          </p>
-          <span className="stat-card-link-text">{viewAllSubscriptionsLabel}</span>
+        <article className="bento-card bento-renewals">
+          <div className="bento-row">
+            <span className="bento-label">{t('dashboard.upcomingRenewals')}</span>
+            <span className="bento-pill">{t('dashboard.bento.next30', { count: stats.subscriptions.upcomingRenewals })}</span>
+          </div>
+          {upcoming.length === 0 ? (
+            <p className="bento-empty">{t('dashboard.bento.noRenewals')}</p>
+          ) : (
+            <ul className="bento-list">
+              {upcoming.map((sub) => (
+                <li key={sub.id}>
+                  <Link to={`/tools/${sub.toolId}`}>
+                    <span className="bento-list-name">{sub.toolName}</span>
+                    <span className={`bento-when ${daysUntil(sub.renewalDate) <= 3 ? 'is-soon' : ''}`}>{whenLabel(sub.renewalDate)}</span>
+                    <span className="bento-list-price">{formatEuro(sub.price)}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </article>
+
+        <Link to="/tools" className="bento-card bento-stat">
+          <span className="bento-icon" aria-hidden="true">🧰</span>
+          <span className="bento-label">{t('dashboard.totalTools')}</span>
+          <span className="bento-num">{stats.tools.total}</span>
+          <span className="bento-meta">
+            {t('dashboard.active')}: {stats.tools.byStatus?.ACTIVE || 0} · {t('dashboard.inactive')}: {stats.tools.byStatus?.INACTIVE || 0}
+          </span>
         </Link>
 
-        <div className="stat-card dashboard-stat-card">
-          <h3>{t('dashboard.upcomingRenewals')}</h3>
-          <p className="stat-number">{stats.subscriptions.upcomingRenewals}</p>
-          <p className="stat-detail">{t('dashboard.next30Days')}</p>
-        </div>
+        <article className="bento-card bento-stat">
+          <span className="bento-icon" aria-hidden="true">📅</span>
+          <span className="bento-label">{t('dashboard.bento.nextPayment')}</span>
+          {upcoming[0] ? (
+            <>
+              <span className="bento-num">{formatEuro(upcoming[0].price)}</span>
+              <span className="bento-meta">{upcoming[0].toolName} · {whenLabel(upcoming[0].renewalDate)}</span>
+            </>
+          ) : (
+            <span className="bento-meta">{t('dashboard.bento.noRenewals')}</span>
+          )}
+        </article>
 
-        <div className="stat-card dashboard-stat-card">
-          <h3>{t('dashboard.categories')}</h3>
-          <p className="stat-number">{stats.categories}</p>
-          <p className="stat-detail">{t('dashboard.toolCategories')}</p>
-        </div>
-      </div>
+        <article className="bento-card bento-stat">
+          <span className="bento-icon" aria-hidden="true">💎</span>
+          <span className="bento-label">{t('dashboard.bento.mostExpensive')}</span>
+          {stats.expensiveTools[0] ? (
+            <>
+              <span className="bento-num">{formatEuro(stats.expensiveTools[0].price)}</span>
+              <span className="bento-meta">{stats.expensiveTools[0].name}</span>
+            </>
+          ) : (
+            <span className="bento-meta">{t('dashboard.noPricingInfo')}</span>
+          )}
+        </article>
 
-      {/* GRÁFICOS */}
+        <article className="bento-card bento-stat">
+          <span className="bento-icon" aria-hidden="true">🏷️</span>
+          <span className="bento-label">{t('dashboard.categories')}</span>
+          <span className="bento-num">{stats.categories}</span>
+          <span className="bento-meta">{t('dashboard.toolCategories')}</span>
+        </article>
+      </section>
+
       {stats.charts && stats.subscriptions.total > 0 && (
         <div className="charts-grid">
           <div className="dashboard-section">
@@ -151,10 +221,12 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* SUSCRIPCIONES AGRUPADAS POR HERRAMIENTA */}
       {stats.subscriptions.byTool && stats.subscriptions.byTool.length > 0 && (
-        <div className="dashboard-section">
-          <h2>{t('dashboard.yourSubscriptions')}</h2>
+        <section className="dashboard-section">
+          <div className="section-head">
+            <h2>{t('dashboard.yourSubscriptions')}</h2>
+            <Link to="/subscriptions" className="section-link">{viewAllSubscriptionsLabel} →</Link>
+          </div>
           <div className="subscriptions-grid">
             {stats.subscriptions.byTool.map((toolGroup) => (
               <div key={toolGroup.toolId} className="tool-subscription-card">
@@ -162,7 +234,6 @@ const Dashboard = () => {
                   <h4>{toolGroup.toolName}</h4>
                   <span className="category-badge">{categoryLabel(t, toolGroup.category)}</span>
                 </div>
-                
                 <div className="plans-list">
                   {toolGroup.subscriptions.map((sub) => (
                     <div key={sub.id} className="plan-row">
@@ -180,25 +251,32 @@ const Dashboard = () => {
               </div>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
-      <div className="dashboard-section">
-        <h2>{t('dashboard.mostExpensiveTools')}</h2>
+      <section className="dashboard-section">
+        <div className="section-head">
+          <h2>{t('dashboard.mostExpensiveTools')}</h2>
+        </div>
         {stats.expensiveTools.length > 0 ? (
-          <div className="tools-list">
-            {stats.expensiveTools.map((tool) => (
-              <div key={tool.id} className="tool-item">
-                <h4>{tool.name}</h4>
-                <p className="tool-price">{formatEuro(tool.price)}/mo</p>
-                <p className="tool-category">{categoryLabel(t, tool.category?.name)}</p>
-              </div>
+          <ol className="rank-list">
+            {stats.expensiveTools.map((tool, index) => (
+              <li key={tool.id}>
+                <Link to={`/tools/${tool.id}`}>
+                  <span className="rank-pos">{index + 1}</span>
+                  <span className="rank-name">
+                    {tool.name}
+                    <small>{categoryLabel(t, tool.category?.name)}</small>
+                  </span>
+                  <span className="rank-price">{formatEuro(tool.price)}<small>/{t('dashboard.bento.month')}</small></span>
+                </Link>
+              </li>
             ))}
-          </div>
+          </ol>
         ) : (
-          <p className="empty-state">No pricing information available</p>
+          <p className="empty-state">{t('dashboard.noPricingInfo')}</p>
         )}
-      </div>
+      </section>
 
       {showExportModal && (
         <div className="modal-overlay" onClick={() => !exporting && setShowExportModal(false)}>

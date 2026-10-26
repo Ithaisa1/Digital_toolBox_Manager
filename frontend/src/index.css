@@ -7,7 +7,7 @@
 
 html {
   /* Fondo también debajo del contenido en páginas cortas (las variables viven en body) */
-  background-color: #f7fbff;
+  background-color: #f5f4fa;
   scroll-behavior: smooth;
   font-size: clamp(14px, 1vw, 18px);
 }
@@ -195,7 +195,7 @@ textarea {
 }
 
 html:has(body.dark) {
-  background-color: #0b1220;
+  background-color: #07070c;
 }
 
 /* Aviso sin conexión */

@@ -22,7 +22,7 @@ import Spinner from './components/Spinner';
 import './App.css';
 
 function AppContent() {
-  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
   const { user, loading } = useAuth();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ function AppContent() {
     // Color de la barra del sistema (móvil y app instalada) acorde al tema
     document
       .querySelectorAll('meta[name="theme-color"]')
-      .forEach((meta) => meta.setAttribute('content', theme === 'dark' ? '#0b1220' : '#f7fbff'));
+      .forEach((meta) => meta.setAttribute('content', theme === 'dark' ? '#07070c' : '#f5f4fa'));
   }, [theme]);
 
   const toggleTheme = () => {

@@ -94,6 +94,24 @@
       "upcomingPayments": "Upcoming payments",
       "next12Months": "Next 12 months",
       "other": "Other"
+    },
+    "bento": {
+      "hello": "Hi, {{name}} 👋",
+      "title": "Your stack at a glance",
+      "monthlySpend": "Monthly spend",
+      "yearly": "≈ {{amount}} per year",
+      "activeSubs_one": "{{count}} active subscription",
+      "activeSubs_other": "{{count}} active subscriptions",
+      "next30_one": "{{count}} in 30 days",
+      "next30_other": "{{count}} in 30 days",
+      "today": "today",
+      "tomorrow": "tomorrow",
+      "inDays_one": "in {{count}} day",
+      "inDays_other": "in {{count}} days",
+      "noRenewals": "Nothing renews in the coming days",
+      "month": "mo",
+      "nextPayment": "Next payment",
+      "mostExpensive": "Most expensive"
     }
   },
   "tools": {
@@ -580,5 +598,54 @@
     "deleted": "Deleted “{{tool}}”",
     "imported": "Imported “{{tool}}” from CSV",
     "priceChange": "Changed the price of “{{tool}}” from €{{from}} to €{{to}}"
+  },
+  "landing": {
+    "pill": "New · install it on your phone or computer",
+    "title1": "Your subscriptions,",
+    "title2": "under control.",
+    "lead": "Dexa brings all your digital tools and subscriptions together: what you spend, what renews and when, with reminders before you're charged.",
+    "start": "Start for free",
+    "tryDemo": "Try the demo",
+    "goDashboard": "Go to my dashboard",
+    "code": "View the code",
+    "fact1": "No card needed",
+    "fact2": "English and Spanish",
+    "fact3": "Light and dark mode",
+    "preview": {
+      "in3": "in 3 days",
+      "in5": "in 5 days",
+      "in14": "in 14 days"
+    },
+    "featuresTitle": "Everything you need, nothing you don't",
+    "featuresLead": "Made for freelancers, small teams and anyone with too many paid apps.",
+    "features": {
+      "tools": {
+        "title": "Tools and subscriptions",
+        "text": "80+ suggested tools and 18 categories: Figma, Adobe, Notion, Slack, ChatGPT, Netflix… Add them in seconds."
+      },
+      "reminders": {
+        "title": "Renewal reminders",
+        "text": "An email a few days before each charge, so you can cancel what you no longer use."
+      },
+      "charts": {
+        "title": "Spending at a glance",
+        "text": "Monthly cost, cost by category and expected payments for the next 12 months."
+      },
+      "csv": {
+        "title": "Import and export",
+        "text": "Bring your list from Excel as CSV with a preview, and export your data as CSV, JSON or PDF anytime."
+      },
+      "pwa": {
+        "title": "Installable app",
+        "text": "Install it on your phone or computer and open it like any app, even offline."
+      },
+      "admin": {
+        "title": "Control panel",
+        "text": "For admins: users, categories, activity and system status."
+      }
+    },
+    "ctaTitle": "Start saving this month",
+    "ctaText": "Find out what you really pay and which subscriptions you can cancel.",
+    "footer": "Full-stack project · React, Node.js and PostgreSQL"
   }
 }

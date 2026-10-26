@@ -94,6 +94,24 @@
       "upcomingPayments": "Pagos previstos",
       "next12Months": "Próximos 12 meses",
       "other": "Otras"
+    },
+    "bento": {
+      "hello": "Hola, {{name}} 👋",
+      "title": "Tu stack, de un vistazo",
+      "monthlySpend": "Gasto mensual",
+      "yearly": "≈ {{amount}} al año",
+      "activeSubs_one": "{{count}} suscripción activa",
+      "activeSubs_other": "{{count}} suscripciones activas",
+      "next30_one": "{{count}} en 30 días",
+      "next30_other": "{{count}} en 30 días",
+      "today": "hoy",
+      "tomorrow": "mañana",
+      "inDays_one": "en {{count}} día",
+      "inDays_other": "en {{count}} días",
+      "noRenewals": "Nada se renueva en los próximos días",
+      "month": "mes",
+      "nextPayment": "Próximo pago",
+      "mostExpensive": "La más cara"
     }
   },
   "tools": {
@@ -580,5 +598,54 @@
     "deleted": "Eliminó «{{tool}}»",
     "imported": "Importó «{{tool}}» desde CSV",
     "priceChange": "Cambió el precio de «{{tool}}» de {{from}} € a {{to}} €"
+  },
+  "landing": {
+    "pill": "Nuevo · instálala en tu móvil o PC",
+    "title1": "Tus suscripciones,",
+    "title2": "bajo control.",
+    "lead": "Dexa reúne todas tus herramientas digitales y suscripciones: cuánto gastas, qué se renueva y cuándo, con avisos antes de que te cobren.",
+    "start": "Empezar gratis",
+    "tryDemo": "Probar la demo",
+    "goDashboard": "Ir a mi panel",
+    "code": "Ver el código",
+    "fact1": "Sin tarjeta",
+    "fact2": "Español e inglés",
+    "fact3": "Modo claro y oscuro",
+    "preview": {
+      "in3": "en 3 días",
+      "in5": "en 5 días",
+      "in14": "en 14 días"
+    },
+    "featuresTitle": "Todo lo que necesitas, nada que sobre",
+    "featuresLead": "Pensada para freelancers, equipos pequeños y cualquiera con demasiadas apps de pago.",
+    "features": {
+      "tools": {
+        "title": "Herramientas y suscripciones",
+        "text": "Más de 80 herramientas sugeridas y 18 categorías: Figma, Adobe, Notion, Slack, ChatGPT, Netflix… Añádelas en segundos."
+      },
+      "reminders": {
+        "title": "Avisos de renovación",
+        "text": "Un email unos días antes de cada cobro, para cancelar a tiempo lo que ya no usas."
+      },
+      "charts": {
+        "title": "Gasto a la vista",
+        "text": "Coste mensual, por categoría y pagos previstos para los próximos 12 meses."
+      },
+      "csv": {
+        "title": "Importa y exporta",
+        "text": "Trae tu lista desde Excel en CSV con vista previa, y exporta tus datos en CSV, JSON o PDF cuando quieras."
+      },
+      "pwa": {
+        "title": "App instalable",
+        "text": "Instálala en el móvil o en el ordenador y ábrela como cualquier app, incluso sin conexión."
+      },
+      "admin": {
+        "title": "Panel de control",
+        "text": "Para administradores: usuarios, categorías, actividad y estado del sistema."
+      }
+    },
+    "ctaTitle": "Empieza a ahorrar este mes",
+    "ctaText": "Descubre cuánto pagas de verdad y qué suscripciones puedes cancelar.",
+    "footer": "Proyecto full-stack · React, Node.js y PostgreSQL"
   }
 }
