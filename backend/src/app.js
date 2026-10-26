@@ -18,6 +18,7 @@ import jobsRoutes from "./routes/jobs.js";
 import { errorHandler, notFound } from "./middleware/errorHandler.js";
 import { corsOptionsDelegate } from "./config/cors.js";
 import { checkDatabaseConnection } from "./config/database.js";
+import { publicDemoInfo } from "./config/demo.js";
 
 dotenv.config();
 
@@ -57,6 +58,11 @@ app.get("/api/health", async (req, res) => {
     database: "connected",
     message: "Dexa Manager API is running",
   });
+});
+
+// Información pública para la web (p. ej. si es la demo y sus cuentas)
+app.get("/api/meta", (req, res) => {
+  res.json({ name: "Dexa Manager", ...publicDemoInfo() });
 });
 
 // Rellenar la BD con datos de ejemplo (solo fuera de producción)

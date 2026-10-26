@@ -63,7 +63,8 @@ export const getCategoryById = async (req, res, next) => {
  */
 export const createCategory = async (req, res, next) => {
   try {
-    const { name, description } = req.body;
+    const name = typeof req.body.name === 'string' ? req.body.name.trim() : '';
+    const description = typeof req.body.description === 'string' ? req.body.description.trim() || null : null;
 
     if (!name) {
       return res.status(400).json({ error: 'Name is required' });
@@ -96,8 +97,8 @@ export const updateCategory = async (req, res, next) => {
     const category = await prisma.category.update({
       where: { id },
       data: {
-        name: name || undefined,
-        description: description !== undefined ? description : undefined,
+        name: typeof name === 'string' && name.trim() ? name.trim() : undefined,
+        description: description !== undefined ? (String(description).trim() || null) : undefined,
       },
     });
 

@@ -3,7 +3,8 @@
  *
  * 1. Genera el cliente de Prisma
  * 2. En producción, aplica las migraciones con la conexión directa (sin pooler)
- * 3. Si AUTO_SEED=true y la base de datos está vacía, carga los datos de ejemplo
+ * 3. Web de demo (DEMO_MODE=true): datos de la demo si la BD está vacía.
+ *    Si no, con AUTO_SEED=true y la BD vacía, carga los datos de ejemplo
  * 4. Compila el frontend apuntando a la API del mismo dominio (/api)
  *
  * Variables que crea la integración de Neon en Vercel:
@@ -54,8 +55,18 @@ if (!env.DATABASE_URL) {
     { DATABASE_URL: directUrl },
   );
 
-  // 3. Datos de ejemplo (opcional)
-  if (env.AUTO_SEED === 'true') {
+  // 3a. Web de demo: datos de ejemplo la primera vez (luego se recargan cada noche)
+  if (env.DEMO_MODE === 'true') {
+    await step(
+      'Datos de la demo (solo si la base de datos está vacía)',
+      'node', ['scripts/demo-reset.js', '--if-empty'],
+      BACKEND,
+      { DATABASE_URL: directUrl },
+    );
+  }
+
+  // 3b. Datos de ejemplo (opcional)
+  if (env.AUTO_SEED === 'true' && env.DEMO_MODE !== 'true') {
     await step(
       'Datos de ejemplo (solo si la base de datos está vacía)',
       'node', ['scripts/seed-if-empty.js'],

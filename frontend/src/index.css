@@ -225,3 +225,105 @@ html:has(body.dark) {
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
+
+/* ---------- Web de demo ---------- */
+.demo-banner {
+  padding: 8px 16px;
+  background: linear-gradient(90deg, #0ea5e9, #2563eb);
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.demo-access {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.demo-access h2 {
+  margin: 0 0 0.25rem;
+  color: var(--text-primary);
+  font-size: 1.25rem;
+}
+
+.demo-access > p {
+  margin: 0 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.demo-access-buttons {
+  display: grid;
+  gap: 10px;
+}
+
+.demo-account {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.demo-account:hover:not(:disabled) {
+  border-color: var(--primary-color);
+  background: var(--bg-hover);
+  transform: translateY(-1px);
+}
+
+.demo-account:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.demo-account:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.demo-account-icon {
+  font-size: 1.6rem;
+}
+
+.demo-account-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.demo-account-text small {
+  color: var(--text-muted);
+}
+
+.demo-account-text code {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+.demo-access-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 1.25rem 0 0 !important;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.demo-access-divider::before,
+.demo-access-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-color);
+}

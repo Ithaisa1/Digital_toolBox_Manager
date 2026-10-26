@@ -7,6 +7,9 @@ import express from 'express';
 import crypto from 'crypto';
 import EmailService from '../utils/emailService.js';
 import { sendRenewalReminders } from '../jobs/renewalReminders.js';
+import prisma from '../config/database.js';
+import { isDemoMode } from '../config/demo.js';
+import { resetDemoData } from '../demo/demoData.js';
 
 const router = express.Router();
 
@@ -43,5 +46,19 @@ const runRenewalReminders = async (req, res, next) => {
 // GET lo usa el cron de Vercel (envía Authorization: Bearer <CRON_SECRET>); POST, cualquier otro cron
 router.get('/renewal-reminders', requireCronSecret, runRenewalReminders);
 router.post('/renewal-reminders', requireCronSecret, runRenewalReminders);
+
+// Web de demo: cada noche se borran los cambios de los visitantes y se recargan los datos
+const runDemoReset = async (req, res, next) => {
+  try {
+    if (!isDemoMode()) return res.status(404).json({ error: 'Not found' });
+    const result = await resetDemoData(prisma);
+    res.json({ ok: true, ...result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+router.get('/demo-reset', requireCronSecret, runDemoReset);
+router.post('/demo-reset', requireCronSecret, runDemoReset);
 
 export default router;

@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
+import DemoAccess from '../components/DemoAccess';
 import './Login.css';
 
 const Login = () => {
@@ -60,6 +61,7 @@ const Login = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
+        <DemoAccess />
         <h1>{t('auth.loginTitle')}</h1>
         {error && <div className="error" role="alert">{error}</div>}
         <form onSubmit={handleSubmit}>

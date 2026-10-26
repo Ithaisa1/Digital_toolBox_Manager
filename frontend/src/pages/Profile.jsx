@@ -97,7 +97,7 @@ const Profile = () => {
         confirmPassword: ''
       }));
     } catch (error) {
-      setMessage(error.response?.data?.error || t('profile.updateError'));
+      setMessage(error.response?.data?.code === 'demoProtected' ? t('demo.protected') : error.response?.data?.code === 'lastAdmin' ? t('adminPanel.errors.lastAdmin') : (error.response?.data?.error || t('profile.updateError')));
       setMessageType('error');
     } finally {
       setLoading(false);
@@ -124,7 +124,7 @@ const Profile = () => {
       logout();
       navigate('/login', { replace: true });
     } catch (error) {
-      setMessage(error.response?.data?.error || t('profile.updateError'));
+      setMessage(error.response?.data?.code === 'demoProtected' ? t('demo.protected') : error.response?.data?.code === 'lastAdmin' ? t('adminPanel.errors.lastAdmin') : (error.response?.data?.error || t('profile.updateError')));
       setMessageType('error');
     }
   };

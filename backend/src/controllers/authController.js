@@ -9,6 +9,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import prisma from "../config/database.js";
 import EmailService from "../utils/emailService.js";
+import { isProtectedDemoAccount } from "../config/demo.js";
 
 /**
  * Genera un token JWT con los datos esenciales del usuario.
@@ -222,6 +223,14 @@ export const updateProfile = async (req, res, next) => {
       typeof newPassword === "string" && newPassword.length > 0;
     const requiresPasswordCheck = isEmailChanging || isPasswordChanging;
 
+    // Web de demo: nadie puede cambiar el email o la contraseña de las cuentas públicas
+    if (requiresPasswordCheck && isProtectedDemoAccount(currentUser.email)) {
+      return res.status(403).json({
+        error: "Demo accounts cannot change their email or password",
+        code: "demoProtected",
+      });
+    }
+
     if (requiresPasswordCheck) {
       if (!currentPassword) {
         return res.status(400).json({
@@ -338,12 +347,29 @@ export const deleteAccount = async (req, res, next) => {
       return res.status(404).json({ error: "User not found" });
     }
 
+    if (isProtectedDemoAccount(currentUser.email)) {
+      return res.status(403).json({ error: "Demo accounts cannot be deleted", code: "demoProtected" });
+    }
+
     const isValidPassword = await bcrypt.compare(
       currentPassword,
       currentUser.password,
     );
     if (!isValidPassword) {
       return res.status(401).json({ error: "Current password is incorrect" });
+    }
+
+    // No dejar la plataforma sin administradores
+    if (currentUser.role === "ADMIN") {
+      const otherAdmins = await prisma.user.count({
+        where: { role: "ADMIN", isBlocked: false, id: { not: currentUser.id } },
+      });
+      if (otherAdmins === 0) {
+        return res.status(400).json({
+          error: "You are the only admin: make someone else admin before deleting your account",
+          code: "lastAdmin",
+        });
+      }
     }
 
     await prisma.user.delete({

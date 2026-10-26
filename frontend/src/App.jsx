@@ -6,6 +6,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import OfflineBanner from './components/OfflineBanner';
+import DemoBanner from './components/DemoBanner';
+import ScrollToTop from './components/ScrollToTop';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
@@ -47,6 +49,8 @@ function AppContent() {
 
   return (
     <div className="App">
+      <ScrollToTop />
+      <DemoBanner />
       <Navbar theme={theme} onToggleTheme={toggleTheme} />
       <OfflineBanner />
       <main className="main-content">
