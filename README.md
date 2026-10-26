@@ -198,92 +198,60 @@ Digital_Toolbox_Manager/
 ### Requisitos previos
 
 - **Node.js 18+** — [Descargar](https://nodejs.org/)
-- **PostgreSQL 14+** — [Descargar](https://www.postgresql.org/download/) o usar Docker:
-  ```bash
-  docker run --name toolbox-db -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=digital_toolbox_manager -p 5432:5432 -d postgres:16
-  ```
+- **PostgreSQL 14+** — [Descargar](https://www.postgresql.org/download/)
 
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/Digital_Toolbox_Manager.git
-cd Digital_Toolbox_Manager
+git clone https://github.com/Ithaisa1/Digital_toolBox_Manager.git
+cd Digital_toolBox_Manager
 ```
 
-### 2. Configurar la base de datos
+### 2. Preparar PostgreSQL
 
-Crea la base de datos en PostgreSQL:
+Con PostgreSQL instalado y encendido, crea la base de datos (guía detallada en [docs/setup-postgres.md](docs/setup-postgres.md)):
 
 ```bash
 psql -U postgres -c "CREATE DATABASE digital_toolbox_manager;"
 ```
 
-### 3. Configurar el backend
+### 3. Preparar el proyecto (solo la primera vez)
 
 ```bash
-cd backend
-cp .env.example .env
+npm run setup
 ```
 
-Edita `.env` con tus credenciales:
+Instala todas las dependencias, crea `backend/.env` y `frontend/.env` a partir de los ejemplos (con un `JWT_SECRET` aleatorio), genera el cliente de Prisma y aplica las migraciones.
+
+Si es la primera vez, **edita `DATABASE_URL` en `backend/.env`** con tu usuario y contraseña de PostgreSQL y vuelve a ejecutar `npm run setup`:
 
 ```env
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/digital_toolbox_manager?schema=public"
-JWT_SECRET="cambia-esto-por-algo-seguro"
-PORT=3001
-NODE_ENV=development
+DATABASE_URL="postgresql://postgres:TU_PASSWORD@localhost:5432/digital_toolbox_manager?schema=public"
 ```
 
-Instala dependencias y genera el cliente de Prisma:
+Si algo falla (PostgreSQL apagado, contraseña incorrecta, base de datos inexistente), el comando explica qué hacer.
 
-```bash
-npm install
-npx prisma generate --schema ../database/prisma/schema.prisma
-npx prisma migrate dev --schema ../database/prisma/schema.prisma
-```
-
-> 💡 La migración creará todas las tablas. Si quieres datos de ejemplo, el seed se ejecuta automáticamente al arrancar si la base de datos está vacía.
-
-### 4. Arrancar el backend
+### 4. Arrancar la app
 
 ```bash
 npm run dev
 ```
 
-Verás algo como:
+Arranca backend y frontend a la vez en la misma terminal (las líneas salen marcadas con `[api]` y `[web]`). **Ctrl+C** los apaga los dos.
 
-```
-Migraciones aplicadas
-Base de datos conectada correctamente
-Base de datos lista (2 usuario(s); seed omitido)
-Servidor corriendo en http://localhost:3001
-```
+Abre **http://localhost:3000** en tu navegador. La primera vez se crean datos de ejemplo automáticamente.
 
-### 5. Configurar el frontend
+### Otros comandos desde la raíz
 
-Abre otra terminal:
+| Comando | Qué hace |
+|---------|----------|
+| `npm test` | Tests del backend |
+| `npm run lint` | Linter de backend y frontend |
+| `npm run build` | Compila el frontend |
 
-```bash
-cd frontend
-cp .env.example .env
-npm install
-```
+> Prefieres hacerlo a mano: `cd backend && npm run dev` y, en otra terminal, `cd frontend && npm run dev`.
 
-El `.env` del frontend solo necesita la URL del backend:
-
-```env
-VITE_API_URL=http://localhost:3001
-```
-
-### 6. Arrancar el frontend
-
-```bash
-npm run dev
-```
-
-Abre **http://localhost:3000** en tu navegador.
-
-### 7. Iniciar sesión
+### 5. Iniciar sesión
 
 Usa las cuentas de demo que crea el seed:
 
@@ -569,7 +537,6 @@ Estas son las siguientes iteraciones previstas para el proyecto, ordenadas por i
 ### Técnica
 - **TypeScript** — Migrar backend y frontend a TypeScript para type safety completa
 - **Tests E2E** — Añadir Cypress o Playwright para tests de flujo completo
-- **Docker** — Docker Compose con PostgreSQL + backend + frontend para desarrollo local en un comando
 - **GraphQL** — Explorar Apollo/Prisma como alternativa a REST para queries complejas
 
 ### UX
