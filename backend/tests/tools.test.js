@@ -142,6 +142,35 @@ describe("Tools Endpoints", () => {
     });
   });
 
+  describe("POST /api/tools — campos opcionales", () => {
+    it("guarda la descripción y acepta categoría y URL vacías", async () => {
+      const response = await request(app)
+        .post("/api/tools")
+        .set("Authorization", `Bearer ${authToken}`)
+        .send({ name: "Figma", type: "Design", description: "Diseño colaborativo", categoryId: "", url: "" })
+        .expect(201);
+
+      expect(response.body.description).toBe("Diseño colaborativo");
+      expect(response.body.categoryId).toBeNull();
+      expect(response.body.url).toBeNull();
+    });
+
+    it("actualiza la descripción", async () => {
+      const created = await request(app)
+        .post("/api/tools")
+        .set("Authorization", `Bearer ${authToken}`)
+        .send({ name: "Notion", type: "Docs" });
+
+      const updated = await request(app)
+        .put(`/api/tools/${created.body.id}`)
+        .set("Authorization", `Bearer ${authToken}`)
+        .send({ description: "Notas y wikis" })
+        .expect(200);
+
+      expect(updated.body.description).toBe("Notas y wikis");
+    });
+  });
+
   describe("PUT /api/tools/:id", () => {
     let toolId;
 

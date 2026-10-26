@@ -54,7 +54,7 @@ Está pensada como proyecto educativo para estudiantes de desarrollo web, pero e
 | Área | Funcionalidad |
 |------|--------------|
 | 🔐 **Autenticación** | Registro, login JWT con persistencia de sesión, restablecimiento de contraseña por email, rate limiting anti fuerza bruta |
-| 🛠️ **Herramientas** | CRUD completo con catálogo integrado, búsqueda, categorías y logo automático del producto |
+| 🛠️ **Herramientas** | CRUD completo con catálogo de más de 80 herramientas sugeridas, búsqueda, 18 categorías por defecto (traducidas ES/EN) y logo automático del producto |
 | 💳 **Suscripciones** | Gestión con estados (Activa / Inactiva / Archivada), fecha de renovación, ciclo de facturación y plan |
 | 📊 **Dashboard** | Coste mensual total, renovaciones próximas (30 días), herramientas más costosas, gráficos de coste por categoría y pagos previstos a 12 meses |
 | 🔔 **Avisos de renovación** | Email diario con las suscripciones que se renuevan en los próximos días (activable desde el perfil) |

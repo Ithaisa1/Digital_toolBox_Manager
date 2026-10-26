@@ -7,6 +7,7 @@
  * y CSV hechos a mano en español o inglés.
  */
 import { parseCsv } from './csv.js';
+import { DEFAULT_CATEGORIES } from '../data/defaultCategories.js';
 
 export const MAX_IMPORT_ROWS = 500;
 export const DEFAULT_TYPE = 'General';
@@ -125,6 +126,11 @@ export const buildImportPlan = (csvText, { categories = [], existingNames = [] }
   if (body.length > MAX_IMPORT_ROWS) return { ...empty, error: 'tooManyRows' };
 
   const categoryByName = new Map(categories.map((c) => [normalize(c.name), c]));
+  // Nombres en español de las categorías por defecto ("Diseño" → "Design")
+  for (const { name, es } of DEFAULT_CATEGORIES) {
+    const category = categoryByName.get(normalize(name));
+    if (category && !categoryByName.has(normalize(es))) categoryByName.set(normalize(es), category);
+  }
   const seen = new Set(existingNames.map(normalize));
   const cell = (cells, field) => (columns[field] === undefined ? '' : (cells[columns[field]] ?? '').trim());
 

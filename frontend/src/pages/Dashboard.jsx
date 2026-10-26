@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 import API_URL from '../config/api';
+import { categoryLabel } from '../utils/categories';
 import { useTranslation } from 'react-i18next';
 import { formatEuro } from '../utils/formatCurrency';
 import { CostByCategoryChart, UpcomingPaymentsChart } from '../components/DashboardCharts';
@@ -16,8 +17,7 @@ const Dashboard = () => {
   const [error, setError] = useState('');
   const [showExportModal, setShowExportModal] = useState(false);
   const [exporting, setExporting] = useState(false);
-  const { t, i18n } = useTranslation();
-  const isSpanish = i18n.language?.startsWith('es');
+  const { t } = useTranslation();
 
   const dashboardSubtitle = t('dashboard.subtitle');
   const viewAllSubscriptionsLabel = t('dashboard.viewAllSubscriptions');
@@ -160,7 +160,7 @@ const Dashboard = () => {
               <div key={toolGroup.toolId} className="tool-subscription-card">
                 <div className="tool-sub-header">
                   <h4>{toolGroup.toolName}</h4>
-                  <span className="category-badge">{toolGroup.category}</span>
+                  <span className="category-badge">{categoryLabel(t, toolGroup.category)}</span>
                 </div>
                 
                 <div className="plans-list">
@@ -191,7 +191,7 @@ const Dashboard = () => {
               <div key={tool.id} className="tool-item">
                 <h4>{tool.name}</h4>
                 <p className="tool-price">{formatEuro(tool.price)}/mo</p>
-                <p className="tool-category">{tool.category?.name || (isSpanish ? 'Sin categoria' : 'Uncategorized')}</p>
+                <p className="tool-category">{categoryLabel(t, tool.category?.name)}</p>
               </div>
             ))}
           </div>

@@ -3,6 +3,7 @@ import api from '../services/api';
 import { useTranslation } from 'react-i18next';
 import { formatEuro } from '../utils/formatCurrency';
 import { getToolDescription } from '../utils/productDescriptions';
+import { categoryLabel, sortCategories } from '../utils/categories';
 import Pagination from '../components/Pagination';
 import ImportToolsModal from '../components/ImportToolsModal';
 import { usePagination } from '../hooks/usePagination';
@@ -112,10 +113,10 @@ const TOOLS_CATALOG = [
   { name: 'VS Code', type: 'IDE', url: 'https://code.visualstudio.com', price: 0, description: 'Editor de código', category: 'Development' },
   { name: 'Midjourney', type: 'AI Art', url: 'https://midjourney.com', price: 10, description: 'Generación de imágenes con IA', category: 'AI & Machine Learning' },
   { name: 'Miro', type: 'Collaboration', url: 'https://miro.com', price: 0, description: 'Pizarra colaborativa', category: 'Productivity' },
-  { name: 'Trello', type: 'Project Management', url: 'https://trello.com', price: 0, description: 'Gestión de proyectos', category: 'Productivity' },
+  { name: 'Trello', type: 'Project Management', url: 'https://trello.com', price: 0, description: 'Gestión de proyectos', category: 'Project Management' },
   { name: 'Zoom', type: 'Video Conferencing', url: 'https://zoom.us', price: 15, description: 'Videoconferencias', category: 'Communication' },
-  { name: 'Jira', type: 'Project Management', url: 'https://jira.com', price: 10, description: 'Gestión ágil de proyectos', category: 'Productivity' },
-  { name: 'Linear', type: 'Project Management', url: 'https://linear.app', price: 8, description: 'Gestión de issues moderna', category: 'Productivity' },
+  { name: 'Jira', type: 'Project Management', url: 'https://jira.com', price: 10, description: 'Gestión ágil de proyectos', category: 'Project Management' },
+  { name: 'Linear', type: 'Project Management', url: 'https://linear.app', price: 8, description: 'Gestión de issues moderna', category: 'Project Management' },
   { name: 'Raycast', type: 'Productivity', url: 'https://raycast.com', price: 0, description: 'Launcher para Mac', category: 'Productivity' },
   { name: 'Obsidian', type: 'Notes', url: 'https://obsidian.md', price: 0, description: 'Notas en markdown', category: 'Productivity' },
   { name: 'Grammarly', type: 'Writing', url: 'https://grammarly.com', price: 12, description: 'Asistente de escritura', category: 'Productivity' },
@@ -125,22 +126,69 @@ const TOOLS_CATALOG = [
   { name: 'Framer', type: 'Design Tool', url: 'https://framer.com', price: 0, description: 'Diseño web interactivo', category: 'Design' },
   { name: 'Webflow', type: 'Design Tool', url: 'https://webflow.com', price: 14, description: 'Diseño web sin código', category: 'Design' },
   { name: 'Airtable', type: 'Productivity', url: 'https://airtable.com', price: 10, description: 'Base de datos flexible', category: 'Productivity' },
-  { name: 'Asana', type: 'Project Management', url: 'https://asana.com', price: 11, description: 'Gestión de trabajo', category: 'Productivity' },
-  { name: 'Monday', type: 'Project Management', url: 'https://monday.com', price: 9, description: 'Gestión de equipos', category: 'Productivity' },
+  { name: 'Asana', type: 'Project Management', url: 'https://asana.com', price: 11, description: 'Gestión de trabajo', category: 'Project Management' },
+  { name: 'Monday', type: 'Project Management', url: 'https://monday.com', price: 9, description: 'Gestión de equipos', category: 'Project Management' },
   { name: 'Discord', type: 'Communication', url: 'https://discord.com', price: 0, description: 'Comunicación en comunidad', category: 'Communication' },
-  { name: 'Teams', type: 'Communication', url: 'https://teams.microsoft.com', price: 6, description: 'Colaboración empresarial', category: 'Communication' },
-  { name: 'Dropbox', type: 'Productivity', url: 'https://dropbox.com', price: 12, description: 'Almacenamiento en la nube', category: 'Productivity' },
-  { name: 'Google Drive', type: 'Productivity', url: 'https://drive.google.com', price: 2, description: 'Almacenamiento y documentos', category: 'Productivity' },
+  { name: 'Dropbox', type: 'Productivity', url: 'https://dropbox.com', price: 12, description: 'Almacenamiento en la nube', category: 'Cloud Storage' },
+  { name: 'Google Drive', type: 'Productivity', url: 'https://drive.google.com', price: 2, description: 'Almacenamiento y documentos', category: 'Cloud Storage' },
   { name: 'Todoist', type: 'Productivity', url: 'https://todoist.com', price: 4, description: 'Gestión de tareas', category: 'Productivity' },
-  { name: 'ClickUp', type: 'Project Management', url: 'https://clickup.com', price: 7, description: 'Gestión de proyectos todo-en-uno', category: 'Productivity' },
+  { name: 'ClickUp', type: 'Project Management', url: 'https://clickup.com', price: 7, description: 'Gestión de proyectos todo-en-uno', category: 'Project Management' },
   { name: 'Cursor', type: 'IDE', url: 'https://cursor.com', price: 0, description: 'Editor de código con IA', category: 'Development' },
   { name: 'Warp', type: 'Productivity', url: 'https://warp.dev', price: 0, description: 'Terminal moderna', category: 'Development' },
-  { name: 'Tableur', type: 'Productivity', url: 'https://tableur.com', price: 0, description: 'Hojas de cálculo online', category: 'Productivity' },
+  { name: 'Tableur', type: 'Productivity', url: 'https://tableur.com', price: 0, description: 'Hojas de cálculo online', category: 'Office & Documents' },
   { name: 'Hugging Face', type: 'AI Platform', url: 'https://huggingface.co', price: 0, description: 'Plataforma de IA open source', category: 'AI & Machine Learning' },
   { name: 'Runway', type: 'AI Video', url: 'https://runwayml.com', price: 12, description: 'Edición de video con IA', category: 'AI & Machine Learning' },
   { name: 'Leonardo AI', type: 'AI Art', url: 'https://leonardo.ai', price: 10, description: 'Generación de imágenes con IA', category: 'AI & Machine Learning' },
   { name: 'Gemini', type: 'AI Assistant', url: 'https://gemini.google.com', price: 0, description: 'Asistente IA de Google', category: 'AI & Machine Learning' },
   { name: 'Perplexity', type: 'AI Search', url: 'https://perplexity.ai', price: 20, description: 'Búsqueda con IA', category: 'AI & Machine Learning' },
+  // Más herramientas y suscripciones habituales (precios orientativos en €/mes)
+  { name: "Adobe Illustrator", type: "Design Tool", url: "https://adobe.com/products/illustrator", price: 24, description: "Ilustración y gráficos vectoriales", category: "Design" },
+  { name: "Adobe InDesign", type: "Design Tool", url: "https://adobe.com/products/indesign", price: 24, description: "Maquetación editorial", category: "Design" },
+  { name: "Adobe Lightroom", type: "Photo Editing", url: "https://adobe.com/products/photoshop-lightroom", price: 12, description: "Edición y organización de fotos", category: "Design" },
+  { name: "Adobe Creative Cloud", type: "Design Suite", url: "https://adobe.com/creativecloud", price: 66, description: "Todas las apps de Adobe", category: "Design" },
+  { name: "Affinity", type: "Design Tool", url: "https://affinity.serif.com", price: 0, description: "Diseño, foto y maquetación", category: "Design" },
+  { name: "Adobe Premiere Pro", type: "Video Editing", url: "https://adobe.com/products/premiere", price: 24, description: "Edición de vídeo profesional", category: "Video & Audio" },
+  { name: "Adobe After Effects", type: "Motion Graphics", url: "https://adobe.com/products/aftereffects", price: 24, description: "Animación y efectos visuales", category: "Video & Audio" },
+  { name: "DaVinci Resolve", type: "Video Editing", url: "https://blackmagicdesign.com/products/davinciresolve", price: 0, description: "Edición y color de vídeo", category: "Video & Audio" },
+  { name: "CapCut", type: "Video Editing", url: "https://capcut.com", price: 0, description: "Edición de vídeo sencilla", category: "Video & Audio" },
+  { name: "Toggl Track", type: "Time Tracking", url: "https://toggl.com/track", price: 9, description: "Registro de horas por proyecto", category: "Time Tracking" },
+  { name: "Clockify", type: "Time Tracking", url: "https://clockify.me", price: 0, description: "Control de horas gratuito", category: "Time Tracking" },
+  { name: "Harvest", type: "Time Tracking", url: "https://getharvest.com", price: 11, description: "Horas y facturación", category: "Time Tracking" },
+  { name: "Microsoft Teams", type: "Communication", url: "https://teams.microsoft.com", price: 4, description: "Chat y reuniones de Microsoft", category: "Communication" },
+  { name: "Google Meet", type: "Video Conferencing", url: "https://meet.google.com", price: 0, description: "Videollamadas de Google", category: "Communication" },
+  { name: "Microsoft 365", type: "Office Suite", url: "https://microsoft.com/microsoft-365", price: 10, description: "Word, Excel, PowerPoint y Outlook", category: "Office & Documents" },
+  { name: "Google Workspace", type: "Office Suite", url: "https://workspace.google.com", price: 7, description: "Gmail, Docs, Sheets y Drive para empresas", category: "Office & Documents" },
+  { name: "Adobe Acrobat", type: "PDF", url: "https://adobe.com/acrobat", price: 18, description: "Crear y editar PDF", category: "Office & Documents" },
+  { name: "Evernote", type: "Notes", url: "https://evernote.com", price: 11, description: "Notas y organización", category: "Productivity" },
+  { name: "OneDrive", type: "Cloud Storage", url: "https://onedrive.live.com", price: 2, description: "Almacenamiento de Microsoft", category: "Cloud Storage" },
+  { name: "iCloud+", type: "Cloud Storage", url: "https://icloud.com", price: 1, description: "Almacenamiento de Apple", category: "Cloud Storage" },
+  { name: "Vercel", type: "Hosting", url: "https://vercel.com", price: 0, description: "Despliegue de webs y APIs", category: "Hosting & Cloud" },
+  { name: "Netlify", type: "Hosting", url: "https://netlify.com", price: 0, description: "Hosting de webs estáticas", category: "Hosting & Cloud" },
+  { name: "AWS", type: "Cloud Platform", url: "https://aws.amazon.com", price: 0, description: "Servicios en la nube de Amazon", category: "Hosting & Cloud" },
+  { name: "Hostinger", type: "Hosting", url: "https://hostinger.com", price: 3, description: "Hosting y dominios", category: "Hosting & Cloud" },
+  { name: "Mailchimp", type: "Email Marketing", url: "https://mailchimp.com", price: 13, description: "Campañas de email", category: "Marketing & Social Media" },
+  { name: "Hootsuite", type: "Social Media", url: "https://hootsuite.com", price: 99, description: "Gestión de redes sociales", category: "Marketing & Social Media" },
+  { name: "Buffer", type: "Social Media", url: "https://buffer.com", price: 6, description: "Programar publicaciones", category: "Marketing & Social Media" },
+  { name: "Semrush", type: "SEO", url: "https://semrush.com", price: 130, description: "SEO y análisis de la competencia", category: "Marketing & Social Media" },
+  { name: "HubSpot", type: "CRM", url: "https://hubspot.com", price: 0, description: "CRM y marketing", category: "Sales & CRM" },
+  { name: "Pipedrive", type: "CRM", url: "https://pipedrive.com", price: 14, description: "Embudo de ventas", category: "Sales & CRM" },
+  { name: "Holded", type: "Accounting", url: "https://holded.com", price: 15, description: "Facturación y contabilidad", category: "Finance & Accounting" },
+  { name: "QuickBooks", type: "Accounting", url: "https://quickbooks.intuit.com", price: 15, description: "Contabilidad para pymes", category: "Finance & Accounting" },
+  { name: "Stripe", type: "Payments", url: "https://stripe.com", price: 0, description: "Pagos online", category: "Finance & Accounting" },
+  { name: "1Password", type: "Password Manager", url: "https://1password.com", price: 3, description: "Gestor de contraseñas", category: "Security & Privacy" },
+  { name: "Bitwarden", type: "Password Manager", url: "https://bitwarden.com", price: 0, description: "Gestor de contraseñas open source", category: "Security & Privacy" },
+  { name: "NordVPN", type: "VPN", url: "https://nordvpn.com", price: 5, description: "VPN y privacidad", category: "Security & Privacy" },
+  { name: "Udemy", type: "Online Courses", url: "https://udemy.com", price: 0, description: "Cursos online", category: "Education & Learning" },
+  { name: "Coursera", type: "Online Courses", url: "https://coursera.org", price: 49, description: "Cursos y certificados universitarios", category: "Education & Learning" },
+  { name: "Domestika", type: "Online Courses", url: "https://domestika.org", price: 8, description: "Cursos creativos", category: "Education & Learning" },
+  { name: "Platzi", type: "Online Courses", url: "https://platzi.com", price: 25, description: "Cursos de tecnología", category: "Education & Learning" },
+  { name: "Duolingo", type: "Languages", url: "https://duolingo.com", price: 0, description: "Aprender idiomas", category: "Education & Learning" },
+  { name: "Netflix", type: "Streaming", url: "https://netflix.com", price: 13, description: "Series y películas", category: "Entertainment & Streaming" },
+  { name: "Spotify", type: "Music", url: "https://spotify.com", price: 11, description: "Música y podcasts", category: "Entertainment & Streaming" },
+  { name: "Disney+", type: "Streaming", url: "https://disneyplus.com", price: 10, description: "Series y películas de Disney", category: "Entertainment & Streaming" },
+  { name: "HBO Max", type: "Streaming", url: "https://max.com", price: 10, description: "Series y películas de HBO", category: "Entertainment & Streaming" },
+  { name: "YouTube Premium", type: "Streaming", url: "https://youtube.com/premium", price: 14, description: "YouTube sin anuncios", category: "Entertainment & Streaming" },
+  { name: "Amazon Prime", type: "Streaming", url: "https://amazon.es/prime", price: 5, description: "Envíos y Prime Video", category: "Entertainment & Streaming" },
 ];
 
 const AddToolModal = ({ isOpen, onClose, onToolAdded, categories }) => {
@@ -158,7 +206,7 @@ const AddToolModal = ({ isOpen, onClose, onToolAdded, categories }) => {
   });
   
   const debouncedSearch = useDebounce(searchQuery, 300);
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const isSpanish = i18n.language?.startsWith('es');
   
   const copy = {
@@ -190,13 +238,14 @@ const AddToolModal = ({ isOpen, onClose, onToolAdded, categories }) => {
         tool.name.toLowerCase().includes(query) ||
         tool.type.toLowerCase().includes(query) ||
         tool.description.toLowerCase().includes(query) ||
-        tool.category.toLowerCase().includes(query)
+        tool.category.toLowerCase().includes(query) ||
+        categoryLabel(t, tool.category).toLowerCase().includes(query)
       );
       setSuggestions(filtered);
     } else {
       setSuggestions([]);
     }
-  }, [debouncedSearch]);
+  }, [debouncedSearch, t]);
   
   useEffect(() => {
     if (!isOpen) {
@@ -223,6 +272,8 @@ const AddToolModal = ({ isOpen, onClose, onToolAdded, categories }) => {
       type: tool.type,
       url: tool.url,
       price: tool.price?.toString() || '',
+      // Rellenar la categoría sugerida si existe en la base de datos
+      categoryId: categories.find((c) => c.name === tool.category)?.id || formData.categoryId,
       toolType: tool.price === 0 ? 'free' : 'paid'
     });
     setShowForm(true);
@@ -389,8 +440,8 @@ const AddToolModal = ({ isOpen, onClose, onToolAdded, categories }) => {
                 onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
               >
                 <option value="">{copy.selectCategory}</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                {sortCategories(categories, t, i18n.language).map((cat) => (
+                  <option key={cat.id} value={cat.id}>{categoryLabel(t, cat.name)}</option>
                 ))}
               </select>
             </div>
@@ -611,6 +662,7 @@ const ToolsList = () => {
           tool.name?.toLowerCase().includes(query) ||
           tool.type?.toLowerCase().includes(query) ||
           tool.category?.name?.toLowerCase().includes(query) ||
+          (tool.category && categoryLabel(t, tool.category.name).toLowerCase().includes(query)) ||
           tool.description?.toLowerCase().includes(query)
       );
     }
@@ -633,7 +685,7 @@ const ToolsList = () => {
     }
 
     return result;
-  }, [uniqueTools, debouncedSearch, activeFilter, selectedCategory]);
+  }, [uniqueTools, debouncedSearch, activeFilter, selectedCategory, t]);
 
   const {
     page,
@@ -758,7 +810,7 @@ const ToolsList = () => {
             {recentlyAdded.map((tool) => (
               <div key={tool.id} className="recently-added-card">
                 <span>{tool.name}</span>
-                <small>{tool.category?.name || copy.uncategorized}</small>
+                <small>{tool.category ? categoryLabel(t, tool.category.name) : copy.uncategorized}</small>
               </div>
             ))}
           </div>
@@ -801,13 +853,14 @@ const ToolsList = () => {
               >
                 {copy.allCategories}
               </button>
-              {categories.map((category) => (
+              {sortCategories(categories, t, i18n.language).map((category) => (
                 <button
                   key={category.id}
+                  title={category.description || undefined}
                   className={`category-tab ${selectedCategory === category.id ? 'active' : ''}`}
                   onClick={() => setSelectedCategory(category.id)}
                 >
-                  {category.name}
+                  {categoryLabel(t, category.name)}
                 </button>
               ))}
             </div>
