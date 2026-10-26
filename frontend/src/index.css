@@ -7,7 +7,7 @@
 
 html {
   /* Fondo también debajo del contenido en páginas cortas (las variables viven en body) */
-  background-color: #f5f4fa;
+  background-color: #f6efe3;
   scroll-behavior: smooth;
   font-size: clamp(14px, 1vw, 18px);
 }
@@ -133,7 +133,7 @@ textarea {
 .form-group textarea:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  box-shadow: 0 0 0 3px rgba(168, 82, 31, 0.12);
 }
 
 .card {
@@ -146,20 +146,20 @@ textarea {
 }
 
 .error {
-  color: #b91c1c;
-  background-color: rgba(239, 68, 68, 0.12);
+  color: #932a2a;
+  background-color: rgba(194, 65, 59, 0.12);
   padding: 10px;
   border-radius: var(--border-radius-sm);
   margin-bottom: 15px;
-  border: 1px solid rgba(239, 68, 68, 0.18);
+  border: 1px solid rgba(194, 65, 59, 0.18);
 }
 
 .success {
-  color: #065f46;
-  background-color: rgba(16, 185, 129, 0.12);
+  color: #3f5418;
+  background-color: rgba(125, 143, 58, 0.12);
   padding: 10px;
   border-radius: var(--border-radius-sm);
-  border: 1px solid rgba(16, 185, 129, 0.18);
+  border: 1px solid rgba(125, 143, 58, 0.18);
 }
 
 .loading {
@@ -195,7 +195,7 @@ textarea {
 }
 
 html:has(body.dark) {
-  background-color: #07070c;
+  background-color: #110b07;
 }
 
 /* Aviso sin conexión */
@@ -208,8 +208,8 @@ html:has(body.dark) {
   max-width: calc(100% - 32px);
   padding: 10px 16px;
   border-radius: 999px;
-  background: #0f172a;
-  color: #f8fafc;
+  background: #23160c;
+  color: #fbf6ee;
   font-size: 0.9rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
   text-align: center;
@@ -229,7 +229,7 @@ html:has(body.dark) {
 /* ---------- Web de demo ---------- */
 .demo-banner {
   padding: 8px 16px;
-  background: linear-gradient(90deg, #0ea5e9, #2563eb);
+  background: linear-gradient(90deg, #7d8f3a, #a8521f);
   color: #fff;
   font-size: 0.88rem;
   font-weight: 600;

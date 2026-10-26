@@ -12,20 +12,20 @@
 
 .cardHeader {
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
-  background-color: #f9fafb;
+  border-bottom: 1px solid #ece2d3;
+  background-color: #fbf6ee;
 }
 
 .cardTitle {
   font-size: 1.125rem;
   font-weight: 600;
-  color: #111827;
+  color: #23160c;
   margin: 0;
 }
 
 .cardSubtitle {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: #7a6552;
   margin: 0.25rem 0 0 0;
 }
 
@@ -35,8 +35,8 @@
 
 .cardFooter {
   padding: 1rem 1.5rem;
-  border-top: 1px solid #e5e7eb;
-  background-color: #f9fafb;
+  border-top: 1px solid #ece2d3;
+  background-color: #fbf6ee;
 }
 
 .cardActions {
@@ -70,12 +70,12 @@
 }
 
 .outlined {
-  border: 1px solid #e5e7eb;
+  border: 1px solid #ece2d3;
   box-shadow: none;
 }
 
 .outlined:hover {
-  border-color: #d1d5db;
+  border-color: #e0d3c0;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }
 

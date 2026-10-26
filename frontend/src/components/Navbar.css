@@ -17,11 +17,11 @@
 }
 
 .navbar-dark {
-  background: rgba(10, 15, 30, 0.86);
+  background: rgba(20, 12, 6, 0.86);
 }
 
 .navbar-light {
-  background: rgba(247, 251, 255, 0.92);
+  background: rgba(255, 250, 242, 0.92);
 }
 
 .navbar-dark .brand-link,
@@ -29,14 +29,14 @@
 .navbar-dark .theme-toggle,
 .navbar-dark .language-option,
 .navbar-dark .navbar-profile-link {
-  color: #f8fafc;
+  color: #fbf6ee;
 }
 
 .navbar-light .brand-link,
 .navbar-light .navbar-links a,
 .navbar-light .navbar-profile-link,
 .navbar-light .theme-toggle {
-  color: #0f172a;
+  color: #23160c;
 }
 
 .brand-link {
@@ -102,15 +102,15 @@
 }
 
 .navbar-dark .navbar-links a {
-  color: #f8fafc;
-  background: rgba(15, 23, 42, 0.34);
-  border-color: rgba(148, 163, 184, 0.16);
+  color: #fbf6ee;
+  background: rgba(35, 22, 12, 0.34);
+  border-color: rgba(168, 149, 127, 0.16);
 }
 
 .navbar-light .navbar-links a {
-  color: #0f172a;
+  color: #23160c;
   background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(15, 23, 42, 0.08);
+  border-color: rgba(35, 22, 12, 0.08);
 }
 
 .navbar-links a:hover {
@@ -120,13 +120,13 @@
 }
 
 .navbar-dark .navbar-links a:hover {
-  background: rgba(37, 99, 235, 0.32);
+  background: rgba(168, 82, 31, 0.32);
   color: #ffffff;
 }
 
 .navbar-light .navbar-links a:hover {
-  background: rgba(37, 99, 235, 0.12);
-  color: #0f172a;
+  background: rgba(168, 82, 31, 0.12);
+  color: #23160c;
 }
 
 .navbar-links a.active {
@@ -197,7 +197,7 @@
 
 .navbar-dark .theme-toggle,
 .navbar-dark .navbar-profile-link {
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(35, 22, 12, 0.4);
 }
 
 /* Hamburger button */
@@ -219,7 +219,7 @@
 }
 
 .hamburger:hover {
-  background: rgba(37, 99, 235, 0.12);
+  background: rgba(168, 82, 31, 0.12);
 }
 
 .hamburger-line {
@@ -232,11 +232,11 @@
 }
 
 .navbar-dark .hamburger-line {
-  background: #f8fafc;
+  background: #fbf6ee;
 }
 
 .navbar-light .hamburger-line {
-  background: #0f172a;
+  background: #23160c;
 }
 
 .hamburger-line:nth-child(1) {
@@ -316,13 +316,13 @@
   }
 
   .navbar-dark .navbar-links {
-    background: rgba(10, 15, 30, 0.97);
-    border-left: 1px solid rgba(148, 163, 184, 0.12);
+    background: rgba(20, 12, 6, 0.97);
+    border-left: 1px solid rgba(168, 149, 127, 0.12);
   }
 
   .navbar-light .navbar-links {
-    background: rgba(247, 251, 255, 0.98);
-    border-left: 1px solid rgba(15, 23, 42, 0.08);
+    background: rgba(255, 250, 242, 0.98);
+    border-left: 1px solid rgba(35, 22, 12, 0.08);
   }
 
   .navbar-links-open {

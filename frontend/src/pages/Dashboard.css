@@ -80,8 +80,8 @@ a.bento-card:hover {
   grid-row: span 2;
   padding: 1.75rem;
   background:
-    radial-gradient(120% 90% at 0% 0%, rgba(139, 92, 246, 0.35), transparent 55%),
-    radial-gradient(90% 80% at 100% 100%, rgba(34, 211, 238, 0.22), transparent 60%),
+    radial-gradient(120% 90% at 0% 0%, rgba(200, 105, 47, 0.35), transparent 55%),
+    radial-gradient(90% 80% at 100% 100%, rgba(169, 184, 106, 0.22), transparent 60%),
     var(--bg-card);
 }
 
@@ -149,11 +149,11 @@ a.bento-card:hover {
   flex: 1;
   min-height: 4px;
   border-radius: 6px 6px 2px 2px;
-  background: linear-gradient(180deg, rgba(196, 181, 253, 0.95), rgba(139, 92, 246, 0.35));
+  background: linear-gradient(180deg, rgba(240, 178, 122, 0.95), rgba(200, 105, 47, 0.35));
 }
 
 body:not(.dark) .bento-spark span {
-  background: linear-gradient(180deg, #8b5cf6, rgba(139, 92, 246, 0.25));
+  background: linear-gradient(180deg, #c8692f, rgba(200, 105, 47, 0.25));
 }
 
 /* Próximas renovaciones */
@@ -215,12 +215,12 @@ body:not(.dark) .bento-spark span {
 }
 
 .bento-when.is-soon {
-  color: var(--pink);
+  color: var(--wine);
   font-weight: 600;
 }
 
 body:not(.dark) .bento-when.is-soon {
-  color: #be185d;
+  color: #8c1f2d;
 }
 
 .bento-list-price {
@@ -310,8 +310,8 @@ body:not(.dark) .bento-when.is-soon {
   overflow: hidden;
   padding: 2px 9px;
   border-radius: 999px;
-  background: rgba(139, 92, 246, 0.14);
-  color: var(--text-accent);
+  background: color-mix(in srgb, var(--cat, var(--copper)) 18%, transparent);
+  color: color-mix(in srgb, var(--cat, var(--copper)) 55%, var(--text-primary));
   font-size: 0.72rem;
   font-weight: 650;
   text-overflow: ellipsis;
@@ -538,7 +538,7 @@ body:not(.dark) .bento-when.is-soon {
 }
 
 .modal-close:hover {
-  background: var(--error-color, #ef4444);
+  background: var(--error-color, #c2413b);
   color: #fff;
 }
 
@@ -595,7 +595,7 @@ body:not(.dark) .bento-when.is-soon {
 
 .format-option:hover {
   border-color: var(--primary-color);
-  background: rgba(59, 130, 246, 0.05);
+  background: rgba(185, 98, 42, 0.05);
 }
 
 .format-option input[type="radio"] {
@@ -607,8 +607,8 @@ body:not(.dark) .bento-when.is-soon {
 
 .format-option:has(input:checked) {
   border-color: var(--primary-color);
-  background: rgba(59, 130, 246, 0.1);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  background: rgba(185, 98, 42, 0.1);
+  box-shadow: 0 0 0 3px rgba(185, 98, 42, 0.15);
 }
 
 .format-icon {
@@ -664,7 +664,7 @@ body:not(.dark) .bento-when.is-soon {
 
 .include-option:has(input:checked) {
   border-color: var(--primary-color);
-  background: rgba(59, 130, 246, 0.1);
+  background: rgba(185, 98, 42, 0.1);
 }
 
 .export-modal-actions {

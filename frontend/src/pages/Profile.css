@@ -119,7 +119,7 @@
 .form-group input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 3px rgba(185, 98, 42, 0.1);
 }
 
 .form-group input:disabled {
@@ -186,7 +186,7 @@
 .notification-item:hover {
   background: var(--bg-secondary);
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 2px 8px rgba(185, 112, 42, 0.2);
 }
 
 .notification-item input[type="checkbox"] {
@@ -243,14 +243,14 @@
 }
 
 .danger-zone {
-  border: 1px solid rgba(220, 38, 38, 0.25);
+  border: 1px solid rgba(168, 48, 46, 0.25);
   border-radius: var(--border-radius-sm);
   padding: 1.5rem;
-  background: rgba(220, 38, 38, 0.08);
+  background: rgba(168, 48, 46, 0.08);
 }
 
 .danger-zone p {
-  color: #b91c1c;
+  color: #932a2a;
   margin-bottom: 1rem;
   font-weight: 500;
 }

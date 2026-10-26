@@ -10,12 +10,12 @@ const ErrorState = ({ error, onRetry, onDismiss }) => {
     margin: '1rem',
   };
 
-  const iconStyle = { flexShrink: 0, width: 20, height: 20, color: 'var(--color-error, #f87171)' };
-  const titleStyle = { fontSize: '0.875rem', fontWeight: 500, color: 'var(--color-error-text, #991b1b)' };
-  const textStyle = { marginTop: '0.5rem', fontSize: '0.875rem', color: 'var(--color-error-text, #b91c1c)' };
+  const iconStyle = { flexShrink: 0, width: 20, height: 20, color: 'var(--color-error, #e0766b)' };
+  const titleStyle = { fontSize: '0.875rem', fontWeight: 500, color: 'var(--color-error-text, #7a2222)' };
+  const textStyle = { marginTop: '0.5rem', fontSize: '0.875rem', color: 'var(--color-error-text, #932a2a)' };
   const buttonContainerStyle = { marginTop: '0.75rem', display: 'flex', gap: '0.5rem' };
-  const retryStyle = { backgroundColor: 'var(--color-error-light, #fee2e2)', color: 'var(--color-error-text, #991b1b)', padding: '0.25rem 0.75rem', borderRadius: '0.25rem', fontSize: '0.875rem', fontWeight: 500, border: 'none', cursor: 'pointer' };
-  const dismissStyle = { color: 'var(--color-error, #dc2626)', padding: '0.25rem 0.75rem', borderRadius: '0.25rem', fontSize: '0.875rem', fontWeight: 500, border: 'none', background: 'none', cursor: 'pointer' };
+  const retryStyle = { backgroundColor: 'var(--color-error-light, #fee2e2)', color: 'var(--color-error-text, #7a2222)', padding: '0.25rem 0.75rem', borderRadius: '0.25rem', fontSize: '0.875rem', fontWeight: 500, border: 'none', cursor: 'pointer' };
+  const dismissStyle = { color: 'var(--color-error, #a8302e)', padding: '0.25rem 0.75rem', borderRadius: '0.25rem', fontSize: '0.875rem', fontWeight: 500, border: 'none', background: 'none', cursor: 'pointer' };
 
   return (
     <div style={containerStyle}>

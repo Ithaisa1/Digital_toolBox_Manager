@@ -30,8 +30,8 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--cyan);
-  box-shadow: 0 0 12px var(--cyan);
+  background: var(--moss);
+  box-shadow: 0 0 12px var(--moss);
 }
 
 .landing-hero h1 {
@@ -80,7 +80,7 @@
 .landing-facts li::before {
   content: "✓";
   margin-right: 6px;
-  color: var(--cyan);
+  color: var(--moss);
   font-weight: 700;
 }
 
@@ -93,7 +93,7 @@
   border: 1px solid var(--border-strong);
   border-radius: 24px;
   background: color-mix(in srgb, var(--bg-elevated) 80%, transparent);
-  box-shadow: 0 40px 120px -30px rgba(139, 92, 246, 0.55), var(--shadow-lg);
+  box-shadow: 0 40px 120px -30px rgba(200, 105, 47, 0.55), var(--shadow-lg);
   text-align: left;
   transform: perspective(1400px) rotateX(8deg);
   transform-origin: 50% 0;
@@ -123,9 +123,9 @@
   background: var(--border-strong);
 }
 
-.preview-bar span:nth-child(1) { background: #fb7185; }
-.preview-bar span:nth-child(2) { background: #fbbf24; }
-.preview-bar span:nth-child(3) { background: #34d399; }
+.preview-bar span:nth-child(1) { background: #e0707a; }
+.preview-bar span:nth-child(2) { background: #e6b450; }
+.preview-bar span:nth-child(3) { background: #a9c46a; }
 
 .preview-bar em {
   margin-left: 12px;
@@ -172,7 +172,7 @@
 .preview-hero {
   grid-row: span 2;
   background:
-    radial-gradient(120% 90% at 0% 0%, rgba(139, 92, 246, 0.35), transparent 55%),
+    radial-gradient(120% 90% at 0% 0%, rgba(200, 105, 47, 0.35), transparent 55%),
     var(--bg-card);
 }
 
@@ -191,7 +191,7 @@
 .preview-bars i {
   flex: 1;
   border-radius: 5px 5px 2px 2px;
-  background: linear-gradient(180deg, #c4b5fd, rgba(139, 92, 246, 0.35));
+  background: linear-gradient(180deg, #f0b27a, rgba(200, 105, 47, 0.35));
 }
 
 .preview-row {
@@ -209,7 +209,7 @@
 }
 
 .preview-row span.soon {
-  color: var(--pink);
+  color: var(--wine);
 }
 
 .preview-row span:last-child {
@@ -269,7 +269,7 @@
 .feature-tile.is-wide {
   grid-column: span 2;
   background:
-    radial-gradient(100% 120% at 100% 0%, rgba(34, 211, 238, 0.16), transparent 60%),
+    radial-gradient(100% 120% at 100% 0%, rgba(169, 184, 106, 0.16), transparent 60%),
     var(--bg-card);
 }
 
@@ -308,13 +308,13 @@
   border: 1px solid var(--border-color);
   border-radius: 32px;
   background:
-    radial-gradient(60% 120% at 50% 0%, rgba(139, 92, 246, 0.28), transparent 70%),
+    radial-gradient(60% 120% at 50% 0%, rgba(200, 105, 47, 0.28), transparent 70%),
     var(--bg-card);
 }
 
 .landing-cta svg {
   border-radius: 16px;
-  box-shadow: 0 12px 40px rgba(139, 92, 246, 0.5);
+  box-shadow: 0 12px 40px rgba(200, 105, 47, 0.5);
 }
 
 .landing-cta p {
@@ -381,5 +381,5 @@
 }
 
 body:not(.dark) .preview-bars i {
-  background: linear-gradient(180deg, #8b5cf6, rgba(139, 92, 246, 0.25));
+  background: linear-gradient(180deg, #c8692f, rgba(200, 105, 47, 0.25));
 }

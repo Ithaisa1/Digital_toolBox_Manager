@@ -131,7 +131,7 @@
 }
 
 .tool-card.status-subscribed {
-  border-color: #3b82f6;
+  border-color: #b9622a;
 }
 
 .tool-card.status-inactive,
@@ -181,34 +181,34 @@
 }
 
 .badge-status.active {
-  background: rgba(34, 197, 94, 0.15);
-  color: #22c55e;
+  background: rgba(125, 154, 58, 0.15);
+  color: #7d9a3a;
 }
 
 .badge-status.subscribed {
-  background: rgba(59, 130, 246, 0.15);
-  color: #3b82f6;
+  background: rgba(185, 98, 42, 0.15);
+  color: #b9622a;
 }
 
 .badge-status.inactive {
-  background: rgba(245, 158, 11, 0.15);
-  color: #f59e0b;
+  background: rgba(214, 154, 45, 0.15);
+  color: #d69a2d;
 }
 
 .badge-status.archived {
-  background: rgba(100, 116, 139, 0.15);
-  color: #64748b;
+  background: rgba(122, 101, 82, 0.15);
+  color: #7a6552;
 }
 
 .badge-status.cancelled,
 .badge-status.expired {
-  background: rgba(100, 116, 139, 0.15);
-  color: #64748b;
+  background: rgba(122, 101, 82, 0.15);
+  color: #7a6552;
 }
 
 .badge-status.premium {
-  background: rgba(168, 85, 247, 0.15);
-  color: #a855f7;
+  background: rgba(200, 105, 47, 0.15);
+  color: #c8692f;
 }
 
 .badge-free {
@@ -216,7 +216,7 @@
   align-items: center;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
-  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  background: linear-gradient(135deg, #7d9a3a 0%, #62802c 100%);
   color: white;
   font-size: 0.7rem;
   font-weight: 700;
@@ -322,8 +322,8 @@
 }
 
 .btn-primary:hover {
-  background-color: #1d4ed8;
-  border-color: #1d4ed8;
+  background-color: #8f3f17;
+  border-color: #8f3f17;
   transform: translateY(-1px);
 }
 
@@ -349,13 +349,13 @@
 }
 
 .btn-danger {
-  background: #ef4444;
+  background: #c2413b;
   color: white;
   border: none;
 }
 
 .btn-danger:hover {
-  background: #dc2626;
+  background: #a8302e;
 }
 
 .empty-state {
@@ -377,7 +377,7 @@
 }
 
 .error {
-  color: #ef4444;
+  color: #c2413b;
 }
 
 .modal-overlay {
@@ -490,7 +490,7 @@
 .modal-body .form-group select:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  box-shadow: 0 0 0 3px rgba(168, 82, 31, 0.12);
 }
 
 .modal-actions {

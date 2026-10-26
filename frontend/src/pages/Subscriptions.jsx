@@ -27,8 +27,8 @@ const getFallbackLogo = (name = 'DM') => {
     <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
       <defs>
         <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#2563eb" />
-          <stop offset="100%" stop-color="#0f172a" />
+          <stop offset="0%" stop-color="#a8521f" />
+          <stop offset="100%" stop-color="#23160c" />
         </linearGradient>
       </defs>
       <rect width="128" height="128" rx="28" fill="url(#g)" />

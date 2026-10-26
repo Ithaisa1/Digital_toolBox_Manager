@@ -153,9 +153,9 @@
 }
 
 .category-tab.active {
-  background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+  background: linear-gradient(135deg, #c8692f 0%, #8f3f17 100%);
   color: white;
-  border-color: #6d28d9;
+  border-color: #8f3f17;
 }
 
 .recently-added-section {
@@ -181,8 +181,8 @@
   flex-direction: column;
   gap: 0.15rem;
   padding: 0.5rem 0.75rem;
-  background: rgba(34, 197, 94, 0.1);
-  border: 1px solid rgba(34, 197, 94, 0.2);
+  background: rgba(125, 154, 58, 0.1);
+  border: 1px solid rgba(125, 154, 58, 0.2);
   border-radius: var(--border-radius-sm);
   color: var(--text-primary);
   font-size: 0.85rem;
@@ -200,7 +200,7 @@
 }
 
 .recently-added-banner {
-  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  background: linear-gradient(135deg, #7d9a3a 0%, #62802c 100%);
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: var(--border-radius);
@@ -251,12 +251,12 @@
 
 .tool-card.recently-added {
   animation: highlight 0.5s ease-out;
-  border-color: #22c55e;
+  border-color: #7d9a3a;
 }
 
 @keyframes highlight {
   0% {
-    background: rgba(34, 197, 94, 0.1);
+    background: rgba(125, 154, 58, 0.1);
   }
   100% {
     background: var(--bg-card);
@@ -302,23 +302,23 @@
 }
 
 .badge-status.free {
-  background: rgba(16, 185, 129, 0.15);
-  color: #059669;
+  background: rgba(125, 143, 58, 0.15);
+  color: #5a7428;
 }
 
 .badge-status.paid {
-  background: rgba(59, 130, 246, 0.15);
-  color: #3b82f6;
+  background: rgba(185, 98, 42, 0.15);
+  color: #b9622a;
 }
 
 .badge-status.subscribed {
-  background: rgba(59, 130, 246, 0.15);
-  color: #3b82f6;
+  background: rgba(185, 98, 42, 0.15);
+  color: #b9622a;
 }
 
 .badge-status.notSubscribed {
-  background: rgba(245, 158, 11, 0.15);
-  color: #f59e0b;
+  background: rgba(214, 154, 45, 0.15);
+  color: #d69a2d;
 }
 
 .badge-free {
@@ -326,7 +326,7 @@
   align-items: center;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
-  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  background: linear-gradient(135deg, #7d9a3a 0%, #62802c 100%);
   color: white;
   font-size: 0.7rem;
   font-weight: 700;
@@ -356,9 +356,22 @@
 }
 
 .tool-category {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   margin: 0.25rem 0 0;
   color: var(--text-muted);
   font-size: 0.8rem;
+}
+
+/* Punto con el color de otoño de la categoría */
+.tool-category::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cat, var(--text-muted));
 }
 
 .tool-subscription-info {
@@ -432,24 +445,24 @@
 
 .btn-primary {
   color: #fff;
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  border-color: #1d4ed8;
+  background: linear-gradient(135deg, #a8521f 0%, #8f3f17 100%);
+  border-color: #8f3f17;
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  background: linear-gradient(135deg, #8f3f17 0%, #7a3514 100%);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 4px 12px rgba(168, 82, 31, 0.3);
 }
 
 .btn-secondary {
   color: #fff;
-  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
-  border-color: #4b5563;
+  background: linear-gradient(135deg, #7a6552 0%, #5c4836 100%);
+  border-color: #5c4836;
 }
 
 .btn-secondary:hover {
-  background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+  background: linear-gradient(135deg, #5c4836 0%, #4d3a2a 100%);
   transform: translateY(-1px);
 }
 
@@ -466,13 +479,13 @@
 }
 
 .btn-danger {
-  background: #ef4444;
+  background: #c2413b;
   color: white;
   border: none;
 }
 
 .btn-danger:hover {
-  background: #dc2626;
+  background: #a8302e;
 }
 
 /* Fila inferior de la tarjeta: botones de acción + papelera (sin solaparse) */
@@ -496,18 +509,18 @@
   align-items: center;
   justify-content: center;
   background: transparent;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  border: 1px solid rgba(194, 65, 59, 0.3);
   border-radius: 6px;
-  color: rgba(239, 68, 68, 0.6);
+  color: rgba(194, 65, 59, 0.6);
   cursor: pointer;
   transition: all 0.2s ease;
   padding: 0;
 }
 
 .btn-delete-tool:hover {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.6);
-  color: #ef4444;
+  background: rgba(194, 65, 59, 0.1);
+  border-color: rgba(194, 65, 59, 0.6);
+  color: #c2413b;
 }
 
 /* Modal styles */
@@ -681,13 +694,13 @@
 }
 
 .tool-type-badge.free {
-  background: rgba(16, 185, 129, 0.15);
-  color: #059669;
+  background: rgba(125, 143, 58, 0.15);
+  color: #5a7428;
 }
 
 .tool-type-badge.paid {
-  background: rgba(59, 130, 246, 0.15);
-  color: #3b82f6;
+  background: rgba(185, 98, 42, 0.15);
+  color: #b9622a;
 }
 
 .no-suggestions {
@@ -854,21 +867,21 @@
 }
 
 .type-option input:checked + .type-label.free {
-  background: rgba(16, 185, 129, 0.15);
-  color: #059669;
-  border-color: #059669;
+  background: rgba(125, 143, 58, 0.15);
+  color: #5a7428;
+  border-color: #5a7428;
 }
 
 .type-option input:checked + .type-label.paid {
-  background: rgba(59, 130, 246, 0.15);
-  color: #3b82f6;
-  border-color: #3b82f6;
+  background: rgba(185, 98, 42, 0.15);
+  color: #b9622a;
+  border-color: #b9622a;
 }
 
 .type-option input:checked + .type-label.freemium {
-  background: rgba(168, 85, 247, 0.15);
-  color: #9333ea;
-  border-color: #9333ea;
+  background: rgba(200, 105, 47, 0.15);
+  color: #a8521f;
+  border-color: #a8521f;
 }
 
 .form-actions {
@@ -1040,7 +1053,7 @@
 }
 
 .error {
-  color: #ef4444;
+  color: #c2413b;
 }
 
 @media (max-width: 768px) {

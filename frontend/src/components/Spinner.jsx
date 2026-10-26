@@ -16,8 +16,8 @@ const Spinner = ({ size = 'medium' }) => {
         style={{
           width,
           height,
-          border: `${borderWidth}px solid var(--color-border, #d1d5db)`,
-          borderTopColor: 'var(--color-primary, #3b82f6)',
+          border: `${borderWidth}px solid var(--color-border, #e0d3c0)`,
+          borderTopColor: 'var(--color-primary, #b9622a)',
           borderRadius: '50%',
           animation: 'spin 1s linear infinite',
         }}
