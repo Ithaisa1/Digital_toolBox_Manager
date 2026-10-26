@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "ToolBox Manager",
+    "appName": "Dexa Manager",
     "loading": "Loading...",
     "error": "Error",
     "success": "Success",
@@ -48,7 +48,7 @@
     "registerLink": "Register"
   },
   "home": {
-    "welcome": "Welcome to ToolBox Manager",
+    "welcome": "Welcome to Dexa Manager",
     "description": "Organize and manage all your digital tools, subscriptions, and licenses in one place.",
     "goToDashboard": "Go to Dashboard",
     "viewTools": "View Tools",
@@ -263,7 +263,13 @@
       "totalCategories": "Total Categories",
       "recentActivity": "Recent Activity",
       "topUsers": "Most Active Users",
-      "tools": "tools"
+      "tools": "tools",
+      "userManagement": "User management",
+      "searchUsers": "Search by name or email…",
+      "noUsersFound": "No users found",
+      "subs": "subscriptions",
+      "block": "Block",
+      "unblock": "Unblock"
     }
   },
   "language": {
@@ -285,5 +291,64 @@
     "movementsOnly": "History only",
     "download": "Download",
     "error": "Failed to export data"
+  },
+  "pagination": {
+    "label": "Pagination",
+    "showing": "Showing {{from}}–{{to}} of {{total}}",
+    "previous": "Previous page",
+    "next": "Next page",
+    "page": "Page {{page}}"
+  },
+  "import": {
+    "button": "⬆ Import CSV",
+    "title": "Import tools",
+    "intro": "Upload a CSV file with your tools. You'll see a preview before anything is saved.",
+    "chooseFile": "Choose a CSV file",
+    "reading": "Reading file…",
+    "dropHint": "or drop it here · max 1 MB and 500 rows",
+    "columnsHelp": "Only the name column is required. Also read: type, url, price, category, status and description. The app's own CSV export works, in English or Spanish, comma or semicolon separated.",
+    "downloadTemplate": "Download template",
+    "chooseAnother": "Choose another file",
+    "confirm_one": "Import {{count}} tool",
+    "confirm_other": "Import {{count}} tools",
+    "close": "Close",
+    "free": "Free",
+    "duplicateNote": "A tool with this name already exists",
+    "unknownCategory": "Category “{{name}}” doesn't exist: imported without category",
+    "doneMessage_one": "{{count}} tool imported.",
+    "doneMessage_other": "{{count}} tools imported.",
+    "summary": {
+      "new": "new",
+      "duplicates": "duplicates (skipped)",
+      "invalid": "with errors (skipped)"
+    },
+    "columns": {
+      "line": "Row",
+      "name": "Tool",
+      "price": "Price",
+      "result": "Result"
+    },
+    "result": {
+      "new": "New",
+      "duplicate": "Duplicate",
+      "invalid": "Error"
+    },
+    "rowErrors": {
+      "missingName": "Name is missing",
+      "nameTooLong": "Name too long (max 100)",
+      "typeTooLong": "Type too long (max 50)",
+      "invalidUrl": "Invalid URL",
+      "invalidPrice": "Invalid price",
+      "negativePrice": "Price can't be negative",
+      "invalidStatus": "Invalid status (use Active, Inactive or Archived)"
+    },
+    "errors": {
+      "emptyFile": "The file is empty or only has the header.",
+      "missingNameColumn": "Couldn't find the “name” column.",
+      "tooManyRows": "The file has too many rows (max {{max}}).",
+      "fileTooLarge": "The file is larger than 1 MB.",
+      "generic": "Couldn't read the file. Please try again."
+    },
+    "nothingToImport": "Nothing to import"
   }
 }

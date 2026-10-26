@@ -4,11 +4,12 @@
  */
 
 import prisma from '../config/database.js';
+import { contains, findPage, parsePagination, parseSearch } from '../utils/pagination.js';
 
 /**
  * Lista los últimos movimientos del usuario, opcionalmente filtrados por herramienta.
- * @param {import('express').Request} req - query: { toolId? }.
- * @param {import('express').Response} res - 200 con hasta 50 movimientos ordenados por fecha descendente.
+ * @param {import('express').Request} req - query: { toolId?, q?, page?, limit? }.
+ * @param {import('express').Response} res - 200 con hasta 50 movimientos (sin paginar) o una página, por fecha descendente.
  * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
  */
 export const getAllMovements = async (req, res, next) => {
@@ -19,16 +20,21 @@ export const getAllMovements = async (req, res, next) => {
     const where = { userId };
     if (toolId) where.toolId = toolId;
 
-    const movements = await prisma.movement.findMany({
+    const search = parseSearch(req.query);
+    if (search) where.description = contains(search);
+
+    const pagination = parsePagination(req.query);
+    const result = await findPage(prisma.movement, {
       where,
       include: {
         tool: true,
       },
       orderBy: { createdAt: 'desc' },
-      take: 50,
-    });
+      // Sin paginación se mantienen los 50 más recientes, como antes
+      ...(pagination ? {} : { take: 50 }),
+    }, pagination);
 
-    res.json(movements);
+    res.json(result);
   } catch (error) {
     next(error);
   }

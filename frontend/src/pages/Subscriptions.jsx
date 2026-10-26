@@ -3,14 +3,18 @@ import api from '../services/api';
 import { useTranslation } from 'react-i18next';
 import { formatEuro } from '../utils/formatCurrency';
 import { getToolDescription } from '../utils/productDescriptions';
+import Pagination from '../components/Pagination';
+import { usePagination } from '../hooks/usePagination';
 import './Subscriptions.css';
+
+const SUBSCRIPTIONS_PER_PAGE = 12;
 
 const FILTERS = ['all', 'active', 'inactive', 'archived'];
 
 const STATUS_OPTIONS = ['ACTIVE', 'INACTIVE', 'ARCHIVED'];
 
-const getFallbackLogo = (name = 'TB') => {
-  const initials = (name || 'TB')
+const getFallbackLogo = (name = 'DM') => {
+  const initials = (name || 'DM')
     .trim()
     .split(/\s+/)
     .slice(0, 2)
@@ -229,6 +233,14 @@ const Subscriptions = () => {
     return result;
   }, [uniqueSubscriptions, searchQuery, activeFilter]);
 
+  const {
+    page,
+    setPage,
+    totalPages,
+    total,
+    pageItems: pagedSubscriptions,
+  } = usePagination(filteredSubscriptions, SUBSCRIPTIONS_PER_PAGE, `${searchQuery}|${activeFilter}`);
+
   const handleOpenTool = (tool) => {
     if (tool.url) {
       window.open(tool.url, '_blank');
@@ -304,8 +316,9 @@ const Subscriptions = () => {
       {filteredSubscriptions.length === 0 ? (
         <div className="empty-state">{copy.noResults}</div>
       ) : (
+        <>
         <div className="tools-grid">
-          {filteredSubscriptions.map((subscription) => {
+          {pagedSubscriptions.map((subscription) => {
             const toolStatus = getSubscriptionStatus(subscription);
             const isFree = !subscription.tool?.price || subscription.tool?.price === 0;
 
@@ -374,6 +387,14 @@ const Subscriptions = () => {
             );
           })}
         </div>
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          total={total}
+          pageSize={SUBSCRIPTIONS_PER_PAGE}
+          onPageChange={setPage}
+        />
+        </>
       )}
 
       {manageModal && (

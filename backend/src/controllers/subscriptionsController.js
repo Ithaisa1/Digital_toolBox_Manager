@@ -5,11 +5,12 @@
 
 import prisma from '../config/database.js';
 import { attachSubscriptionLogo } from '../utils/productLogo.js';
+import { contains, findPage, parsePagination, parseSearch } from '../utils/pagination.js';
 
 /**
  * Lista todas las suscripciones del usuario con filtro opcional por estado.
- * @param {import('express').Request} req - query: { status? }.
- * @param {import('express').Response} res - 200 con array de suscripciones (con logo).
+ * @param {import('express').Request} req - query: { status?, q?, page?, limit? }.
+ * @param {import('express').Response} res - 200 con array de suscripciones (con logo), o página si se envía page/limit.
  * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
  */
 export const getAllSubscriptions = async (req, res, next) => {
@@ -23,7 +24,15 @@ export const getAllSubscriptions = async (req, res, next) => {
       where.status = status;
     }
 
-    const subscriptions = await prisma.subscription.findMany({
+    const search = parseSearch(req.query);
+    if (search) {
+      where.OR = [
+        { plan: contains(search) },
+        { tool: { name: contains(search) } },
+      ];
+    }
+
+    const result = await findPage(prisma.subscription, {
       where,
       include: {
         tool: {
@@ -33,9 +42,9 @@ export const getAllSubscriptions = async (req, res, next) => {
         },
       },
       orderBy: { renewalDate: 'asc' },
-    });
+    }, parsePagination(req.query), attachSubscriptionLogo);
 
-    res.json(subscriptions.map(attachSubscriptionLogo));
+    res.json(result);
   } catch (error) {
     next(error);
   }

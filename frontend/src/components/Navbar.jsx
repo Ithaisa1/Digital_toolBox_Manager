@@ -46,7 +46,7 @@ const Navbar = ({ theme, onToggleTheme }) => {
       <nav className={`navbar navbar-${theme}${scrolled ? ' navbar-scrolled' : ''}`}>
         <div className="navbar-brand">
           <Link to="/" className="brand-link" onClick={closeMenu}>
-            <span className="brand-mark">TB</span>
+            <span className="brand-mark">DM</span>
             <span className="brand-text">{t('common.appName')}</span>
           </Link>
         </div>

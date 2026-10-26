@@ -10,7 +10,7 @@
 
 ### 1. Base de datos
 
-Crea la base `digital_toolbox_manager` (o el nombre que uses en `DATABASE_URL`).  
+Crea la base `dexa_manager` (o el nombre que uses en `DATABASE_URL`).  
 Guía detallada: [setup-postgres.md](./setup-postgres.md).
 
 ### 2. Backend
@@ -24,7 +24,7 @@ cp .env.example .env
 Edita `backend/.env`:
 
 ```env
-DATABASE_URL="postgresql://postgres:TU_PASSWORD@localhost:5432/digital_toolbox_manager?schema=public"
+DATABASE_URL="postgresql://postgres:TU_PASSWORD@localhost:5432/dexa_manager?schema=public"
 JWT_SECRET="una-clave-larga-y-aleatoria"
 PORT=3001
 AUTO_DB_SETUP=true
@@ -150,8 +150,10 @@ En la consola del navegador: `localStorage.removeItem('token')` y vuelve a inici
 
 ## Estructura de dependencias
 
-- **No instalar npm en la raíz** del proyecto: solo `backend/` y `frontend/`.
-- Prisma CLI y cliente viven en `backend/package.json`.
+- `backend/` y `frontend/` tienen sus propias dependencias.
+- La raíz solo tiene `prisma` y `@prisma/client`: Prisma busca sus paquetes junto al schema (`database/prisma/`) y, si no los encuentra, los instala solo en la raíz. `npm run setup` los instala de forma ordenada.
+- El cliente de Prisma se genera siempre en `backend/node_modules/.prisma/client` (opción `output` del schema).
+- Arranque diario: `npm run setup` (una vez) y `npm run dev` desde la raíz.
 
 ## Comentarios en el código
 

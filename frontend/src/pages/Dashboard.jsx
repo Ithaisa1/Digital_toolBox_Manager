@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
+import API_URL from '../config/api';
 import { useTranslation } from 'react-i18next';
 import { formatEuro } from '../utils/formatCurrency';
 import { CostByCategoryChart, UpcomingPaymentsChart } from '../components/DashboardCharts';
@@ -43,7 +44,7 @@ const Dashboard = () => {
     try {
       const token = localStorage.getItem('token');
       const params = new URLSearchParams({ format, include });
-      const url = `${import.meta.env.VITE_API_URL}/api/export/data?${params}`;
+      const url = `${API_URL}/api/export/data?${params}`;
 
       const response = await fetch(url, {
         headers: { Authorization: `Bearer ${token}` },
@@ -56,7 +57,7 @@ const Dashboard = () => {
       const blob = await response.blob();
       const contentType = response.headers.get('content-type') || '';
       const ext = contentType.includes('pdf') ? 'pdf' : contentType.includes('json') ? 'json' : 'csv';
-      downloadBlob(blob, `toolbox-${getToday()}.${ext}`);
+      downloadBlob(blob, `dexa-${getToday()}.${ext}`);
       setShowExportModal(false);
     } catch (err) {
       console.error('Export failed:', err);

@@ -1,4 +1,4 @@
-# Configuración de PostgreSQL para Digital Toolbox Manager
+# Configuración de PostgreSQL para Dexa Manager
 
 ## 1. Instalar PostgreSQL
 
@@ -9,9 +9,9 @@ Descarga e instala PostgreSQL desde https://postgresql.org/download/windows/.
 Usa pgAdmin o psql y ejecuta:
 
 ```sql
-CREATE DATABASE digital_toolbox_manager;
-CREATE USER toolbox_user WITH PASSWORD 'toolbox_password';
-GRANT ALL PRIVILEGES ON DATABASE digital_toolbox_manager TO toolbox_user;
+CREATE DATABASE dexa_manager;
+CREATE USER dexa_user WITH PASSWORD 'dexa_password';
+GRANT ALL PRIVILEGES ON DATABASE dexa_manager TO dexa_user;
 ```
 
 ## 3. Actualizar `.env`
@@ -26,7 +26,7 @@ cp .env.example .env
 Y edita `backend/.env` con tu conexión:
 
 ```env
-DATABASE_URL="postgresql://toolbox_user:toolbox_password@localhost:5432/digital_toolbox_manager?schema=public"
+DATABASE_URL="postgresql://dexa_user:dexa_password@localhost:5432/dexa_manager?schema=public"
 JWT_SECRET="your-secret-key-change-in-production"
 JWT_EXPIRES_IN="7d"
 NODE_ENV="development"

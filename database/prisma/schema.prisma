@@ -1,9 +1,11 @@
-// Esquema de base de datos — Digital Toolbox Manager
+// Esquema de base de datos — Dexa Manager
 // ORM: Prisma | Motor: PostgreSQL
 // Los comandos se ejecutan desde backend/ con --schema ../database/prisma/schema.prisma
 
 generator client {
   provider = "prisma-client-js"
+  // Generar siempre dentro de backend/ (si no, Prisma puede usar un node_modules de la raíz)
+  output   = "../../backend/node_modules/.prisma/client"
 }
 
 datasource db {

@@ -3,15 +3,20 @@ import api from '../services/api';
 import { useTranslation } from 'react-i18next';
 import { formatEuro } from '../utils/formatCurrency';
 import { getToolDescription } from '../utils/productDescriptions';
+import Pagination from '../components/Pagination';
+import ImportToolsModal from '../components/ImportToolsModal';
+import { usePagination } from '../hooks/usePagination';
 import './ToolsList.css';
+
+const TOOLS_PER_PAGE = 12;
 
 const TOOL_TYPES = {
   FREE: 'free',
   PAID: 'paid'
 };
 
-const getFallbackLogo = (name = 'TB') => {
-  const initials = (name || 'TB')
+const getFallbackLogo = (name = 'DM') => {
+  const initials = (name || 'DM')
     .trim()
     .split(/\s+/)
     .slice(0, 2)
@@ -439,6 +444,7 @@ const ToolsList = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
   const [categories, setCategories] = useState([]);
   const [subscriptionPanel, setSubscriptionPanel] = useState(null);
   const [subscriptionForm, setSubscriptionForm] = useState({
@@ -629,6 +635,14 @@ const ToolsList = () => {
     return result;
   }, [uniqueTools, debouncedSearch, activeFilter, selectedCategory]);
 
+  const {
+    page,
+    setPage,
+    totalPages,
+    total,
+    pageItems: pagedTools,
+  } = usePagination(filteredTools, TOOLS_PER_PAGE, `${debouncedSearch}|${activeFilter}|${selectedCategory}`);
+
   const handleToolAdded = (newTool) => {
     if (newTool) {
       setRecentlyAdded((prev) => [newTool, ...prev].slice(0, 3));
@@ -727,9 +741,14 @@ const ToolsList = () => {
           <h1>{copy.title}</h1>
           <p className="tools-subtitle">{copy.subtitle}</p>
         </div>
-        <button className="btn btn-primary" onClick={() => setShowAddModal(true)}>
-          {copy.addTool}
-        </button>
+        <div className="tools-header-actions">
+          <button className="btn btn-secondary" onClick={() => setShowImportModal(true)}>
+            {t('import.button')}
+          </button>
+          <button className="btn btn-primary" onClick={() => setShowAddModal(true)}>
+            {copy.addTool}
+          </button>
+        </div>
       </div>
 
       {recentlyAdded.length > 0 && (
@@ -804,8 +823,9 @@ const ToolsList = () => {
           </button>
         </div>
       ) : (
+        <>
         <div className="tools-grid">
-          {filteredTools.map((tool) => {
+          {pagedTools.map((tool) => {
             const isFree = !tool.price || tool.price === 0;
             const subscribed = hasActiveSubscription(tool);
             const activeSub = getActiveSubscription(tool);
@@ -935,7 +955,21 @@ const ToolsList = () => {
             );
           })}
         </div>
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          total={total}
+          pageSize={TOOLS_PER_PAGE}
+          onPageChange={setPage}
+        />
+        </>
       )}
+
+      <ImportToolsModal
+        isOpen={showImportModal}
+        onClose={() => setShowImportModal(false)}
+        onImported={fetchTools}
+      />
 
       <AddToolModal
         isOpen={showAddModal}

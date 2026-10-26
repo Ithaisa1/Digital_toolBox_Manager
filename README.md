@@ -1,4 +1,4 @@
-# 🧰 Digital Toolbox Manager
+# 🧰 Dexa Manager
 
 > Organiza todas tus herramientas digitales, suscripciones y licencias en un solo lugar.
 
@@ -32,7 +32,7 @@
 
 ## 🎯 ¿Qué es?
 
-**Digital Toolbox Manager** es una aplicación full-stack que te permite centralizar la gestión de tus herramientas digitales: desde IDEs y plataformas SaaS hasta suscripciones de pago y licencias.
+**Dexa Manager** es una aplicación full-stack que te permite centralizar la gestión de tus herramientas digitales: desde IDEs y plataformas SaaS hasta suscripciones de pago y licencias.
 
 El problema que resuelve es sencillo pero real: ¿cuántas herramientas pagas cada mes? ¿Cuándo se renueva tu suscripción a Figma? ¿Qué categorías de software usas más? Esta app te da las respuestas en un dashboard claro, con historial de cambios y exportación de datos.
 
@@ -65,6 +65,7 @@ Está pensada como proyecto educativo para estudiantes de desarrollo web, pero e
 | 🌙 **Temas** | Claro y oscuro con persistencia en localStorage |
 | 📱 **Responsive** | Menú hamburguesa animado (≤600px), layout adaptativo para móvil, tablet y desktop |
 | 📤 **Exportación** | Descarga tus datos en CSV, JSON o PDF con informe visual |
+| 📥 **Importación** | Sube un CSV (el exportado por la app o uno hecho en Excel) con vista previa antes de guardar; omite repetidas y filas con errores |
 | 🔄 **Seed automático** | La base de datos se inicializa con datos de ejemplo al primer arranque |
 
 ---
@@ -95,7 +96,7 @@ Cada herramienta tiene su ficha con nombre, tipo, descripción, URL, precio mens
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                     Frontend (Vercel)                    │
+│              Frontend (Vercel, archivos estáticos)       │
 │  React 18 + Vite + React Router + Axios + i18next       │
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌─────────┐ │
 │  │  Pages   │  │Components│  │ Context  │  │Services │ │
@@ -104,10 +105,10 @@ Cada herramienta tiene su ficha con nombre, tipo, descripción, URL, precio mens
 │                          │ HTTP (JSON)                   │
 └──────────────────────────┼──────────────────────────────┘
                            │
-                    CORS + JWT Bearer
+              /api/* en el mismo dominio + JWT
                            │
 ┌──────────────────────────┼──────────────────────────────┐
-│                     Backend (Render)                     │
+│          Backend (Vercel Function: api/index.js)         │
 │  Express + Prisma 6 + Zod + bcryptjs + JWT              │
 │  ┌──────────┐  ┌────────────┐  ┌──────────┐ ┌────────┐ │
 │  │  Routes  │→ │Controllers │→ │  Prisma  │→│   DB   │ │
@@ -117,7 +118,7 @@ Cada herramienta tiene su ficha con nombre, tipo, descripción, URL, precio mens
 │  (Zod)        (auth, errors)                              │
 └─────────────────────────────────────────────────────────┘
                            │
-                    PostgreSQL (Render)
+                 PostgreSQL (Neon, vía Vercel)
 ```
 
 ### Flujo de una petición típica
@@ -142,7 +143,7 @@ Cada herramienta tiene su ficha con nombre, tipo, descripción, URL, precio mens
 ## 📁 Estructura del proyecto
 
 ```
-Digital_Toolbox_Manager/
+dexa-manager/
 │
 ├── backend/                          # API REST (Express)
 │   ├── src/
@@ -169,7 +170,6 @@ Digital_Toolbox_Manager/
 │   │   ├── config/                   # URL del API
 │   │   ├── App.jsx                   # Enrutamiento
 │   │   └── main.jsx                  # Punto de entrada
-│   ├── vercel.json                   # SPA fallback para Vercel
 │   ├── package.json
 │   └── .env.example
 │
@@ -185,7 +185,9 @@ Digital_Toolbox_Manager/
 │   ├── DEVELOPMENT.md
 │   └── DEPLOYMENT.md
 │
-├── render.yaml                       # Blueprint de despliegue en Render
+├── api/index.js                      # Función de Vercel que sirve la API
+├── scripts/                          # setup, dev y build de Vercel
+├── vercel.json                       # Despliegue en Vercel (web + API + cron)
 ├── AUDIT.md                          # Auditoría completa del proyecto
 └── ISSUES.md                         # Errores encontrados y soluciones
 ```
@@ -197,92 +199,60 @@ Digital_Toolbox_Manager/
 ### Requisitos previos
 
 - **Node.js 18+** — [Descargar](https://nodejs.org/)
-- **PostgreSQL 14+** — [Descargar](https://www.postgresql.org/download/) o usar Docker:
-  ```bash
-  docker run --name toolbox-db -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=digital_toolbox_manager -p 5432:5432 -d postgres:16
-  ```
+- **PostgreSQL 14+** — [Descargar](https://www.postgresql.org/download/)
 
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/Digital_Toolbox_Manager.git
-cd Digital_Toolbox_Manager
+git clone https://github.com/Ithaisa1/dexa-manager.git
+cd dexa-manager
 ```
 
-### 2. Configurar la base de datos
+### 2. Preparar PostgreSQL
 
-Crea la base de datos en PostgreSQL:
+Con PostgreSQL instalado y encendido, crea la base de datos (guía detallada en [docs/setup-postgres.md](docs/setup-postgres.md)):
 
 ```bash
-psql -U postgres -c "CREATE DATABASE digital_toolbox_manager;"
+psql -U postgres -c "CREATE DATABASE dexa_manager;"
 ```
 
-### 3. Configurar el backend
+### 3. Preparar el proyecto (solo la primera vez)
 
 ```bash
-cd backend
-cp .env.example .env
+npm run setup
 ```
 
-Edita `.env` con tus credenciales:
+Instala todas las dependencias, crea `backend/.env` y `frontend/.env` a partir de los ejemplos (con un `JWT_SECRET` aleatorio), genera el cliente de Prisma y aplica las migraciones.
+
+Si es la primera vez, **edita `DATABASE_URL` en `backend/.env`** con tu usuario y contraseña de PostgreSQL y vuelve a ejecutar `npm run setup`:
 
 ```env
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/digital_toolbox_manager?schema=public"
-JWT_SECRET="cambia-esto-por-algo-seguro"
-PORT=3001
-NODE_ENV=development
+DATABASE_URL="postgresql://postgres:TU_PASSWORD@localhost:5432/dexa_manager?schema=public"
 ```
 
-Instala dependencias y genera el cliente de Prisma:
+Si algo falla (PostgreSQL apagado, contraseña incorrecta, base de datos inexistente), el comando explica qué hacer.
 
-```bash
-npm install
-npx prisma generate --schema ../database/prisma/schema.prisma
-npx prisma migrate dev --schema ../database/prisma/schema.prisma
-```
-
-> 💡 La migración creará todas las tablas. Si quieres datos de ejemplo, el seed se ejecuta automáticamente al arrancar si la base de datos está vacía.
-
-### 4. Arrancar el backend
+### 4. Arrancar la app
 
 ```bash
 npm run dev
 ```
 
-Verás algo como:
+Arranca backend y frontend a la vez en la misma terminal (las líneas salen marcadas con `[api]` y `[web]`). **Ctrl+C** los apaga los dos.
 
-```
-Migraciones aplicadas
-Base de datos conectada correctamente
-Base de datos lista (2 usuario(s); seed omitido)
-Servidor corriendo en http://localhost:3001
-```
+Abre **http://localhost:3000** en tu navegador. La primera vez se crean datos de ejemplo automáticamente.
 
-### 5. Configurar el frontend
+### Otros comandos desde la raíz
 
-Abre otra terminal:
+| Comando | Qué hace |
+|---------|----------|
+| `npm test` | Tests del backend |
+| `npm run lint` | Linter de backend y frontend |
+| `npm run build` | Compila el frontend |
 
-```bash
-cd frontend
-cp .env.example .env
-npm install
-```
+> Prefieres hacerlo a mano: `cd backend && npm run dev` y, en otra terminal, `cd frontend && npm run dev`.
 
-El `.env` del frontend solo necesita la URL del backend:
-
-```env
-VITE_API_URL=http://localhost:3001
-```
-
-### 6. Arrancar el frontend
-
-```bash
-npm run dev
-```
-
-Abre **http://localhost:3000** en tu navegador.
-
-### 7. Iniciar sesión
+### 5. Iniciar sesión
 
 Usa las cuentas de demo que crea el seed:
 
@@ -360,6 +330,7 @@ Prefijo base: `/api`
 | `DELETE` | `/auth/profile` | Eliminar cuenta |
 | `GET` | `/tools` | Listar mis herramientas |
 | `POST` | `/tools` | Crear herramienta |
+| `POST` | `/tools/import` | Importar herramientas desde CSV (`{ csv, dryRun }`) |
 | `GET` | `/tools/:id` | Ver detalle de herramienta |
 | `PUT` | `/tools/:id` | Actualizar herramienta |
 | `DELETE` | `/tools/:id` | Eliminar herramienta |
@@ -371,6 +342,22 @@ Prefijo base: `/api`
 | `GET` | `/movements` | Historial de movimientos |
 | `GET` | `/dashboard/stats` | Estadísticas del usuario |
 | `GET` | `/export?format=csv` | Exportar datos |
+
+### Paginación y búsqueda
+
+Las listas `GET /api/tools`, `/api/subscriptions`, `/api/movements` y `/api/admin/users` aceptan parámetros opcionales:
+
+| Parámetro | Descripción |
+|-----------|-------------|
+| `q` | Texto a buscar (sin distinguir mayúsculas) |
+| `page` | Número de página (desde 1) |
+| `limit` | Elementos por página (por defecto 20, máximo 100) |
+
+Sin `page` ni `limit` la respuesta es un array, como siempre. Con ellos, la respuesta es:
+
+```json
+{ "items": [...], "total": 46, "page": 2, "limit": 12, "totalPages": 4 }
+```
 
 ### Endpoints de administrador
 
@@ -451,53 +438,47 @@ curl http://localhost:3001/api/dashboard/stats \
 
 | Variable | Requerida | Default | Descripción |
 |----------|-----------|---------|-------------|
-| `VITE_API_URL` | ✅ | — | URL del backend |
+| `VITE_API_URL` | — | `http://localhost:3001` en desarrollo; mismo dominio en producción | URL del backend |
 
 ---
 
 ## 🌍 Despliegue
 
-### Backend en Render
+Todo vive en **un solo proyecto de Vercel**: la web (archivos estáticos), la API (una Vercel Function en `api/index.js` que usa la app de Express) y la base de datos **Neon** (PostgreSQL). La web llama a la API en su mismo dominio (`/api/...`), así que no hay que configurar URLs ni CORS.
 
-1. Crea una base de datos PostgreSQL en Render y copia el connection string
-2. Conecta tu repositorio a Render
-3. Usa `render.yaml` como Blueprint (despliegue automático)
-4. Añade las variables de entorno:
-   - `DATABASE_URL` — el connection string de tu PostgreSQL en Render
-   - `JWT_SECRET` — una cadena aleatoria segura
-   - `FRONTEND_URL` — la URL de tu frontend en Vercel
-   - `AUTO_DB_SETUP=false` — las migraciones ya se aplican en el build
+### 1. Proyecto en Vercel
 
-El `render.yaml` configura automáticamente:
-- `rootDir: backend` — Render sabe dónde está el backend
-- Build: `npm install && npx prisma generate && npx prisma migrate deploy`
-- Start: `npm start`
-- Health check: `/api/health`
+1. Importa el repositorio en Vercel.
+2. En **Settings → Build and Deployment**, deja **Root Directory** vacío (la raíz del repositorio). Todo lo demás lo define `vercel.json`.
 
-### Frontend en Vercel
+### 2. Base de datos (Neon)
 
-1. Conecta tu repositorio a Vercel
-2. Configura la variable de entorno:
-   - `VITE_API_URL` — la URL de tu backend en Render (ej. `https://digital-toolbox-api.onrender.com`)
-3. El archivo `vercel.json` ya incluido configura el fallback SPA para que las rutas del cliente funcionen al refrescar
+1. En el proyecto de Vercel: **Storage → Create Database → Neon**. Elige la región **Frankfurt (eu-central-1)**, cerca de las funciones (`fra1`).
+2. Conéctala al proyecto. Vercel añade solo `DATABASE_URL` (con pooler, para la API) y `DATABASE_URL_UNPOOLED` (directa, para las migraciones).
+
+### 3. Variables de entorno
+
+| Variable | Obligatoria | Para qué |
+|----------|-------------|----------|
+| `JWT_SECRET` | ✅ | Firmar las sesiones (cadena larga aleatoria) |
+| `CRON_SECRET` | Para avisos | Protege el cron de avisos (Vercel lo envía solo) |
+| `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_USER`, `EMAIL_PASSWORD` | Para emails | SMTP. Con Gmail, usa una [contraseña de aplicación](https://myaccount.google.com/apppasswords) |
+| `FRONTEND_URL` | — | Enlaces de los emails (p. ej. `https://dexa-manager.vercel.app`) |
+| `AUTO_SEED` | — | `true` carga datos de ejemplo si la base de datos está vacía. ⚠️ Crea `admin@example.com / admin123`: no lo uses en una web pública |
+
+### Qué pasa en cada despliegue
+
+`scripts/vercel-build.mjs`:
+1. Genera el cliente de Prisma.
+2. **Solo en producción**, aplica las migraciones pendientes (con la conexión directa). En las previews se omiten salvo `MIGRATE_ON_PREVIEW=true`.
+3. Si `AUTO_SEED=true` y no hay usuarios, carga los datos de ejemplo.
+4. Compila el frontend.
 
 ### Avisos de renovación (cron diario)
 
-Los avisos se envían desde un workflow de GitHub Actions (`.github/workflows/renewal-reminders.yml`) que cada día a las 07:00 UTC llama a `POST /api/jobs/renewal-reminders`. Así funciona aunque Render (plan gratuito) duerma el servidor.
-
-1. En Render, añade `CRON_SECRET` (una cadena larga aleatoria) y las variables `EMAIL_*`. Con Gmail necesitas una [contraseña de aplicación](https://myaccount.google.com/apppasswords).
-2. En GitHub → **Settings → Secrets and variables → Actions**, crea:
-   - `API_URL` — la URL del backend en Render
-   - `CRON_SECRET` — el mismo valor que en Render
-3. Pruébalo en **Actions → Renewal reminders → Run workflow**.
+`vercel.json` registra un **Vercel Cron** que cada día a las 07:00 UTC llama a `/api/jobs/renewal-reminders` con `Authorization: Bearer <CRON_SECRET>`. Solo necesitas definir `CRON_SECRET` y las variables `EMAIL_*`. Puedes lanzarlo a mano desde **Settings → Cron Jobs → Run**.
 
 Cada usuario recibe un solo email con todas sus renovaciones próximas, y nunca dos avisos para la misma renovación. Cualquiera puede desactivarlos desde su perfil.
-
-### Orden de despliegue
-
-1. **Primero** la base de datos (Render PostgreSQL)
-2. **Después** el backend (Render Web Service)
-3. **Finalmente** el frontend (Vercel)
 
 ---
 
@@ -545,14 +526,12 @@ Estas son las siguientes iteraciones previstas para el proyecto, ordenadas por i
 
 ### Funcionalidad
 - **Paginación** — Añadir `skip`/`take` a los endpoints de lista para manejar grandes volúmenes de datos
-- **Importación** — Subir un CSV para importar herramientas en lote
 - **Etiquetas** — Sistema de tags libre además de categorías
 - **Compartir** — Permitir compartir herramientas entre usuarios
 
 ### Técnica
 - **TypeScript** — Migrar backend y frontend a TypeScript para type safety completa
 - **Tests E2E** — Añadir Cypress o Playwright para tests de flujo completo
-- **Docker** — Docker Compose con PostgreSQL + backend + frontend para desarrollo local en un comando
 - **GraphQL** — Explorar Apollo/Prisma como alternativa a REST para queries complejas
 
 ### UX
@@ -579,7 +558,7 @@ Este proyecto ha sido una oportunidad para aplicar conceptos clave del desarroll
 - **i18next** — La internacionalización con keys (`t('auth.login')`) es mucho más mantenible que tener componentes duplicados por idioma.
 
 ### Despliegue
-- **Render + Vercel** — La combinación funciona bien pero hay que cuidar los CORS. El backend necesita saber la URL del frontend y viceversa.
+- **Render + Vercel → solo Vercel** — Con frontend y backend separados había que cuidar CORS y URLs, y la base de datos gratuita de Render caducaba. Servir la API como Vercel Function en el mismo dominio, con Neon como base de datos, simplificó el despliegue.
 - **SPA routing** — Sin `vercel.json` con rewrites, refrescar `/dashboard` da 404 porque Vercel busca un archivo que no existe.
 - **Variables de entorno** — En producción, los `.env` no se suben al repo. Cada plataforma tiene su propia forma de configurarlas (Render dashboard, Vercel settings).
 

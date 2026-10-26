@@ -1,4 +1,4 @@
-# Documentación — Digital Toolbox Manager
+# Documentación — Dexa Manager
 
 Índice de la documentación del proyecto.
 
@@ -10,7 +10,7 @@
 | [DATABASE.md](./DATABASE.md) | Esquema Prisma, migraciones, seed y bootstrap |
 | [FRONTEND.md](./FRONTEND.md) | React, rutas, componentes, i18n y tema |
 | [DEVELOPMENT.md](./DEVELOPMENT.md) | Guía de desarrollo, variables de entorno y troubleshooting |
-| [DEPLOYMENT.md](./DEPLOYMENT.md) | Despliegue (Railway, Vercel, etc.) |
+| [DEPLOYMENT.md](./DEPLOYMENT.md) | Despliegue en Vercel + Neon |
 | [setup-postgres.md](./setup-postgres.md) | Instalación y configuración de PostgreSQL |
 | [AUDIT.md](./AUDIT.md) | Auditoría completa del proyecto |
 | [PROBLEMAS_Y_SOLUCIONES.md](./PROBLEMAS_Y_SOLUCIONES.md) | Retrospectiva técnica — problemas encontrados y soluciones |

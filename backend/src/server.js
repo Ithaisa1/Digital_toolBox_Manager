@@ -1,90 +1,12 @@
 /**
- * Punto de entrada del servidor HTTP.
- * Configura Express, monta las rutas de la API, inicializa la base de datos y arranca el listener.
+ * Servidor local (npm run dev / npm start).
+ * Prepara la base de datos (migraciones y seed) y pone a escuchar la app de app.js.
+ * En Vercel no se usa: allí la app se sirve desde api/index.js.
  */
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import authRoutes from "./routes/auth.js";
-import toolsRoutes from "./routes/tools.js";
-import categoriesRoutes from "./routes/categories.js";
-import subscriptionsRoutes from "./routes/subscriptions.js";
-import movementsRoutes from "./routes/movements.js";
-import dashboardRoutes from "./routes/dashboard.js";
-import exportRoutes from "./routes/export.js";
-import adminRoutes from "./routes/admin.js";
-import jobsRoutes from "./routes/jobs.js";
-import { errorHandler, notFound } from "./middleware/errorHandler.js";
+import app from "./app.js";
 import { bootstrapDatabase } from "./utils/bootstrapDatabase.js";
-import { checkDatabaseConnection } from "./config/database.js";
-import { corsOriginCallback } from "./config/cors.js";
-import { seedDatabase } from "./seed.js";
 
-dotenv.config();
-
-const app = express();
 const PORT = Number(process.env.PORT) || 3001;
-
-// Render usa proxy, necesario para rate-limit y seguridad
-app.set('trust proxy', 1);
-
-// ✅ CORS CONFIGURADO CORRECTAMENTE
-app.use(
-  cors({
-    origin: corsOriginCallback,
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  }),
-);
-app.use(express.json());
-
-// Rutas de la API REST
-app.use("/api/auth", authRoutes);
-app.use("/api/tools", toolsRoutes);
-app.use("/api/categories", categoriesRoutes);
-app.use("/api/subscriptions", subscriptionsRoutes);
-app.use("/api/movements", movementsRoutes);
-app.use("/api/dashboard", dashboardRoutes);
-app.use("/api/export", exportRoutes);
-app.use("/api/admin", adminRoutes);
-app.use("/api/jobs", jobsRoutes);
-
-// Comprobación de que el servicio y la BD están activos
-app.get("/api/health", async (req, res) => {
-  const dbConnected = await checkDatabaseConnection();
-
-  if (!dbConnected) {
-    return res.status(503).json({
-      status: "error",
-      database: "disconnected",
-      message: "API activa pero la base de datos no responde",
-    });
-  }
-
-  res.json({
-    status: "ok",
-    database: "connected",
-    message: "Digital Toolbox Manager API is running",
-  });
-});
-
-// Endpoint para popular la BD (solo en desarrollo)
-app.get('/api/seed', async (req, res, next) => {
-  if (process.env.NODE_ENV === 'production') {
-    return res.status(403).json({ error: 'Seed endpoint disabled in production' });
-  }
-  try {
-    await seedDatabase();
-    res.json({ message: 'Database seeded successfully' });
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Manejo de rutas inexistentes y errores globales
-app.use(notFound);
-app.use(errorHandler);
 
 /** Inicializa la BD (migraciones/seed) y pone el servidor a escuchar en PORT. */
 async function startServer() {

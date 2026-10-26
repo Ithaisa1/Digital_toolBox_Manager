@@ -7,7 +7,29 @@ import { PrismaClient } from "@prisma/client";
 
 dotenv.config();
 
-const prisma = new PrismaClient();
+/**
+ * Ajusta la URL para el pooler de Neon (host con "-pooler"): Prisma necesita
+ * pgbouncer=true para no usar sentencias preparadas a través de PgBouncer.
+ */
+export function resolveDatabaseUrl(rawUrl) {
+  if (!rawUrl) return rawUrl;
+  try {
+    const url = new URL(rawUrl);
+    if (url.hostname.includes("-pooler") && !url.searchParams.has("pgbouncer")) {
+      url.searchParams.set("pgbouncer", "true");
+    }
+    return url.toString();
+  } catch {
+    return rawUrl;
+  }
+}
+
+const databaseUrl = resolveDatabaseUrl(process.env.DATABASE_URL);
+
+// Una sola instancia por proceso (en Vercel se reutiliza entre peticiones)
+const prisma = new PrismaClient(
+  databaseUrl ? { datasources: { db: { url: databaseUrl } } } : undefined,
+);
 
 let isConnected = false;
 
@@ -58,13 +80,11 @@ export async function connectDatabase(
   );
 }
 
-/** Comprueba si Prisma sigue conectado (útil para /api/health). */
+/** Comprueba que la base de datos responde (útil para /api/health). Conecta si hace falta. */
 export async function checkDatabaseConnection() {
-  if (!isConnected) {
-    return false;
-  }
   try {
     await prisma.$queryRaw`SELECT 1`;
+    isConnected = true;
     return true;
   } catch {
     isConnected = false;

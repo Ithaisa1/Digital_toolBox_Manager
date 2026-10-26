@@ -3,13 +3,21 @@
  */
 
 import prisma from '../config/database.js';
+import { contains, findPage, parsePagination, parseSearch } from '../utils/pagination.js';
 
 /**
- * Devuelve todos los usuarios con información mínima y métricas de uso.
+ * Devuelve los usuarios con información mínima y métricas de uso.
+ * Query opcional: q (busca en nombre y email), page, limit.
  */
 export const getAdminUsers = async (req, res, next) => {
   try {
-    const users = await prisma.user.findMany({
+    const search = parseSearch(req.query);
+    const where = search
+      ? { OR: [{ name: contains(search) }, { email: contains(search) }] }
+      : {};
+
+    const result = await findPage(prisma.user, {
+      where,
       orderBy: { createdAt: 'desc' },
       include: {
         _count: {
@@ -19,20 +27,18 @@ export const getAdminUsers = async (req, res, next) => {
           },
         },
       },
-    });
+    }, parsePagination(req.query), (user) => ({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      isBlocked: user.isBlocked,
+      createdAt: user.createdAt,
+      toolsCount: user._count.tools,
+      subscriptionsCount: user._count.subscriptions,
+    }));
 
-    res.json(
-      users.map((user) => ({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        isBlocked: user.isBlocked,
-        createdAt: user.createdAt,
-        toolsCount: user._count.tools,
-        subscriptionsCount: user._count.subscriptions,
-      })),
-    );
+    res.json(result);
   } catch (error) {
     next(error);
   }

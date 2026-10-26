@@ -168,7 +168,7 @@ class EmailService {
       const mailOptions = {
         from: process.env.EMAIL_USER,
         to: user.email,
-        subject: `🎉 Welcome to ToolBox Manager`,
+        subject: `🎉 Welcome to Dexa Manager`,
         html: this.generateWelcomeTemplate(user),
       };
 
@@ -235,7 +235,7 @@ class EmailService {
             </div>
           </div>
           <div class="footer">
-            <p>This is an automated reminder from ToolBox Manager. You can manage your notification preferences in your profile settings.</p>
+            <p>This is an automated reminder from Dexa Manager. You can manage your notification preferences in your profile settings.</p>
           </div>
         </div>
       </body>
@@ -251,7 +251,7 @@ class EmailService {
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Welcome to ToolBox Manager</title>
+        <title>Welcome to Dexa Manager</title>
         <style>
           body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
           .container { max-width: 600px; margin: 0 auto; padding: 20px; }
@@ -266,7 +266,7 @@ class EmailService {
       <body>
         <div class="container">
           <div class="header">
-            <h1>🎉 Welcome to ToolBox Manager!</h1>
+            <h1>🎉 Welcome to Dexa Manager!</h1>
             <p>Hi ${user.name}, thank you for joining us!</p>
           </div>
           <div class="content">

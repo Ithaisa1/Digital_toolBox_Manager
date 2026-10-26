@@ -8,23 +8,34 @@ import {
   attachToolLogo,
   attachSubscriptionLogo,
 } from "../utils/productLogo.js";
+import { contains, findPage, parsePagination, parseSearch } from "../utils/pagination.js";
+import { buildImportPlan, MAX_IMPORT_ROWS } from "../utils/toolImport.js";
 
 /**
  * Lista todas las herramientas del usuario autenticado con filtros opcionales.
- * @param {import('express').Request} req - query: { status?, category? }.
- * @param {import('express').Response} res - 200 con array de herramientas (logos adjuntos).
+ * @param {import('express').Request} req - query: { status?, category?, q?, page?, limit? }.
+ * @param {import('express').Response} res - 200 con array de herramientas (logos adjuntos), o página si se envía page/limit.
  * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
  */
 export const getAllTools = async (req, res, next) => {
   try {
     const userId = req.user.userId;
     const { status, category } = req.query;
+    const search = parseSearch(req.query);
 
     const where = { userId };
     if (status) where.status = status;
     if (category) where.categoryId = category;
+    if (search) {
+      where.OR = [
+        { name: contains(search) },
+        { type: contains(search) },
+        { description: contains(search) },
+        { category: { name: contains(search) } },
+      ];
+    }
 
-    const tools = await prisma.tool.findMany({
+    const result = await findPage(prisma.tool, {
       where,
       include: {
         category: true,
@@ -42,14 +53,12 @@ export const getAllTools = async (req, res, next) => {
         },
       },
       orderBy: { createdAt: "desc" },
-    });
+    }, parsePagination(req.query), (tool) => ({
+      ...attachToolLogo(tool),
+      subscriptions: (tool.subscriptions || []).map(attachSubscriptionLogo),
+    }));
 
-    res.json(
-      tools.map((tool) => ({
-        ...attachToolLogo(tool),
-        subscriptions: (tool.subscriptions || []).map(attachSubscriptionLogo),
-      })),
-    );
+    res.json(result);
   } catch (error) {
     next(error);
   }
@@ -240,6 +249,84 @@ export const deleteTool = async (req, res, next) => {
     });
 
     res.json({ message: "Tool deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/** Tamaño máximo del texto CSV aceptado (1 MB). */
+const MAX_IMPORT_CHARS = 1024 * 1024;
+
+/**
+ * Importa herramientas desde un CSV.
+ * Con dryRun=true solo devuelve la vista previa; si no, crea las filas válidas
+ * (todas o ninguna) y registra un movimiento CREATED por cada una.
+ * @param {import('express').Request} req - body: { csv: string, dryRun?: boolean }.
+ * @param {import('express').Response} res - 200 con { summary, rows, created? } o 400 si el archivo no sirve.
+ * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
+ */
+export const importTools = async (req, res, next) => {
+  try {
+    const userId = req.user.userId;
+    const { csv, dryRun = false } = req.body || {};
+
+    if (typeof csv !== "string" || !csv.trim()) {
+      return res.status(400).json({ error: "CSV content is required", code: "emptyFile" });
+    }
+    if (csv.length > MAX_IMPORT_CHARS) {
+      return res.status(400).json({ error: "CSV file is too large (max 1 MB)", code: "fileTooLarge" });
+    }
+
+    const [categories, existing] = await Promise.all([
+      prisma.category.findMany({ select: { id: true, name: true } }),
+      prisma.tool.findMany({ where: { userId }, select: { name: true } }),
+    ]);
+
+    const plan = buildImportPlan(csv, {
+      categories,
+      existingNames: existing.map((tool) => tool.name),
+    });
+
+    if (plan.error) {
+      return res.status(400).json({ error: "Invalid CSV file", code: plan.error, maxRows: MAX_IMPORT_ROWS });
+    }
+
+    if (dryRun) {
+      return res.json(plan);
+    }
+
+    const toCreate = plan.rows.filter((row) => row.result === "new");
+
+    const created = await prisma.$transaction(async (tx) => {
+      const tools = [];
+      for (const { data } of toCreate) {
+        const tool = await tx.tool.create({
+          data: {
+            name: data.name,
+            type: data.type,
+            url: data.url,
+            price: data.price,
+            description: data.description,
+            status: data.status,
+            categoryId: data.categoryId,
+            userId,
+          },
+        });
+        await tx.movement.create({
+          data: {
+            toolId: tool.id,
+            userId,
+            type: "CREATED",
+            description: `Tool "${tool.name}" was imported from CSV`,
+            newData: JSON.stringify(tool),
+          },
+        });
+        tools.push(tool);
+      }
+      return tools;
+    }, { timeout: 30000 });
+
+    res.json({ ...plan, created: created.length });
   } catch (error) {
     next(error);
   }
