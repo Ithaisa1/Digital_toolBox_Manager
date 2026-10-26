@@ -81,6 +81,12 @@ describe('buildImportPlan', () => {
     expect(plan.summary.invalid).toBe(4);
   });
 
+  it('matches default categories by their Spanish name', () => {
+    const cats = [{ id: 'cat-pm', name: 'Project Management' }];
+    const plan = buildImportPlan('nombre;categoría\nTrello;Gestión de proyectos\nAsana;gestion de proyectos', { categories: cats });
+    expect(plan.rows.map((r) => r.data.categoryId)).toEqual(['cat-pm', 'cat-pm']);
+  });
+
   it('warns about unknown categories but still imports', () => {
     const plan = buildImportPlan('name,category\nX,Gaming', { categories });
     expect(plan.rows[0].result).toBe('new');

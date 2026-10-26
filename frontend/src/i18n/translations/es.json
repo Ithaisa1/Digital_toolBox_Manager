@@ -350,5 +350,26 @@
       "generic": "No se pudo leer el archivo. Inténtalo de nuevo."
     },
     "nothingToImport": "Nada que importar"
+  },
+  "categoryNames": {
+    "Design": "Diseño",
+    "Video & Audio": "Vídeo y audio",
+    "Development": "Desarrollo",
+    "Hosting & Cloud": "Hosting y nube",
+    "Project Management": "Gestión de proyectos",
+    "Time Tracking": "Control de tiempo",
+    "Communication": "Comunicación",
+    "Productivity": "Productividad",
+    "Office & Documents": "Ofimática y documentos",
+    "Cloud Storage": "Almacenamiento en la nube",
+    "AI & Machine Learning": "Inteligencia artificial",
+    "Marketing & Social Media": "Marketing y redes sociales",
+    "Sales & CRM": "Ventas y CRM",
+    "Finance & Accounting": "Finanzas y contabilidad",
+    "Security & Privacy": "Seguridad y privacidad",
+    "Education & Learning": "Formación",
+    "Entertainment & Streaming": "Ocio y streaming",
+    "Other": "Otros",
+    "Uncategorized": "Sin categoría"
   }
 }

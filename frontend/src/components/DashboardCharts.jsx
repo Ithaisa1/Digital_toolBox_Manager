@@ -5,6 +5,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatEuro } from '../utils/formatCurrency';
+import { categoryLabel } from '../utils/categories';
 import './DashboardCharts.css';
 
 const MAX_CATEGORIES = 6;
@@ -41,7 +42,7 @@ export const CostByCategoryChart = ({ data }) => {
       <ul className="hbar-list">
         {rows.map((row) => (
           <li key={row.category} className="hbar-row">
-            <span className="hbar-label" title={row.category}>{row.category}</span>
+            <span className="hbar-label" title={categoryLabel(t, row.category)}>{categoryLabel(t, row.category)}</span>
             <span className="hbar-track">
               <span
                 className="hbar-bar"

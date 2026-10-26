@@ -11,6 +11,10 @@ import {
 import { contains, findPage, parsePagination, parseSearch } from "../utils/pagination.js";
 import { buildImportPlan, MAX_IMPORT_ROWS } from "../utils/toolImport.js";
 
+/** "" o espacios → null (los formularios envían campos vacíos como ""). */
+const emptyToNull = (value) =>
+  typeof value === "string" && value.trim() === "" ? null : value;
+
 /**
  * Lista todas las herramientas del usuario autenticado con filtros opcionales.
  * @param {import('express').Request} req - query: { status?, category?, q?, page?, limit? }.
@@ -117,7 +121,7 @@ export const getToolById = async (req, res, next) => {
 export const createTool = async (req, res, next) => {
   try {
     const userId = req.user.userId;
-    const { name, type, url, price, status, categoryId } = req.body;
+    const { name, type, url, price, status, categoryId, description } = req.body;
 
     if (!name || !type) {
       return res.status(400).json({ error: "Name and type are required" });
@@ -127,10 +131,11 @@ export const createTool = async (req, res, next) => {
       data: {
         name,
         type,
-        url,
-        price: price !== undefined && price !== null ? parseFloat(price) : null,
+        url: emptyToNull(url) ?? null,
+        description: emptyToNull(description) ?? null,
+        price: price !== undefined && price !== null && price !== "" ? parseFloat(price) : null,
         status: status || "ACTIVE",
-        categoryId,
+        categoryId: emptyToNull(categoryId) ?? null,
         userId,
       },
       include: {
@@ -165,7 +170,7 @@ export const updateTool = async (req, res, next) => {
   try {
     const { id } = req.params;
     const userId = req.user.userId;
-    const { name, type, url, price, status, categoryId } = req.body;
+    const { name, type, url, price, status, categoryId, description } = req.body;
 
     const existingTool = await prisma.tool.findFirst({
       where: { id, userId },
@@ -183,14 +188,16 @@ export const updateTool = async (req, res, next) => {
       data: {
         name: resolvedName,
         type: resolvedType,
-        url: url !== undefined ? url : existingTool.url,
+        url: url !== undefined ? emptyToNull(url) : existingTool.url,
+        description:
+          description !== undefined ? emptyToNull(description) : existingTool.description,
         price:
           price !== undefined && price !== null
             ? parseFloat(price)
             : existingTool.price,
         status: status || existingTool.status,
         categoryId:
-          categoryId !== undefined ? categoryId : existingTool.categoryId,
+          categoryId !== undefined ? emptyToNull(categoryId) : existingTool.categoryId,
       },
       include: {
         category: true,

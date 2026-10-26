@@ -3,6 +3,7 @@ import api from '../services/api';
 import { useTranslation } from 'react-i18next';
 import { formatEuro } from '../utils/formatCurrency';
 import { getToolDescription } from '../utils/productDescriptions';
+import { categoryLabel } from '../utils/categories';
 import Pagination from '../components/Pagination';
 import { usePagination } from '../hooks/usePagination';
 import './Subscriptions.css';
@@ -211,6 +212,7 @@ const Subscriptions = () => {
           sub.tool?.name?.toLowerCase().includes(query) ||
           sub.tool?.type?.toLowerCase().includes(query) ||
           sub.tool?.category?.name?.toLowerCase().includes(query) ||
+          (sub.tool?.category && categoryLabel(t, sub.tool.category.name).toLowerCase().includes(query)) ||
           sub.tool?.description?.toLowerCase().includes(query)
       );
     }
@@ -231,7 +233,7 @@ const Subscriptions = () => {
     });
 
     return result;
-  }, [uniqueSubscriptions, searchQuery, activeFilter]);
+  }, [uniqueSubscriptions, searchQuery, activeFilter, t]);
 
   const {
     page,
@@ -347,7 +349,7 @@ const Subscriptions = () => {
                     {subscription.tool?.description || getToolDescription(subscription.tool) || subscription.tool?.type || '-'}
                   </p>
                   <p className="tool-category">
-                    {copy.category}: {subscription.tool?.category?.name || copy.uncategorized}
+                    {copy.category}: {subscription.tool?.category ? categoryLabel(t, subscription.tool.category.name) : copy.uncategorized}
                   </p>
                 </div>
 

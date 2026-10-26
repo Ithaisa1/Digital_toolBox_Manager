@@ -350,5 +350,26 @@
       "generic": "Couldn't read the file. Please try again."
     },
     "nothingToImport": "Nothing to import"
+  },
+  "categoryNames": {
+    "Design": "Design",
+    "Video & Audio": "Video & Audio",
+    "Development": "Development",
+    "Hosting & Cloud": "Hosting & Cloud",
+    "Project Management": "Project Management",
+    "Time Tracking": "Time Tracking",
+    "Communication": "Communication",
+    "Productivity": "Productivity",
+    "Office & Documents": "Office & Documents",
+    "Cloud Storage": "Cloud Storage",
+    "AI & Machine Learning": "AI & Machine Learning",
+    "Marketing & Social Media": "Marketing & Social Media",
+    "Sales & CRM": "Sales & CRM",
+    "Finance & Accounting": "Finance & Accounting",
+    "Security & Privacy": "Security & Privacy",
+    "Education & Learning": "Education & Learning",
+    "Entertainment & Streaming": "Entertainment & Streaming",
+    "Other": "Other",
+    "Uncategorized": "Uncategorized"
   }
 }

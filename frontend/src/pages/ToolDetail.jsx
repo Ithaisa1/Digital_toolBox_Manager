@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom';
 import api from '../services/api';
 import { useTranslation } from 'react-i18next';
+import { categoryLabel } from '../utils/categories';
 import { formatEuro } from '../utils/formatCurrency';
 import { getToolDescription } from '../utils/productDescriptions';
 import './ToolDetail.css';
@@ -184,7 +185,7 @@ const ToolDetail = () => {
           {tool.category && (
             <div className="info-row">
               <span className="label">{t('tools.category')}:</span>
-              <span className="value">{tool.category.name}</span>
+              <span className="value">{categoryLabel(t, tool.category.name)}</span>
             </div>
           )}
           <div className="info-row">
