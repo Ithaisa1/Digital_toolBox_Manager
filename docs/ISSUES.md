@@ -1,4 +1,4 @@
-# Digital Toolbox Manager — Errores, Problemas y Soluciones
+# Dexa Manager — Errores, Problemas y Soluciones
 
 > **Fecha:** 17 Mayo 2026
 > **Alcance:** Errores críticos y medios encontrados durante el desarrollo y despliegue, con sus soluciones implementadas.

@@ -113,7 +113,7 @@ Al iniciar `npm run dev` / `npm start`:
 ## Variable de entorno
 
 ```env
-DATABASE_URL="postgresql://usuario:password@localhost:5432/digital_toolbox_manager?schema=public"
+DATABASE_URL="postgresql://usuario:password@localhost:5432/dexa_manager?schema=public"
 ```
 
 Ver también [setup-postgres.md](./setup-postgres.md).

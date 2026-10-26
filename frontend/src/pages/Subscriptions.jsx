@@ -13,8 +13,8 @@ const FILTERS = ['all', 'active', 'inactive', 'archived'];
 
 const STATUS_OPTIONS = ['ACTIVE', 'INACTIVE', 'ARCHIVED'];
 
-const getFallbackLogo = (name = 'TB') => {
-  const initials = (name || 'TB')
+const getFallbackLogo = (name = 'DM') => {
+  const initials = (name || 'DM')
     .trim()
     .split(/\s+/)
     .slice(0, 2)

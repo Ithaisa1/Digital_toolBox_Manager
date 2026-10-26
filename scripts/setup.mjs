@@ -22,7 +22,7 @@ if (major < 18) {
   process.exit(1);
 }
 
-console.log(color.bold('\n🧰 Digital Toolbox Manager — preparación\n'));
+console.log(color.bold('\n🧰 Dexa Manager — preparación\n'));
 
 // 1. Dependencias (la raíz solo tiene Prisma, que lo busca junto a database/prisma)
 for (const [name, dir] of [['raíz', ROOT], ['backend', BACKEND], ['frontend', FRONTEND]]) {

@@ -1,6 +1,6 @@
 # Despliegue
 
-Este documento describe el despliegue del backend y frontend de Digital Toolbox Manager.
+Este documento describe el despliegue del backend y frontend de Dexa Manager.
 
 ## Backend
 

@@ -36,7 +36,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/jobs", jobsRoutes);
 
 app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", message: "ToolBox Manager API is running" });
+  res.json({ status: "ok", message: "Dexa Manager API is running" });
 });
 
 app.use(notFound);

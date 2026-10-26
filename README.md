@@ -1,4 +1,4 @@
-# 🧰 Digital Toolbox Manager
+# 🧰 Dexa Manager
 
 > Organiza todas tus herramientas digitales, suscripciones y licencias en un solo lugar.
 
@@ -32,7 +32,7 @@
 
 ## 🎯 ¿Qué es?
 
-**Digital Toolbox Manager** es una aplicación full-stack que te permite centralizar la gestión de tus herramientas digitales: desde IDEs y plataformas SaaS hasta suscripciones de pago y licencias.
+**Dexa Manager** es una aplicación full-stack que te permite centralizar la gestión de tus herramientas digitales: desde IDEs y plataformas SaaS hasta suscripciones de pago y licencias.
 
 El problema que resuelve es sencillo pero real: ¿cuántas herramientas pagas cada mes? ¿Cuándo se renueva tu suscripción a Figma? ¿Qué categorías de software usas más? Esta app te da las respuestas en un dashboard claro, con historial de cambios y exportación de datos.
 
@@ -143,7 +143,7 @@ Cada herramienta tiene su ficha con nombre, tipo, descripción, URL, precio mens
 ## 📁 Estructura del proyecto
 
 ```
-Digital_Toolbox_Manager/
+dexa-manager/
 │
 ├── backend/                          # API REST (Express)
 │   ├── src/
@@ -203,8 +203,8 @@ Digital_Toolbox_Manager/
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/Ithaisa1/Digital_toolBox_Manager.git
-cd Digital_toolBox_Manager
+git clone https://github.com/Ithaisa1/dexa-manager.git
+cd dexa-manager
 ```
 
 ### 2. Preparar PostgreSQL
@@ -212,7 +212,7 @@ cd Digital_toolBox_Manager
 Con PostgreSQL instalado y encendido, crea la base de datos (guía detallada en [docs/setup-postgres.md](docs/setup-postgres.md)):
 
 ```bash
-psql -U postgres -c "CREATE DATABASE digital_toolbox_manager;"
+psql -U postgres -c "CREATE DATABASE dexa_manager;"
 ```
 
 ### 3. Preparar el proyecto (solo la primera vez)
@@ -226,7 +226,7 @@ Instala todas las dependencias, crea `backend/.env` y `frontend/.env` a partir d
 Si es la primera vez, **edita `DATABASE_URL` en `backend/.env`** con tu usuario y contraseña de PostgreSQL y vuelve a ejecutar `npm run setup`:
 
 ```env
-DATABASE_URL="postgresql://postgres:TU_PASSWORD@localhost:5432/digital_toolbox_manager?schema=public"
+DATABASE_URL="postgresql://postgres:TU_PASSWORD@localhost:5432/dexa_manager?schema=public"
 ```
 
 Si algo falla (PostgreSQL apagado, contraseña incorrecta, base de datos inexistente), el comando explica qué hacer.

@@ -98,7 +98,7 @@ for (const service of services) {
 }
 
 console.log(`
-${color.bold('🧰 Digital Toolbox Manager')}
+${color.bold('🧰 Dexa Manager')}
   ${color.blue('web')}  http://localhost:3000
   ${color.magenta('api')}  http://localhost:${apiPort}
   ${color.dim('Ctrl+C para parar')}

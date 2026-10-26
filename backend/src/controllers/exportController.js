@@ -101,13 +101,13 @@ export const exportUserData = async (req, res, next) => {
         const csvParser = new Parser();
         const csv = csvParser.parse([{ Info: 'No hay datos para exportar' }]);
         res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-        res.setHeader('Content-Disposition', `attachment; filename="toolbox-${sanitizeDate()}.csv"`);
+        res.setHeader('Content-Disposition', `attachment; filename="dexa-${sanitizeDate()}.csv"`);
         return res.send('\uFEFF' + csv);
       }
       const csvParser = new Parser();
       const csv = csvParser.parse(exportData);
       res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-      res.setHeader('Content-Disposition', `attachment; filename="toolbox-${sanitizeDate()}.csv"`);
+      res.setHeader('Content-Disposition', `attachment; filename="dexa-${sanitizeDate()}.csv"`);
       return res.send('\uFEFF' + csv);
     }
 
@@ -119,7 +119,7 @@ export const exportUserData = async (req, res, next) => {
 
 function generatePDF(res, user, toolsRows, subsRows, movRows, include) {
   const doc = new PDFDocument({ margin: 40, size: 'A4' });
-  const filename = `toolbox-${sanitizeDate()}.pdf`;
+  const filename = `dexa-${sanitizeDate()}.pdf`;
 
   res.setHeader('Content-Type', 'application/pdf');
   res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
@@ -146,7 +146,7 @@ function generatePDF(res, user, toolsRows, subsRows, movRows, include) {
 
   // Header
   doc.rect(0, 0, doc.page.width, 100).fill(primaryColor);
-  doc.fillColor('#FFFFFF').fontSize(24).font('Helvetica-Bold').text('Digital Toolbox Manager', 40, 30);
+  doc.fillColor('#FFFFFF').fontSize(24).font('Helvetica-Bold').text('Dexa Manager', 40, 30);
   doc.fontSize(12).font('Helvetica').text(`Informe de ${user.name}`, 40, 62);
   doc.fontSize(10).fillColor('#CBD5E1').text(`Generado: ${new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}`, 40, 82);
 
@@ -235,7 +235,7 @@ function generatePDF(res, user, toolsRows, subsRows, movRows, include) {
     doc.switchToPage(i);
     const pageHeight = doc.page.height;
     doc.fontSize(8).fillColor(mutedColor).text(
-      `Digital Toolbox Manager — Página ${i - range.start + 1} de ${pageCount}`,
+      `Dexa Manager — Página ${i - range.start + 1} de ${pageCount}`,
       40,
       pageHeight - 30,
       { align: 'center' },

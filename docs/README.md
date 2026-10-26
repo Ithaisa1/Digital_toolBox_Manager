@@ -1,4 +1,4 @@
-# Documentación — Digital Toolbox Manager
+# Documentación — Dexa Manager
 
 Índice de la documentación del proyecto.
 

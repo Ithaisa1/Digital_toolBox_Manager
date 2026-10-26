@@ -66,7 +66,7 @@ app.get("/api/health", async (req, res) => {
   res.json({
     status: "ok",
     database: "connected",
-    message: "Digital Toolbox Manager API is running",
+    message: "Dexa Manager API is running",
   });
 });
 

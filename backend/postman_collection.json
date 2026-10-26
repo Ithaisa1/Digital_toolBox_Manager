@@ -1,8 +1,8 @@
 {
   "info": {
-    "name": "Digital Toolbox Manager API",
+    "name": "Dexa Manager API",
     "_postman_id": "ee06714b-55ce-4f13-b84f-85138751da3c",
-    "description": "Colección de Postman para las rutas principales del backend de Digital Toolbox Manager.",
+    "description": "Colección de Postman para las rutas principales del backend de Dexa Manager.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [

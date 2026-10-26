@@ -15,8 +15,8 @@ const TOOL_TYPES = {
   PAID: 'paid'
 };
 
-const getFallbackLogo = (name = 'TB') => {
-  const initials = (name || 'TB')
+const getFallbackLogo = (name = 'DM') => {
+  const initials = (name || 'DM')
     .trim()
     .split(/\s+/)
     .slice(0, 2)

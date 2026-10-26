@@ -1,4 +1,4 @@
-# Problemas Enfrentados y Soluciones — Digital Toolbox Manager
+# Problemas Enfrentados y Soluciones — Dexa Manager
 
 > **Autor:** Ithaisa Sánchez González
 > **Fecha:** Mayo 2026
