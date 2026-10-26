@@ -5,19 +5,29 @@ import { useState, useEffect } from 'react';
 import api from '../services/api';
 import { useTranslation } from 'react-i18next';
 import { formatEuro } from '../utils/formatCurrency';
+import Pagination from '../components/Pagination';
 import './AdminDashboard.css';
+
+const USERS_PER_PAGE = 10;
 
 const AdminDashboard = () => {
   const { t } = useTranslation();
   const [stats, setStats] = useState(null);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState({ items: [], total: 0, page: 1, totalPages: 1 });
+  const [userSearch, setUserSearch] = useState('');
+  const [userPage, setUserPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
     fetchAdminStats();
-    fetchAdminUsers();
   }, []);
+
+  // Carga la página de usuarios; espera 300 ms tras teclear para no saturar la API
+  useEffect(() => {
+    const timer = setTimeout(() => fetchAdminUsers(), userSearch ? 300 : 0);
+    return () => clearTimeout(timer);
+  }, [userSearch, userPage]);
 
   /** Carga estadísticas solo accesibles para rol ADMIN. */
   const fetchAdminStats = async () => {
@@ -33,7 +43,9 @@ const AdminDashboard = () => {
 
   const fetchAdminUsers = async () => {
     try {
-      const response = await api.get('/admin/users');
+      const response = await api.get('/admin/users', {
+        params: { q: userSearch || undefined, page: userPage, limit: USERS_PER_PAGE },
+      });
       setUsers(response.data);
     } catch (err) {
       console.error('Failed to load admin users', err);
@@ -118,27 +130,49 @@ const AdminDashboard = () => {
       </div>
 
       <div className="admin-dashboard-section">
-        <h2>User Management</h2>
+        <h2>{t('admin.dashboard.userManagement')}</h2>
+        <input
+          type="search"
+          className="admin-user-search"
+          placeholder={t('admin.dashboard.searchUsers')}
+          value={userSearch}
+          onChange={(e) => {
+            setUserSearch(e.target.value);
+            setUserPage(1);
+          }}
+          aria-label={t('admin.dashboard.searchUsers')}
+        />
+        {users.items.length === 0 && (
+          <p className="admin-user-empty">{t('admin.dashboard.noUsersFound')}</p>
+        )}
         <div className="users-list admin-user-management">
-          {users.map((user) => (
+          {users.items.map((user) => (
             <div key={user.id} className="user-item">
               <div>
                 <strong>{user.name}</strong> ({user.email})
                 <div className="user-meta">
                   <span>{user.role}</span>
-                  <span>{user.toolsCount} tools</span>
-                  <span>{user.subscriptionsCount} subs</span>
+                  <span>{user.toolsCount} {t('admin.dashboard.tools')}</span>
+                  <span>{user.subscriptionsCount} {t('admin.dashboard.subs')}</span>
                 </div>
               </div>
               <button
                 className={`btn ${user.isBlocked ? 'btn-outline' : 'btn-danger'}`}
                 onClick={() => handleToggleBlock(user.id)}
               >
-                {user.isBlocked ? 'Unblock' : 'Block'}
+                {user.isBlocked ? t('admin.dashboard.unblock') : t('admin.dashboard.block')}
               </button>
             </div>
           ))}
         </div>
+        <Pagination
+          page={users.page}
+          totalPages={users.totalPages}
+          total={users.total}
+          pageSize={USERS_PER_PAGE}
+          onPageChange={setUserPage}
+          scrollToTop={false}
+        />
       </div>
     </div>
   );

@@ -3,7 +3,11 @@ import api from '../services/api';
 import { useTranslation } from 'react-i18next';
 import { formatEuro } from '../utils/formatCurrency';
 import { getToolDescription } from '../utils/productDescriptions';
+import Pagination from '../components/Pagination';
+import { usePagination } from '../hooks/usePagination';
 import './ToolsList.css';
+
+const TOOLS_PER_PAGE = 12;
 
 const TOOL_TYPES = {
   FREE: 'free',
@@ -629,6 +633,14 @@ const ToolsList = () => {
     return result;
   }, [uniqueTools, debouncedSearch, activeFilter, selectedCategory]);
 
+  const {
+    page,
+    setPage,
+    totalPages,
+    total,
+    pageItems: pagedTools,
+  } = usePagination(filteredTools, TOOLS_PER_PAGE, `${debouncedSearch}|${activeFilter}|${selectedCategory}`);
+
   const handleToolAdded = (newTool) => {
     if (newTool) {
       setRecentlyAdded((prev) => [newTool, ...prev].slice(0, 3));
@@ -804,8 +816,9 @@ const ToolsList = () => {
           </button>
         </div>
       ) : (
+        <>
         <div className="tools-grid">
-          {filteredTools.map((tool) => {
+          {pagedTools.map((tool) => {
             const isFree = !tool.price || tool.price === 0;
             const subscribed = hasActiveSubscription(tool);
             const activeSub = getActiveSubscription(tool);
@@ -935,6 +948,14 @@ const ToolsList = () => {
             );
           })}
         </div>
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          total={total}
+          pageSize={TOOLS_PER_PAGE}
+          onPageChange={setPage}
+        />
+        </>
       )}
 
       <AddToolModal

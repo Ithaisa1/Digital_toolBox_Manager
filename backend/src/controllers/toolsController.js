@@ -8,23 +8,33 @@ import {
   attachToolLogo,
   attachSubscriptionLogo,
 } from "../utils/productLogo.js";
+import { contains, findPage, parsePagination, parseSearch } from "../utils/pagination.js";
 
 /**
  * Lista todas las herramientas del usuario autenticado con filtros opcionales.
- * @param {import('express').Request} req - query: { status?, category? }.
- * @param {import('express').Response} res - 200 con array de herramientas (logos adjuntos).
+ * @param {import('express').Request} req - query: { status?, category?, q?, page?, limit? }.
+ * @param {import('express').Response} res - 200 con array de herramientas (logos adjuntos), o página si se envía page/limit.
  * @param {import('express').NextFunction} next - Pasa errores al middleware de errores.
  */
 export const getAllTools = async (req, res, next) => {
   try {
     const userId = req.user.userId;
     const { status, category } = req.query;
+    const search = parseSearch(req.query);
 
     const where = { userId };
     if (status) where.status = status;
     if (category) where.categoryId = category;
+    if (search) {
+      where.OR = [
+        { name: contains(search) },
+        { type: contains(search) },
+        { description: contains(search) },
+        { category: { name: contains(search) } },
+      ];
+    }
 
-    const tools = await prisma.tool.findMany({
+    const result = await findPage(prisma.tool, {
       where,
       include: {
         category: true,
@@ -42,14 +52,12 @@ export const getAllTools = async (req, res, next) => {
         },
       },
       orderBy: { createdAt: "desc" },
-    });
+    }, parsePagination(req.query), (tool) => ({
+      ...attachToolLogo(tool),
+      subscriptions: (tool.subscriptions || []).map(attachSubscriptionLogo),
+    }));
 
-    res.json(
-      tools.map((tool) => ({
-        ...attachToolLogo(tool),
-        subscriptions: (tool.subscriptions || []).map(attachSubscriptionLogo),
-      })),
-    );
+    res.json(result);
   } catch (error) {
     next(error);
   }

@@ -372,6 +372,22 @@ Prefijo base: `/api`
 | `GET` | `/dashboard/stats` | Estadísticas del usuario |
 | `GET` | `/export?format=csv` | Exportar datos |
 
+### Paginación y búsqueda
+
+Las listas `GET /api/tools`, `/api/subscriptions`, `/api/movements` y `/api/admin/users` aceptan parámetros opcionales:
+
+| Parámetro | Descripción |
+|-----------|-------------|
+| `q` | Texto a buscar (sin distinguir mayúsculas) |
+| `page` | Número de página (desde 1) |
+| `limit` | Elementos por página (por defecto 20, máximo 100) |
+
+Sin `page` ni `limit` la respuesta es un array, como siempre. Con ellos, la respuesta es:
+
+```json
+{ "items": [...], "total": 46, "page": 2, "limit": 12, "totalPages": 4 }
+```
+
 ### Endpoints de administrador
 
 | Método | Ruta | Descripción |

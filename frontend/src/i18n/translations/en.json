@@ -263,7 +263,13 @@
       "totalCategories": "Total Categories",
       "recentActivity": "Recent Activity",
       "topUsers": "Most Active Users",
-      "tools": "tools"
+      "tools": "tools",
+      "userManagement": "User management",
+      "searchUsers": "Search by name or email…",
+      "noUsersFound": "No users found",
+      "subs": "subscriptions",
+      "block": "Block",
+      "unblock": "Unblock"
     }
   },
   "language": {
@@ -285,5 +291,12 @@
     "movementsOnly": "History only",
     "download": "Download",
     "error": "Failed to export data"
+  },
+  "pagination": {
+    "label": "Pagination",
+    "showing": "Showing {{from}}–{{to}} of {{total}}",
+    "previous": "Previous page",
+    "next": "Next page",
+    "page": "Page {{page}}"
   }
 }
