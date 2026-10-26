@@ -65,6 +65,7 @@ Está pensada como proyecto educativo para estudiantes de desarrollo web, pero e
 | 🌙 **Temas** | Claro y oscuro con persistencia en localStorage |
 | 📱 **Responsive** | Menú hamburguesa animado (≤600px), layout adaptativo para móvil, tablet y desktop |
 | 📤 **Exportación** | Descarga tus datos en CSV, JSON o PDF con informe visual |
+| 📥 **Importación** | Sube un CSV (el exportado por la app o uno hecho en Excel) con vista previa antes de guardar; omite repetidas y filas con errores |
 | 🔄 **Seed automático** | La base de datos se inicializa con datos de ejemplo al primer arranque |
 
 ---
@@ -360,6 +361,7 @@ Prefijo base: `/api`
 | `DELETE` | `/auth/profile` | Eliminar cuenta |
 | `GET` | `/tools` | Listar mis herramientas |
 | `POST` | `/tools` | Crear herramienta |
+| `POST` | `/tools/import` | Importar herramientas desde CSV (`{ csv, dryRun }`) |
 | `GET` | `/tools/:id` | Ver detalle de herramienta |
 | `PUT` | `/tools/:id` | Actualizar herramienta |
 | `DELETE` | `/tools/:id` | Eliminar herramienta |
@@ -561,7 +563,6 @@ Estas son las siguientes iteraciones previstas para el proyecto, ordenadas por i
 
 ### Funcionalidad
 - **Paginación** — Añadir `skip`/`take` a los endpoints de lista para manejar grandes volúmenes de datos
-- **Importación** — Subir un CSV para importar herramientas en lote
 - **Etiquetas** — Sistema de tags libre además de categorías
 - **Compartir** — Permitir compartir herramientas entre usuarios
 

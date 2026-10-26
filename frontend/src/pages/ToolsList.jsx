@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { formatEuro } from '../utils/formatCurrency';
 import { getToolDescription } from '../utils/productDescriptions';
 import Pagination from '../components/Pagination';
+import ImportToolsModal from '../components/ImportToolsModal';
 import { usePagination } from '../hooks/usePagination';
 import './ToolsList.css';
 
@@ -443,6 +444,7 @@ const ToolsList = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
   const [categories, setCategories] = useState([]);
   const [subscriptionPanel, setSubscriptionPanel] = useState(null);
   const [subscriptionForm, setSubscriptionForm] = useState({
@@ -739,9 +741,14 @@ const ToolsList = () => {
           <h1>{copy.title}</h1>
           <p className="tools-subtitle">{copy.subtitle}</p>
         </div>
-        <button className="btn btn-primary" onClick={() => setShowAddModal(true)}>
-          {copy.addTool}
-        </button>
+        <div className="tools-header-actions">
+          <button className="btn btn-secondary" onClick={() => setShowImportModal(true)}>
+            {t('import.button')}
+          </button>
+          <button className="btn btn-primary" onClick={() => setShowAddModal(true)}>
+            {copy.addTool}
+          </button>
+        </div>
       </div>
 
       {recentlyAdded.length > 0 && (
@@ -957,6 +964,12 @@ const ToolsList = () => {
         />
         </>
       )}
+
+      <ImportToolsModal
+        isOpen={showImportModal}
+        onClose={() => setShowImportModal(false)}
+        onImported={fetchTools}
+      />
 
       <AddToolModal
         isOpen={showAddModal}

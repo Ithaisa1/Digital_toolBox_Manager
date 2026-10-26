@@ -19,6 +19,13 @@
   max-width: 42rem;
 }
 
+.tools-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
 .tools-header h1 {
   margin: 0 0 0.5rem;
   color: var(--text-primary);

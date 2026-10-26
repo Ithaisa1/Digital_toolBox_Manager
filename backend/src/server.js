@@ -37,7 +37,8 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
-app.use(express.json());
+// 2 MB para permitir importar CSV de hasta 1 MB
+app.use(express.json({ limit: "2mb" }));
 
 // Rutas de la API REST
 app.use("/api/auth", authRoutes);

@@ -298,5 +298,57 @@
     "previous": "Página anterior",
     "next": "Página siguiente",
     "page": "Página {{page}}"
+  },
+  "import": {
+    "button": "⬆ Importar CSV",
+    "title": "Importar herramientas",
+    "intro": "Sube un archivo CSV con tus herramientas. Antes de guardar nada verás una vista previa.",
+    "chooseFile": "Elige un archivo CSV",
+    "reading": "Leyendo archivo…",
+    "dropHint": "o arrástralo aquí · máximo 1 MB y 500 filas",
+    "columnsHelp": "Solo es obligatoria la columna nombre. También se leen: tipo, url, precio, categoría, estado y descripción. Vale el CSV que exporta la app, en español o inglés, separado por comas o punto y coma.",
+    "downloadTemplate": "Descargar plantilla",
+    "chooseAnother": "Elegir otro archivo",
+    "confirm_one": "Importar {{count}} herramienta",
+    "confirm_other": "Importar {{count}} herramientas",
+    "close": "Cerrar",
+    "free": "Gratis",
+    "duplicateNote": "Ya existe una herramienta con este nombre",
+    "unknownCategory": "La categoría «{{name}}» no existe: se importa sin categoría",
+    "doneMessage_one": "Se ha importado {{count}} herramienta.",
+    "doneMessage_other": "Se han importado {{count}} herramientas.",
+    "summary": {
+      "new": "nuevas",
+      "duplicates": "repetidas (se omiten)",
+      "invalid": "con errores (se omiten)"
+    },
+    "columns": {
+      "line": "Fila",
+      "name": "Herramienta",
+      "price": "Precio",
+      "result": "Resultado"
+    },
+    "result": {
+      "new": "Nueva",
+      "duplicate": "Repetida",
+      "invalid": "Error"
+    },
+    "rowErrors": {
+      "missingName": "Falta el nombre",
+      "nameTooLong": "Nombre demasiado largo (máx. 100)",
+      "typeTooLong": "Tipo demasiado largo (máx. 50)",
+      "invalidUrl": "URL no válida",
+      "invalidPrice": "Precio no válido",
+      "negativePrice": "El precio no puede ser negativo",
+      "invalidStatus": "Estado no válido (usa Activa, Inactiva o Archivada)"
+    },
+    "errors": {
+      "emptyFile": "El archivo está vacío o solo tiene la cabecera.",
+      "missingNameColumn": "No se encuentra la columna «nombre» (o «name»).",
+      "tooManyRows": "El archivo tiene demasiadas filas (máximo {{max}}).",
+      "fileTooLarge": "El archivo pesa más de 1 MB.",
+      "generic": "No se pudo leer el archivo. Inténtalo de nuevo."
+    },
+    "nothingToImport": "Nada que importar"
   }
 }
