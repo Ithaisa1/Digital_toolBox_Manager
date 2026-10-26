@@ -60,7 +60,8 @@ Está pensada como proyecto educativo para estudiantes de desarrollo web, pero e
 | 🔔 **Avisos de renovación** | Email diario con las suscripciones que se renuevan en los próximos días (activable desde el perfil) |
 | 📜 **Historial** | Auditoría automática de cada cambio: creaciones, actualizaciones, eliminaciones y cambios de precio |
 | 👤 **Perfiles** | Edición de nombre, email, contraseña, idioma preferido y eliminación de cuenta |
-| 🛡️ **Admin panel** | Panel de administración con estadísticas globales y gestión de usuarios |
+| 🛡️ **Panel de control** | Resumen con KPIs y gráficos, usuarios (buscar, filtrar, ver ficha, cambiar rol, bloquear, eliminar), herramientas de todos los usuarios, categorías (crear, editar, borrar), registro de actividad y estado del sistema. Bloqueos y cambios de rol surten efecto al instante |
+| 🧪 **Web de demo** | Modo demo (`DEMO_MODE=true`) con datos realistas, acceso con un clic como admin o usuaria y reinicio automático cada noche |
 | 🌐 **i18n** | Español e inglés con cambio dinámico sin recargar |
 | 🌙 **Temas** | Claro y oscuro con persistencia en localStorage |
 | 📱 **Responsive** | Revisado de 320 px a 1440 px: menú desplegable hasta 900 px, tarjetas en 1–2–3 columnas y botones cómodos para el dedo en pantallas táctiles |
@@ -482,6 +483,18 @@ Todo vive en **un solo proyecto de Vercel**: la web (archivos estáticos), la AP
 Cada usuario recibe un solo email con todas sus renovaciones próximas, y nunca dos avisos para la misma renovación. Cualquiera puede desactivarlos desde su perfil.
 
 ---
+
+## 🧪 Web de demo (portfolio)
+
+Una segunda instalación con `DEMO_MODE=true` y **su propia base de datos** sirve como demo pública:
+
+- La pantalla de inicio de sesión muestra **«Entrar como administradora / usuaria»** (cuentas `admin.demo@example.com` y `usuario.demo@example.com`, contraseña `demo1234`).
+- Datos de ejemplo realistas: ~24 usuarios, ~170 herramientas, ~110 suscripciones y actividad de los últimos meses (`backend/src/demo/demoData.js`).
+- Las cuentas de demo están protegidas: no se puede cambiar su email o contraseña, ni bloquearlas, borrarlas o quitarles el rol.
+- Cada noche (Vercel Cron, 03:00 UTC) se borran los cambios de los visitantes y se recargan los datos (`/api/jobs/demo-reset`).
+- Recargar a mano: `DEMO_MODE=true node backend/scripts/demo-reset.js`.
+
+En la instalación normal (sin `DEMO_MODE`) nada de esto está activo.
 
 ## 📲 App instalable (PWA)
 

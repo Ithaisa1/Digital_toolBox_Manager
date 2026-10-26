@@ -1,6 +1,7 @@
 /**
- * Gráficos del dashboard: coste mensual por categoría y pagos previstos por mes.
- * Hechos con HTML/CSS (sin librerías) para que hereden el tema claro/oscuro.
+ * Gráficos hechos con HTML/CSS (sin librerías) para que hereden el tema claro/oscuro.
+ * - HorizontalBarChart y MonthlyColumnChart: genéricos (los usa también el panel de admin).
+ * - CostByCategoryChart y UpcomingPaymentsChart: los del Dashboard del usuario.
  */
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -27,29 +28,28 @@ const niceMax = (value) => {
   return step * magnitude;
 };
 
-export const CostByCategoryChart = ({ data }) => {
-  const { t } = useTranslation();
-  const rows = foldCategories(data, t('dashboard.charts.other'));
-  const max = Math.max(...rows.map((r) => r.monthlyCost), 0);
+/**
+ * Barras horizontales con el valor al lado.
+ * @param {{title: string, subtitle?: React.ReactNode, rows: {key: string, label: string, value: number}[], format?: (n: number) => string}} props
+ */
+export const HorizontalBarChart = ({ title, subtitle, rows, format = String }) => {
+  const max = Math.max(...rows.map((r) => r.value), 0);
 
   return (
     <figure className="chart">
       <figcaption className="chart-header">
-        <h2>{t('dashboard.charts.costByCategory')}</h2>
-        <p className="chart-subtitle">{t('dashboard.charts.costByCategoryHint')}</p>
+        <h2>{title}</h2>
+        {subtitle && <p className="chart-subtitle">{subtitle}</p>}
       </figcaption>
 
       <ul className="hbar-list">
         {rows.map((row) => (
-          <li key={row.category} className="hbar-row">
-            <span className="hbar-label" title={categoryLabel(t, row.category)}>{categoryLabel(t, row.category)}</span>
+          <li key={row.key} className="hbar-row">
+            <span className="hbar-label" title={row.label}>{row.label}</span>
             <span className="hbar-track">
-              <span
-                className="hbar-bar"
-                style={{ width: `${max > 0 ? (row.monthlyCost / max) * 100 : 0}%` }}
-              />
+              <span className="hbar-bar" style={{ width: `${max > 0 ? (row.value / max) * 100 : 0}%` }} />
             </span>
-            <span className="hbar-value">{formatEuro(row.monthlyCost)}</span>
+            <span className="hbar-value">{format(row.value)}</span>
           </li>
         ))}
       </ul>
@@ -57,8 +57,12 @@ export const CostByCategoryChart = ({ data }) => {
   );
 };
 
-export const UpcomingPaymentsChart = ({ data }) => {
-  const { t, i18n } = useTranslation();
+/**
+ * Columnas por mes con tooltip al pasar el ratón o el teclado.
+ * @param {{title: string, subtitle?: React.ReactNode, data: {month: string, value: number}[], format?: (n: number) => string, tickFormat?: (n: number) => string, minMax?: number}} props
+ */
+export const MonthlyColumnChart = ({ title, subtitle, data, format = String, tickFormat, minMax = 0, integer = false }) => {
+  const { i18n } = useTranslation();
   const [active, setActive] = useState(null);
 
   const locale = i18n.language || 'es';
@@ -68,28 +72,27 @@ export const UpcomingPaymentsChart = ({ data }) => {
   };
   const shortMonth = new Intl.DateTimeFormat(locale, { month: 'short', timeZone: 'UTC' });
   const longMonthFormat = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', timeZone: 'UTC' });
-  const longMonth = { format: (date) => {
+  const longMonth = (date) => {
     const text = longMonthFormat.format(date);
     return text.charAt(0).toUpperCase() + text.slice(1);
-  } };
+  };
 
-  const total = data.reduce((sum, item) => sum + item.amount, 0);
-  const max = niceMax(Math.max(...data.map((d) => d.amount), 0));
+  let max = niceMax(Math.max(minMax, ...data.map((d) => d.value), 0));
+  // Recuentos (personas, acciones): que la marca del medio sea un número entero
+  if (integer && max % 2 !== 0) max += 1;
   const ticks = [max, max / 2, 0];
 
   return (
     <figure className="chart">
       <figcaption className="chart-header">
-        <h2>{t('dashboard.charts.upcomingPayments')}</h2>
-        <p className="chart-subtitle">
-          {t('dashboard.charts.next12Months')} · <strong>{formatEuro(total)}</strong>
-        </p>
+        <h2>{title}</h2>
+        {subtitle && <p className="chart-subtitle">{subtitle}</p>}
       </figcaption>
 
       <div className="cols" onMouseLeave={() => setActive(null)}>
         <div className="cols-axis" aria-hidden="true">
           {ticks.map((tick) => (
-            <span key={tick} className="cols-tick">{formatEuro(tick).replace(/,00/, '')}</span>
+            <span key={tick} className="cols-tick">{(tickFormat || format)(tick)}</span>
           ))}
         </div>
 
@@ -112,13 +115,13 @@ export const UpcomingPaymentsChart = ({ data }) => {
                 key={item.month}
                 className={`cols-slot ${active === index ? 'is-active' : ''}`}
                 tabIndex={0}
-                aria-label={`${longMonth.format(date)}: ${formatEuro(item.amount)}`}
+                aria-label={`${longMonth(date)}: ${format(item.value)}`}
                 onMouseEnter={() => setActive(index)}
                 onFocus={() => setActive(index)}
                 onBlur={() => setActive(null)}
               >
                 <span className="cols-bar-area">
-                  <span className="cols-bar" style={{ height: `${(item.amount / max) * 100}%` }} />
+                  <span className="cols-bar" style={{ height: `${(item.value / max) * 100}%` }} />
                 </span>
                 <span className="cols-label">
                   {label}
@@ -129,8 +132,8 @@ export const UpcomingPaymentsChart = ({ data }) => {
 
                 {active === index && (
                   <span className="chart-tooltip" role="tooltip">
-                    <span className="chart-tooltip-title">{longMonth.format(date)}</span>
-                    <span className="chart-tooltip-value">{formatEuro(item.amount)}</span>
+                    <span className="chart-tooltip-title">{longMonth(date)}</span>
+                    <span className="chart-tooltip-value">{format(item.value)}</span>
                   </span>
                 )}
               </div>
@@ -141,16 +144,53 @@ export const UpcomingPaymentsChart = ({ data }) => {
 
       {/* Versión en tabla para lectores de pantalla */}
       <table className="sr-only">
-        <caption>{t('dashboard.charts.upcomingPayments')}</caption>
+        <caption>{title}</caption>
         <tbody>
           {data.map((item) => (
             <tr key={item.month}>
-              <th scope="row">{longMonth.format(toDate(item.month))}</th>
-              <td>{formatEuro(item.amount)}</td>
+              <th scope="row">{longMonth(toDate(item.month))}</th>
+              <td>{format(item.value)}</td>
             </tr>
           ))}
         </tbody>
       </table>
     </figure>
+  );
+};
+
+const euroTick = (n) => formatEuro(n).replace(/,00/, '');
+
+/** Coste mensual por categoría (Dashboard y panel de admin). */
+export const CostByCategoryChart = ({ data, title, subtitle }) => {
+  const { t } = useTranslation();
+  const rows = foldCategories(data, t('dashboard.charts.other')).map((row) => ({
+    key: row.category,
+    label: categoryLabel(t, row.category),
+    value: row.monthlyCost,
+  }));
+
+  return (
+    <HorizontalBarChart
+      title={title || t('dashboard.charts.costByCategory')}
+      subtitle={subtitle ?? t('dashboard.charts.costByCategoryHint')}
+      rows={rows}
+      format={formatEuro}
+    />
+  );
+};
+
+/** Pagos previstos para los próximos 12 meses. */
+export const UpcomingPaymentsChart = ({ data }) => {
+  const { t } = useTranslation();
+  const total = data.reduce((sum, item) => sum + item.amount, 0);
+
+  return (
+    <MonthlyColumnChart
+      title={t('dashboard.charts.upcomingPayments')}
+      subtitle={<>{t('dashboard.charts.next12Months')} · <strong>{formatEuro(total)}</strong></>}
+      data={data.map((d) => ({ month: d.month, value: d.amount }))}
+      format={formatEuro}
+      tickFormat={euroTick}
+    />
   );
 };

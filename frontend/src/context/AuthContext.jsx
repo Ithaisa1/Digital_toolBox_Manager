@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('language', userData.language || 'es');
       setUser(userData);
 
-      return { success: true };
+      return { success: true, user: userData };
     } catch (error) {
       const apiData = error.response?.data;
       const details = apiData?.details

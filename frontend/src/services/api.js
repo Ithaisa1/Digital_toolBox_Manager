@@ -36,7 +36,9 @@ api.interceptors.response.use(
       requestUrl.includes("/auth/login") ||
       requestUrl.includes("/auth/register");
 
-    if (status === 401 && !isAuthRoute) {
+    // Sesión caducada, cuenta borrada o bloqueada por un administrador: volver al login
+    const blocked = status === 403 && error.response?.data?.code === "blocked";
+    if ((status === 401 || blocked) && !isAuthRoute) {
       localStorage.removeItem("token");
       localStorage.removeItem("language");
       window.location.href = "/login";
