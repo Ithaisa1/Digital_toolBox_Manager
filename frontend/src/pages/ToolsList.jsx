@@ -3,7 +3,7 @@ import api from '../services/api';
 import { useTranslation } from 'react-i18next';
 import { formatEuro } from '../utils/formatCurrency';
 import { getToolDescription } from '../utils/productDescriptions';
-import { categoryLabel, sortCategories } from '../utils/categories';
+import { categoryColor, categoryLabel, sortCategories } from '../utils/categories';
 import Pagination from '../components/Pagination';
 import ImportToolsModal from '../components/ImportToolsModal';
 import { usePagination } from '../hooks/usePagination';
@@ -29,8 +29,8 @@ const getFallbackLogo = (name = 'DM') => {
     <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
       <defs>
         <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#2563eb" />
-          <stop offset="100%" stop-color="#0f172a" />
+          <stop offset="0%" stop-color="#a8521f" />
+          <stop offset="100%" stop-color="#23160c" />
         </linearGradient>
       </defs>
       <rect width="128" height="128" rx="28" fill="url(#g)" />
@@ -921,7 +921,7 @@ const ToolsList = () => {
                   <p className="tool-description">
                     {tool.description || getToolDescription(tool) || tool.type || '-'}
                   </p>
-                  <p className="tool-category">
+                  <p className="tool-category" style={{ '--cat': categoryColor(tool.category?.name) }}>
                     {copy.category}: {tool.category ? categoryLabel(t, tool.category.name) : copy.uncategorized}
                   </p>
                 </div>

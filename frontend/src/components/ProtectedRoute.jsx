@@ -23,15 +23,15 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
   if (requiredRole && user.role !== requiredRole) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--color-error, #dc2626)', marginBottom: '1rem' }}>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--color-error, #a8302e)', marginBottom: '1rem' }}>
           Acceso Denegado
         </h2>
-        <p style={{ color: 'var(--color-text-secondary, #6b7280)', marginBottom: '1rem' }}>
+        <p style={{ color: 'var(--color-text-secondary, #7a6552)', marginBottom: '1rem' }}>
           No tienes permisos para acceder a esta página.
         </p>
         <button
           onClick={() => window.history.back()}
-          style={{ padding: '0.5rem 1rem', backgroundColor: 'var(--color-primary, #3b82f6)', color: '#fff', borderRadius: '0.375rem', border: 'none', cursor: 'pointer' }}
+          style={{ padding: '0.5rem 1rem', backgroundColor: 'var(--color-primary, #b9622a)', color: '#fff', borderRadius: '0.375rem', border: 'none', cursor: 'pointer' }}
         >
           Volver
         </button>

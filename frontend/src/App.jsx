@@ -32,7 +32,7 @@ function AppContent() {
     // Color de la barra del sistema (móvil y app instalada) acorde al tema
     document
       .querySelectorAll('meta[name="theme-color"]')
-      .forEach((meta) => meta.setAttribute('content', theme === 'dark' ? '#07070c' : '#f5f4fa'));
+      .forEach((meta) => meta.setAttribute('content', theme === 'dark' ? '#110b07' : '#f6efe3'));
   }, [theme]);
 
   const toggleTheme = () => {

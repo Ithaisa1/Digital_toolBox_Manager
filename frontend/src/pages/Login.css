@@ -35,8 +35,8 @@
 }
 
 .success-message {
-  background-color: rgba(34, 197, 94, 0.1);
-  border: 1px solid rgba(34, 197, 94, 0.3);
+  background-color: rgba(125, 154, 58, 0.1);
+  border: 1px solid rgba(125, 154, 58, 0.3);
   border-radius: var(--border-radius);
   padding: 16px;
   margin-bottom: 20px;
@@ -51,12 +51,12 @@
 }
 
 .error {
-  background-color: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  background-color: rgba(194, 65, 59, 0.1);
+  border: 1px solid rgba(194, 65, 59, 0.3);
   border-radius: var(--border-radius);
   padding: 12px;
   margin-bottom: 16px;
-  color: var(--error-color, #ef4444);
+  color: var(--error-color, #c2413b);
   font-size: 0.875rem;
 }
 

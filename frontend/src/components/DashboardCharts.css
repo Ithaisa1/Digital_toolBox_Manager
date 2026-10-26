@@ -66,7 +66,8 @@
   display: block;
   height: 100%;
   min-width: 2px;
-  background: var(--chart-bar);
+  /* Cada categoría trae su color de otoño (--cat); si no, el color general */
+  background: var(--cat, var(--chart-bar));
   border-radius: 0 4px 4px 0;
   transition: width 0.4s ease;
 }

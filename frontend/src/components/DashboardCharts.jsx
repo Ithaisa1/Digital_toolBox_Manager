@@ -6,7 +6,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatEuro } from '../utils/formatCurrency';
-import { categoryLabel } from '../utils/categories';
+import { categoryColor, categoryLabel } from '../utils/categories';
 import './DashboardCharts.css';
 
 const MAX_CATEGORIES = 6;
@@ -30,7 +30,7 @@ const niceMax = (value) => {
 
 /**
  * Barras horizontales con el valor al lado.
- * @param {{title: string, subtitle?: React.ReactNode, rows: {key: string, label: string, value: number}[], format?: (n: number) => string}} props
+ * @param {{title: string, subtitle?: React.ReactNode, rows: {key: string, label: string, value: number, color?: string}[], format?: (n: number) => string}} props
  */
 export const HorizontalBarChart = ({ title, subtitle, rows, format = String }) => {
   const max = Math.max(...rows.map((r) => r.value), 0);
@@ -47,7 +47,10 @@ export const HorizontalBarChart = ({ title, subtitle, rows, format = String }) =
           <li key={row.key} className="hbar-row">
             <span className="hbar-label" title={row.label}>{row.label}</span>
             <span className="hbar-track">
-              <span className="hbar-bar" style={{ width: `${max > 0 ? (row.value / max) * 100 : 0}%` }} />
+              <span
+                className="hbar-bar"
+                style={{ width: `${max > 0 ? (row.value / max) * 100 : 0}%`, ...(row.color && { '--cat': row.color }) }}
+              />
             </span>
             <span className="hbar-value">{format(row.value)}</span>
           </li>
@@ -163,10 +166,12 @@ const euroTick = (n) => formatEuro(n).replace(/,00/, '');
 /** Coste mensual por categoría (Dashboard y panel de admin). */
 export const CostByCategoryChart = ({ data, title, subtitle }) => {
   const { t } = useTranslation();
-  const rows = foldCategories(data, t('dashboard.charts.other')).map((row) => ({
+  const otherLabel = t('dashboard.charts.other');
+  const rows = foldCategories(data, otherLabel).map((row) => ({
     key: row.category,
     label: categoryLabel(t, row.category),
     value: row.monthlyCost,
+    color: categoryColor(row.category === otherLabel ? 'Other' : row.category),
   }));
 
   return (

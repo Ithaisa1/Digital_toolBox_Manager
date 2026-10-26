@@ -1,6 +1,13 @@
 /*
- * Dexa Manager — diseño "Aurora"
- * Tokens de color, tipografía y forma. Oscuro por defecto (body.dark), con modo claro.
+ * Dexa Manager — diseño «Cosecha» (otoño)
+ * Una paleta de otoño pensada para una app que controla dinero y suscripciones.
+ * Cada color tiene un significado, igual que las hojas cambian de color según la estación:
+ *   - Cobre      → el dinero: monedas, pagos y acciones principales.
+ *   - Ocre       → una renovación se acerca (la hoja empieza a cambiar).
+ *   - Granate    → un cobro, una alerta o algo que se borra (la hoja que cae).
+ *   - Musgo      → lo que está activo y en orden: el dinero que no se pierde.
+ *   - Corteza / pergamino → los fondos: madera oscura en modo oscuro, papel en modo claro.
+ * Oscuro por defecto (body.dark), con modo claro.
  * Los componentes usan estas variables; el estilo de cada componente vive en styles/aurora.css.
  */
 :root {
@@ -12,57 +19,59 @@
   --transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 
   /* Paleta de marca (igual en claro y oscuro) */
-  --violet: #8b5cf6;
-  --indigo: #6366f1;
-  --cyan: #22d3ee;
-  --pink: #f472b6;
-  --aurora-gradient: linear-gradient(120deg, #8b5cf6 0%, #6366f1 40%, #22d3ee 100%);
-  --aurora-text: linear-gradient(100deg, #c4b5fd 0%, #a5b4fc 35%, #67e8f9 70%, #f9a8d4 100%);
+  --copper: #c8692f;
+  --rust: #b9702a;
+  --moss: #8a9a4a;
+  --wine: #b8323f;
+  --ochre: #d69a2d;
+  /* Degradado de marca: de cobre a ocre, como una hoja de arce al sol */
+  --aurora-gradient: linear-gradient(120deg, #9c3f1c 0%, #b5531f 50%, #b46d22 100%);
+  --aurora-text: linear-gradient(100deg, #f3c27a 0%, #e8935a 35%, #d0694a 65%, #b9c27a 100%);
 }
 
-/* ---------- Modo claro ---------- */
+/* ---------- Modo claro: papel de pergamino ---------- */
 body {
-  --primary-color: #7c3aed;
-  --secondary-color: #18181f;
-  --accent-color: #0891b2;
-  --success-color: #059669;
-  --warning-color: #d97706;
-  --danger-color: #dc2626;
-  --info-color: #6366f1;
+  --primary-color: #a8521f;
+  --secondary-color: #23160c;
+  --accent-color: #5f6f2a;
+  --success-color: #4f6b22;
+  --warning-color: #9a6210;
+  --danger-color: #9b2335;
+  --info-color: #7a4a63;
   --text-inverse: #ffffff;
 
   --primary-gradient: var(--aurora-gradient);
-  --secondary-gradient: linear-gradient(135deg, #18181f 0%, #2a2a36 100%);
-  --success-gradient: linear-gradient(135deg, #10b981 0%, #0891b2 100%);
-  --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #f472b6 100%);
-  --danger-gradient: linear-gradient(135deg, #f43f5e 0%, #be123c 100%);
+  --secondary-gradient: linear-gradient(135deg, #23160c 0%, #3a2a1c 100%);
+  --success-gradient: linear-gradient(135deg, #62802c 0%, #4f6b22 100%);
+  --warning-gradient: linear-gradient(135deg, #c98a24 0%, #a8521f 100%);
+  --danger-gradient: linear-gradient(135deg, #b8323f 0%, #8c1f2d 100%);
 
-  --bg-primary: #f5f4fa;
-  --bg-secondary: #ffffff;
-  --bg-tertiary: #efedf7;
-  --bg-card: rgba(255, 255, 255, 0.72);
-  --bg-elevated: #ffffff;
-  --bg-hover: rgba(124, 58, 237, 0.07);
+  --bg-primary: #f6efe3;
+  --bg-secondary: #fffaf2;
+  --bg-tertiary: #efe4d2;
+  --bg-card: rgba(255, 250, 242, 0.75);
+  --bg-elevated: #fffaf2;
+  --bg-hover: rgba(168, 82, 31, 0.07);
 
-  --text-primary: #0c0b14;
-  --text-secondary: #3f3d4f;
-  --text-muted: #6e6b80;
-  --text-accent: #6d28d9;
+  --text-primary: #23160c;
+  --text-secondary: #4d3a2a;
+  --text-muted: #7a6552;
+  --text-accent: #8f3f17;
 
-  --border-color: rgba(24, 20, 50, 0.09);
-  --border-strong: rgba(24, 20, 50, 0.16);
-  --border-glow: rgba(124, 58, 237, 0.35);
+  --border-color: rgba(60, 35, 15, 0.1);
+  --border-strong: rgba(60, 35, 15, 0.18);
+  --border-glow: rgba(168, 82, 31, 0.35);
 
-  --shadow-sm: 0 1px 2px rgba(20, 16, 40, 0.06), 0 4px 14px rgba(20, 16, 40, 0.05);
-  --shadow-md: 0 2px 6px rgba(20, 16, 40, 0.05), 0 14px 34px rgba(20, 16, 40, 0.08);
-  --shadow-lg: 0 24px 60px rgba(20, 16, 40, 0.14);
-  --shadow-glow: 0 0 0 1px rgba(124, 58, 237, 0.18), 0 18px 50px rgba(124, 58, 237, 0.16);
+  --shadow-sm: 0 1px 2px rgba(60, 35, 15, 0.06), 0 4px 14px rgba(60, 35, 15, 0.05);
+  --shadow-md: 0 2px 6px rgba(60, 35, 15, 0.05), 0 14px 34px rgba(60, 35, 15, 0.08);
+  --shadow-lg: 0 24px 60px rgba(60, 35, 15, 0.14);
+  --shadow-glow: 0 0 0 1px rgba(168, 82, 31, 0.18), 0 18px 50px rgba(168, 82, 31, 0.16);
   --box-shadow: var(--shadow-md);
 
-  --aurora-opacity: 0.38;
+  --aurora-opacity: 0.32;
   --glass-blur: 18px;
-  --chart-bar: #7c3aed;
-  --chart-grid: rgba(24, 20, 50, 0.07);
+  --chart-bar: #b4572a;
+  --chart-grid: rgba(60, 35, 15, 0.08);
 
   margin: 0;
   min-height: 100vh;
@@ -70,44 +79,44 @@ body {
   color: var(--text-primary);
 }
 
-/* ---------- Modo oscuro (por defecto) ---------- */
+/* ---------- Modo oscuro (por defecto): madera y luz de tarde ---------- */
 body.dark {
-  --primary-color: #8b5cf6;
-  --secondary-color: #f4f4f7;
-  --accent-color: #22d3ee;
-  --success-color: #34d399;
-  --warning-color: #fbbf24;
-  --danger-color: #fb7185;
-  --info-color: #818cf8;
+  --primary-color: #e08b4c;
+  --secondary-color: #f6ece0;
+  --accent-color: #a9b86a;
+  --success-color: #a9c46a;
+  --warning-color: #e6b450;
+  --danger-color: #e0707a;
+  --info-color: #c48fae;
   --text-inverse: #ffffff;
 
-  --secondary-gradient: linear-gradient(135deg, #1c1c27 0%, #12121b 100%);
+  --secondary-gradient: linear-gradient(135deg, #2a1e14 0%, #1a120c 100%);
 
-  --bg-primary: #07070c;
-  --bg-secondary: #0f0f17;
-  --bg-tertiary: #161621;
-  --bg-card: rgba(255, 255, 255, 0.035);
-  --bg-elevated: #12121b;
-  --bg-hover: rgba(255, 255, 255, 0.06);
+  --bg-primary: #110b07;
+  --bg-secondary: #1a120c;
+  --bg-tertiary: #231910;
+  --bg-card: rgba(255, 236, 214, 0.04);
+  --bg-elevated: #1c140d;
+  --bg-hover: rgba(255, 220, 180, 0.06);
 
-  --text-primary: #f4f4f7;
-  --text-secondary: #b8b8c7;
-  --text-muted: #7d7d92;
-  --text-accent: #c4b5fd;
+  --text-primary: #f6ece0;
+  --text-secondary: #cdbba6;
+  --text-muted: #9a856f;
+  --text-accent: #f0b27a;
 
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.14);
-  --border-glow: rgba(167, 139, 250, 0.45);
+  --border-color: rgba(255, 228, 200, 0.09);
+  --border-strong: rgba(255, 228, 200, 0.15);
+  --border-glow: rgba(224, 139, 76, 0.45);
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.35);
   --shadow-lg: 0 30px 80px rgba(0, 0, 0, 0.55);
-  --shadow-glow: 0 0 0 1px rgba(167, 139, 250, 0.25), 0 20px 60px rgba(139, 92, 246, 0.25);
+  --shadow-glow: 0 0 0 1px rgba(224, 139, 76, 0.25), 0 20px 60px rgba(200, 105, 47, 0.25);
   --box-shadow: var(--shadow-md);
 
-  --aurora-opacity: 0.55;
-  --chart-bar: #8b5cf6;
-  --chart-grid: rgba(255, 255, 255, 0.07);
+  --aurora-opacity: 0.5;
+  --chart-bar: #d9793f;
+  --chart-grid: rgba(255, 228, 200, 0.07);
 
   background: var(--bg-primary);
 }

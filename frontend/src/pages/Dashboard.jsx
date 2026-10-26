@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 import API_URL from '../config/api';
-import { categoryLabel } from '../utils/categories';
+import { categoryColor, categoryLabel } from '../utils/categories';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { formatEuro } from '../utils/formatCurrency';
@@ -232,7 +232,9 @@ const Dashboard = () => {
               <div key={toolGroup.toolId} className="tool-subscription-card">
                 <div className="tool-sub-header">
                   <h4>{toolGroup.toolName}</h4>
-                  <span className="category-badge">{categoryLabel(t, toolGroup.category)}</span>
+                  <span className="category-badge" style={{ '--cat': categoryColor(toolGroup.category) }}>
+                    {categoryLabel(t, toolGroup.category)}
+                  </span>
                 </div>
                 <div className="plans-list">
                   {toolGroup.subscriptions.map((sub) => (

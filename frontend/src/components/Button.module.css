@@ -17,50 +17,50 @@
 }
 
 .primary {
-  background-color: #3b82f6;
+  background-color: #b9622a;
   color: white;
 }
 
 .primary:hover:not(:disabled) {
-  background-color: #2563eb;
+  background-color: #a8521f;
 }
 
 .secondary {
-  background-color: #6b7280;
+  background-color: #7a6552;
   color: white;
 }
 
 .secondary:hover:not(:disabled) {
-  background-color: #4b5563;
+  background-color: #5c4836;
 }
 
 .danger {
-  background-color: #ef4444;
+  background-color: #c2413b;
   color: white;
 }
 
 .danger:hover:not(:disabled) {
-  background-color: #dc2626;
+  background-color: #a8302e;
 }
 
 .success {
-  background-color: #10b981;
+  background-color: #7d8f3a;
   color: white;
 }
 
 .success:hover:not(:disabled) {
-  background-color: #059669;
+  background-color: #5a7428;
 }
 
 .outline {
   background-color: transparent;
-  border: 1px solid #d1d5db;
-  color: #374151;
+  border: 1px solid #e0d3c0;
+  color: #4d3a2a;
 }
 
 .outline:hover:not(:disabled) {
-  background-color: #f9fafb;
-  border-color: #9ca3af;
+  background-color: #fbf6ee;
+  border-color: #a8957f;
 }
 
 .small {
