@@ -9,6 +9,7 @@ describe('GET /api/health', () => {
     expect(response.status).toBe(200);
     expect(response.body).toEqual({
       status: 'ok',
+      database: 'connected',
       message: 'Dexa Manager API is running',
     });
   });

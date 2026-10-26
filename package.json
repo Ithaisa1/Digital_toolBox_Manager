@@ -1,7 +1,8 @@
 {
   "name": "dexa-manager",
   "private": true,
-  "description": "Comandos para trabajar con backend y frontend desde la raíz. Prisma necesita sus paquetes aquí porque el schema está en database/prisma.",
+  "type": "module",
+  "description": "Dexa Manager: comandos desde la raíz y API en Vercel (api/). Prisma necesita sus paquetes aquí porque el schema está en database/prisma.",
   "scripts": {
     "setup": "node scripts/setup.mjs",
     "dev": "node scripts/dev.mjs",

@@ -1,45 +1,25 @@
-# Despliegue
+# Despliegue — Dexa Manager
 
-Este documento describe el despliegue del backend y frontend de Dexa Manager.
+Web, API y base de datos se despliegan juntas en **Vercel**, con **Neon** como PostgreSQL.
+La guía paso a paso está en el [README principal](../README.md#-despliegue).
 
-## Backend
+## Resumen
 
-### Recomendado: Render
+| Pieza | Dónde | Archivo |
+|-------|-------|---------|
+| Web (React + Vite) | Vercel, archivos estáticos | `frontend/` → `frontend/dist` |
+| API (Express) | Vercel Function | `api/index.js` → `backend/src/app.js` |
+| Base de datos | Neon (integración de Vercel) | `database/prisma/schema.prisma` |
+| Build | Vercel | `scripts/vercel-build.mjs` |
+| Cron de avisos | Vercel Cron | `vercel.json` → `/api/jobs/renewal-reminders` |
 
-1. Conecta el repositorio de GitHub a Render.
-2. Crea un servicio Web apuntando a la carpeta `backend`.
-3. Configura los siguientes comandos:
-   - Build: `npm install && npx prisma generate --schema ../database/prisma/schema.prisma && npx prisma migrate deploy --schema ../database/prisma/schema.prisma`
-   - Start: `npm start`
-4. Variables de entorno necesarias:
-   - `DATABASE_URL`
-   - `JWT_SECRET`
-   - `JWT_EXPIRES_IN`
-   - `NODE_ENV`
-   - `PORT`
-   - `EMAIL_HOST`
-   - `EMAIL_PORT`
-   - `EMAIL_USER`
-   - `EMAIL_PASSWORD`
-   - `FRONTEND_URL`
-   - `WEBHOOK_URL`
-5. Asegura que `PORT` esté configurado o usa el valor que Render asigne.
+## Comprobar que funciona
 
-## Frontend
+- `https://<tu-dominio>/api/health` → `{"status":"ok","database":"connected"}`
+- Si responde `503` con `database: disconnected`, revisa que la base de datos de Neon esté conectada al proyecto (Storage) y vuelve a desplegar.
 
-### Recomendado: Vercel o Netlify
+## Problemas típicos
 
-1. Conecta el repositorio al servicio elegido.
-2. Usa `frontend` como carpeta raíz.
-3. Configura las variables de entorno:
-   - `VITE_API_URL=https://tu-backend-publico.com`
-4. Build command: `npm run build`
-5. Output directory: `dist`
-
-## Flujo de despliegue
-
-1. Despliega primero el backend.
-2. Copia la URL pública del backend.
-3. Configura `VITE_API_URL` en el frontend.
-4. Despliega el frontend.
-5. Verifica login, dashboard, herramientas y suscripciones.
+- **404 al refrescar una página** → el Root Directory del proyecto no está vacío; debe ser la raíz del repositorio.
+- **Las migraciones no se aplican en una preview** → es a propósito: solo se aplican en producción (o con `MIGRATE_ON_PREVIEW=true`).
+- **`Can't reach database server`** → la base de datos de Neon puede estar dormida; se despierta sola en la siguiente petición.
